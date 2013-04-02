@@ -12,13 +12,15 @@ Strings::Strings()
     control(Amax=50, "Amplitude max", 0, 200);
     control(force=1.0, "Force", 0, 50, 1);
     control(damping=0.1, "Damping", 0, 10, 1);
-    control(debug=false, "Debug");
+    control(isSag=false, "Sag");
+    control(isShadow=false, "Shadow");
+    control(isDebug=false, "Debug");
     control(state="Debug", "State", QStringList() << "Default" << "Test");
 }
 
 void Strings::setup()
 {
-    lineImage = loadImage("images/line6.png");
+    lineImage = loadImage("images/line5.png");
 }
 
 void Strings::paint()
@@ -40,16 +42,23 @@ void Strings::paint()
             strings[i].dxPrev = strings[i].dx;
             strings[i].direction = 1;
             strings[i].y2 = height/2.0;
+            strings[i].y3 = height/2.0;
         }
     }
 
     for(int i=0; i<strings.count(); i++) {
         float x = cell * i + cell/2.0;
+        float yMin = height;
+        float yMax = 0;
+        float yAverage = height/2;
+        bool isFirstAverage = true;
 
         SeqAreas &seqAreas = getSeqAreas(0);
         for (unsigned int j=0; j<seqAreas.size(); j++) {
             SeqArea &seqArea = seqAreas.at(j);
             if (seqArea.number > 1) {
+                bool isFound = false;
+
                 // Влияние на струну слева на право
                 if ( seqArea.ptPrev[0] < x && seqArea.pt[0] > x) {
                     strings[i].dx += force;
@@ -59,34 +68,35 @@ void Strings::paint()
                         strings[i].a += force;
                     else
                         strings[i].a -= force;
-
-//                    if ( seqArea.pt[1] > strings[i].y2 )
-//                        strings[i].y2 -= 5;
-//                    else
-//                        strings[i].y2 += 5;
-
-                    if (debug) {
-                        color(1,0,0);
-                        line (seqArea.ptPrev[0], seqArea.ptPrev[1], seqArea.pt[0], seqArea.pt[1]);
-                    }
+                    isFound = true;
                 }
                 // Влияние справа на лево
                 else if ( seqArea.pt[0] < x && seqArea.ptPrev[0] > x) {
                     strings[i].dx -= force;
-
                     // Если совпадает движение с влиянием, увеличиваем амплитуду,
                     // иначе уменьшаем
                     if (strings[i].direction == -1)
                         strings[i].a += force;
                     else
                         strings[i].a -= force;
+                    isFound = true;
+                }
 
-//                    if ( seqArea.ptPrev[1] > strings[i].y2 )
-//                        strings[i].y2 -= 5;
-//                    else
-//                        strings[i].y2 += 5;
+                if (isFound) {
+                    if (seqArea.pt[1] > yMax && seqArea.pt[1] < height)
+                        yMax = seqArea.pt[1];
+                    if (seqArea.pt[1] < yMin && seqArea.pt[1] > 0)
+                        yMin = seqArea.pt[1];
 
-                    if (debug) {
+                    if (isFirstAverage) {
+                        yAverage = seqArea.pt[1];
+                        isFirstAverage = false;
+                    }
+                    else {
+                        yAverage = yAverage + (seqArea.pt[1] - yAverage)/2.0;
+                    }
+
+                    if (isDebug) {
                         color(1,0,0);
                         line (seqArea.ptPrev[0], seqArea.ptPrev[1], seqArea.pt[0], seqArea.pt[1]);
                     }
@@ -94,6 +104,8 @@ void Strings::paint()
             }
         }
 
+        // Меняем амплитуду, в зависимости от текущей раскачки струны и
+        // ограничиваем смещение струны максимальной амплитудой
         if (strings[i].dx<0) {
             if (-strings[i].dx>Amax)
                 strings[i].dx = -Amax;
@@ -106,7 +118,6 @@ void Strings::paint()
             if (strings[i].dx>strings[i].a)
                 strings[i].a = strings[i].dx;
         }
-
         if ( strings[i].a > Amax)
             strings[i].a = Amax;
 
@@ -134,29 +145,52 @@ void Strings::paint()
             strings[i].direction = 1;
         }
 
+        float y2 = strings[i].y2;
+        if (isFirstAverage) {
+            if (y2 < yAverage)
+                y2 += 1;
+            else if (y2 > yAverage)
+                y2 -= 1;
+        }
+        else if (isSag) {
+            if (y2 < yAverage)
+                y2 += 5;
+            else if (y2 > yAverage)
+                y2 -= 5;
+        }
+
         strings[i].x1 = x;
         strings[i].y1 = 0;
         strings[i].x2 = x + strings[i].dx;
-        //strings[i].y2 = height/2.0;
+        strings[i].y2 = y2;
         strings[i].x3 = strings[i].x2;
         strings[i].y3 = strings[i].y2;
         strings[i].x4 = x;
         strings[i].y4 = height;
+
+        strings[i].x1s = strings[i].x1;
+        strings[i].y1s = strings[i].y1;
+        strings[i].x2s = x + strings[i].dx*0.5;
+        strings[i].y2s = strings[i].y2;
+        strings[i].x3s = strings[i].x2s;
+        strings[i].y3s = strings[i].y3;
+        strings[i].x4s = strings[i].x4;
+        strings[i].y4s = strings[i].y4;
     }
 
-    //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
     color(color1);
     lineWidth(height1);
     for(int i=0; i<strings.count(); i++) {
         const String &s = strings.at(i);
         bezier(lineImage, s.x1, s.y1, s.x2, s.y2, s.x3, s.y3, s.x4, s.y4);
-        //bezier(s.x1, s.y1, s.x2, s.y2, s.x3, s.y3, s.x4, s.y4);
     }
 
-    color(color2);
-    lineWidth(height2);
-    for(int i=0; i<strings.count(); i++) {
-        const String &s = strings.at(i);
-        //bezier(s.x1, s.y1, s.x2, s.y2, s.x3, s.y3, s.x4, s.y4);
+    if (isShadow) {
+        color(color2);
+        lineWidth(height2);
+        for(int i=0; i<strings.count(); i++) {
+            const String &s = strings.at(i);
+            bezier(lineImage, s.x1s, s.y1s, s.x2s, s.y2s, s.x3s, s.y3s, s.x4s, s.y4s);
+        }
     }
 }
