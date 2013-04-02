@@ -11,3 +11,15 @@
 *.lai
 *.la
 *.a
+
+# Text Editors
+*~
+
+# Qt project files:
+*.pro.user
+*.pro
+
+# Build catalog
+build/
+
+
