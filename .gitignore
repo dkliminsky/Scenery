@@ -20,6 +20,6 @@
 *.pro
 
 # Build catalog
-build/
+build*/
 
 
