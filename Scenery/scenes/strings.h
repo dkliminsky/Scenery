@@ -41,10 +41,21 @@ private:
         float y3;
         float x4;
         float y4;
+
+        float x1s;
+        float y1s;
+        float x2s;
+        float y2s;
+        float x3s;
+        float y3s;
+        float x4s;
+        float y4s;
     };
 
     QVector<String> strings;
-    bool debug;
+    bool isDebug;
+    bool isSag;
+    bool isShadow;
     QString state;
 };
 
