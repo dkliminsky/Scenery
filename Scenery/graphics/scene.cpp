@@ -4,6 +4,7 @@
 Scene::Scene()
 {
     setProcessCount(1);
+    firstPaint = true;
 }
 
 void Scene::setProcessCount(int n)
@@ -18,11 +19,16 @@ void Scene::setupEvent(void *view)
 {
     this->view = static_cast<View *>(view);
     sceneChanged();
-    setup();
+    firstPaint = true;
 }
 
 void Scene::paintEvent()
 {
+    if (firstPaint) {
+        firstPaint = false;
+        setup();
+    }
+
     paint();
     flush();
 }

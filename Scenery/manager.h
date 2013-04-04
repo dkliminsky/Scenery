@@ -13,8 +13,9 @@
 
 #include "scenes/skeleton.h"
 #include "scenes/cage.h"
-#include "scenes/brush.h"
 #include "scenes/strings.h"
+#include "scenes/drawing.h"
+#include "scenes/brush.h"
 
 typedef QVector<Process *> Processes;
 typedef QVector<Input *>   Inputs;
@@ -51,7 +52,11 @@ private:
     bool isPlay;
     void timerEvent(QTimerEvent *);
     bool firstInput;
+    bool firstDebug;
     bool firstProcess;
+    bool firstSetImage;
+    bool firstSetData;
+    bool firstEndProcess;
 signals:
 
 public slots:

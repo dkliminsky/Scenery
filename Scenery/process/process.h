@@ -47,7 +47,7 @@ public:
     void setMode(Mode mode) { this->mode = mode; }
     Mode getMode() { return mode; }
 
-    void setImage(IplImage *image) { this->image = image; }
+    void setImage(IplImage *image);
     IplImage *getImage() { return image; }
 
     // ====================================================================

@@ -29,14 +29,22 @@ Manager::Manager()
 
     scenes.append(new Skeleton());
     scenes.append(new Cage());
-    scenes.append(new Brush());
     scenes.append(new Strings());
+    scenes.append(new Brush());
+    scenes.append(new Drawing());
 
-    view = new View();
+    QGLFormat format;
+    format.setDoubleBuffer(false);
+    view = new View(format);
+    view->show();
     setScene(0);
 
     firstInput = true;
+    firstDebug = true;
+    firstSetImage = true;
+    firstSetData = true;
     firstProcess = true;
+    firstEndProcess = true;
 
     startTimer(17);
     qDebug() << "Constructor End: Manager";
@@ -91,30 +99,53 @@ void Manager::step()
         }
 
         // возвращается копия изображения
+        //
         IplImage *frame = inputs[0]->getFrame();
-        inputs[0]->start();
 
         if ( !processes[0]->isRunning() ) {
+
+            if (firstDebug) {
+                qDebug() << "First Debug";
+                firstDebug = false;
+            }
+
+            debug->show(frame, processes[0]);
+
+            if (firstSetImage) {
+                qDebug() << "First Set Image";
+                firstSetImage = false;
+            }
+
+            processes[0]->setImage(frame);
+
+            if (firstSetData) {
+                qDebug() << "First Set Data";
+                firstSetData = false;
+            }
+
+            // set process data in scene
+            scenes.at(curScene)->setAreas(0, processes[0]->getAreas());
+            scenes.at(curScene)->setSeqAreas(0, processes[0]->getSeqAreas());
 
             if (firstProcess) {
                 qDebug() << "First Process";
                 firstProcess = false;
             }
 
-            debug->show(frame, processes[0]);
-
-            processes[0]->setImage(frame);
-
-            // set process data in scene
-            scenes.at(curScene)->setAreas(0, processes[0]->getAreas());
-            scenes.at(curScene)->setSeqAreas(0, processes[0]->getSeqAreas());
-
             processes[0]->start();
+
+            if (firstEndProcess) {
+                qDebug() << "First End Process";
+                firstEndProcess = false;
+            }
         }
+
+        inputs[0]->start();
 
         // set video stream in scene
     }
 
+    //qDebug() << "!!";
     view->updateGL();
 }
 

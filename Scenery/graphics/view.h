@@ -10,7 +10,7 @@
 class View : public QGLWidget, protected QGLFunctions
 {
 public:
-    View();
+    View(QGLFormat &format);
     void setScene(IScene *scene);
 
     int getFPS() { return fpsResult; }

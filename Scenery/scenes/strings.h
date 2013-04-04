@@ -56,7 +56,6 @@ private:
     bool isDebug;
     bool isSag;
     bool isShadow;
-    QString state;
 };
 
 #endif // STRINGS_H

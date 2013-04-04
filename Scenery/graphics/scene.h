@@ -45,6 +45,8 @@ private:
     QVector<Areas> areasVector;
     QVector<SeqAreas> seqAreasVector;
 
+    bool firstPaint;
+
 };
 
 #endif // SCENE_H

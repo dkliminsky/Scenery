@@ -1,13 +1,14 @@
 ﻿#include "process.h"
 
 #include <QDebug>
+#include <typeinfo>
 
 Process::Process(int width, int height) :
     ProcessFilters(width, height)
 {
     qDebug() << "Constructor Begin: Process";
 
-    assert(width > 0 && height > 0);
+    Q_ASSERT(width > 0 && height > 0);
 
     this->width  = width;
     this->height = height;
@@ -186,6 +187,13 @@ void Process::step()
         timeNum = 0;
     }
 
+}
+
+void Process::setImage(IplImage *image)
+{
+    assert(image);
+    assert(image->width == width && image->height == height);
+    this->image = image;
 }
 
 void Process::setHaarFile(string file)
