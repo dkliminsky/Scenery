@@ -15,7 +15,6 @@ Strings::Strings()
     control(isSag=false, "Sag");
     control(isShadow=false, "Shadow");
     control(isDebug=false, "Debug");
-    control(state="Debug", "State", QStringList() << "Default" << "Test");
 }
 
 void Strings::setup()

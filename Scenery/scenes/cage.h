@@ -16,6 +16,9 @@ public:
     void paint();
 
 private:
+    void zeroMatrix(int x1, int y1, int x2, int y2);
+    void applyWave();
+
     Image *box;
 
     Color backColor;
@@ -24,13 +27,26 @@ private:
     int boxSize;
     int boxDeviation;
     int influence;
-    double prob;
+    int prob;
+    bool isWave;
+    bool isWaveDebug;
+    int waveWidth;
+    int waveForce;
+    int waveSpeed;
 
     int cxPrev;
     int cyPrev;
     bool isCenterPrev;
 
     QVector< QVector<double> > m;
+
+    struct Wave {
+        float x;
+        float y;
+        float angle;
+        float lenght;
+    };
+    QList<Wave> waves;
 
 };
 

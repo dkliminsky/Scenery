@@ -3,7 +3,8 @@
 #include <QDebug>
 
 
-View::View()
+View::View(QGLFormat &format) :
+    QGLWidget(format)
 {
     timePaint = 0;
     prevTimePaint = 0;
@@ -13,8 +14,8 @@ View::View()
     fpsRest = 0;
     fpsFrames = 0;
     fpsResult = 0;
+
     fpsTime.start();
-    show();
 }
 
 void View::setScene(IScene *scene)
