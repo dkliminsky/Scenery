@@ -636,9 +636,9 @@ void Process::findContours()
     cvCanny(grayImage, hitImage, contourParam.threshold1, contourParam.threshold2, 3);
 
     // находим контуры
-    int contoursCont;
-    contoursCont = cvFindContours(bordImage, contourStorage, &contoursSeq, sizeof(CvContour),
-                                  CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0));
+    int contoursCont =
+        cvFindContours(bordImage, contourStorage, &contoursSeq, sizeof(CvContour),
+                       CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0));
 
     for(CvSeq* seq = contoursSeq; seq != 0; seq = seq->h_next) {
         Contour contour;

@@ -53,13 +53,17 @@ void Control::control(Image **image, QString description, QString path, QString 
 {
     QDir dir(path);
     Q_ASSERT(dir.exists());
-    Q_ASSERT(dir.count() > 0);
     QStringList filters;
     filters << "*.png" << "*.jpg" << "*.jpeg";
     QStringList list = dir.entryList(filters);
+
+    if (list.size() == 0) {
+        *image = loadImage();
+        return;
+    }
+
     QVector<Image *> images;
     int index = 0;
-
     for (int i = 0; i < list.size(); i++) {
         QString name = list.at(i);
         Image *imageDir = new Image(path + name);

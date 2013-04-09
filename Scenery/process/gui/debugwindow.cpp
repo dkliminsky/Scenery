@@ -46,6 +46,9 @@ void DebugWindow::show(IplImage *image, Process *process)
         break;
     case Process::ProcessContour:
         cvSet(debug, CV_RGB(255,255,255), process->getHitImage());
+        drawAreasReal(debug, process->getAreas(), CV_RGB(255,255,0));
+        drawAreas(debug, process->getAreas(), CV_RGB(150,0,0));
+        drawSeqAreas(debug, process->getSeqAreas(), CV_RGB(255,0,0));
         //        for(CvSeq* seq = process->getContours(); seq != 0; seq = seq->h_next){
         //            // нарисовать контур
         //            cvDrawContours(image, seq, CV_RGB(0,0,250), CV_RGB(0,0,250), 0, 1, 8);

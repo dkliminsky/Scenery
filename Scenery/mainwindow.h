@@ -1,9 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "manager.h"
-
 #include <QMainWindow>
+
+#include "manager.h"
 
 namespace Ui {
 class MainWindow;
@@ -27,6 +27,7 @@ private:
 
 public slots:
     void changeScene(int n);
+    void setFullScreen();
 
 };
 

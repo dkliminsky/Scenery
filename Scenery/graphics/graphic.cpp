@@ -48,6 +48,13 @@ Image *Graphic::loadImage(const QString &fileName)
     return image;
 }
 
+Image *Graphic::loadImage()
+{
+    Image *image = new Image("");
+    images.append(image);
+    return image;
+}
+
 void Graphic::color(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 {
     glColor4f(r, g, b, a);

@@ -35,6 +35,7 @@ public:
                             GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4);
 
     Image *loadImage(const QString &fileName);
+    Image *loadImage();
     void image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle=0);
 
     void flush();
