@@ -14,20 +14,17 @@ public:
     void paint();
 
 private:
-    Image *imgStroke;
-    Image *imgLine;
-    int speedLimit;
-    int strokeWidth;
+    bool isStroke;
+    Color strokeColor;
+    Image *strokeImages[10];
+    int strokeSize;
+    int strokeLimit;
 
-    struct Stroke {
-        Point pt;
-        float width;
-        float height;
-        float angle;
-        Color color;
-    };
-
-    QVector<Stroke> strokes;
+    bool isBlot;
+    Color blotColor;
+    Image *blotImages[10];
+    int blotSize;
+    int blotLimit;
 };
 
 #endif // BRUSH_H

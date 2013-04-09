@@ -13,7 +13,7 @@ class ControlColor : public QWidget, public IControl
     Q_OBJECT
 public:
     explicit ControlColor(Color &color);
-    void setData(QString &data) { ; }
+    void setData(QString &data);
     QString &getData() { return *(new QString("")); }
 
 

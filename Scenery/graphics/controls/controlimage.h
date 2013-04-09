@@ -12,7 +12,7 @@ class ControlImage : public QComboBox, public IControl
     Q_OBJECT
 public:
     explicit ControlImage(Image **image, QVector<Image*> images, int index);
-    void setData(QString &data) { ; }
+    void setData(QString &data);
     QString &getData() { return *(new QString("")); }
 
 

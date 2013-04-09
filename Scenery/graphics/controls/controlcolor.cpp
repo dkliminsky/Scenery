@@ -42,6 +42,10 @@ ControlColor::ControlColor(Color &color) :
     connect(spinA, SIGNAL(valueChanged(double)),  SLOT(slotChange()));
 }
 
+void ControlColor::setData(QString &data)
+{
+}
+
 void ControlColor::slotChange()
 {
     color.r = spinR->value();

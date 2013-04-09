@@ -25,7 +25,7 @@ public:
     Control();
 
     QWidget *getWidget() { return widget; }
-    IControl &getControls() { return controls; }
+    QVector<IControl *> &getControls() { return controls; }
 
     void control(int &x, QString description, int min=0, int max=100);
     void control(double &x, QString description, double min=0, double max=100, int precision=1);

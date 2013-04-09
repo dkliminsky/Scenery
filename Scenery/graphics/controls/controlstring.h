@@ -11,7 +11,7 @@ class ControlString : public QComboBox, public IControl
     Q_OBJECT
 public:
     explicit ControlString(QString &string, QStringList list);
-    void setData(QString &data) { ; }
+    void setData(QString &data);
     QString &getData() { return *(new QString("")); }
 
 private:

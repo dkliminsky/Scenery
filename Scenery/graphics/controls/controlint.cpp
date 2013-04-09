@@ -21,6 +21,10 @@ ControlInt::ControlInt(int &data, int min, int max) :
     connect(slider, SIGNAL(valueChanged(int)), SLOT(slotChange()));
 }
 
+void ControlInt::setData(QString &data)
+{
+}
+
 void ControlInt::slotChange()
 {
     data = slider->value();

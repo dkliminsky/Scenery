@@ -16,7 +16,7 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     }
     connect(ui->scenesComboBox, SIGNAL(activated(int)), SLOT(changeScene(int)));
 
-    connect(ui->actionFullScreen, SIGNAL(toggled(bool)), SLOT(setFullScreen()));
+    connect(ui->actionFullScreen, SIGNAL(toggled(bool)), SLOT(setFullScreen(bool)));
 
     manager->setScene(0);
     ui->scenesComboBox->setCurrentIndex(0);
@@ -47,7 +47,10 @@ void MainWindow::changeScene(int n)
     ui->scenesStackedWidget->setCurrentIndex(n);
 }
 
-void MainWindow::setFullScreen()
+void MainWindow::setFullScreen(bool full)
 {
-    manager->getView()->showFullScreen();
+    if (full)
+        manager->getView()->showFullScreen();
+    else
+        manager->getView()->showNormal();
 }

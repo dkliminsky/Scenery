@@ -27,7 +27,7 @@ private:
 
 public slots:
     void changeScene(int n);
-    void setFullScreen();
+    void setFullScreen(bool full);
 
 };
 

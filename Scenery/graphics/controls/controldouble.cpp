@@ -12,6 +12,10 @@ ControlDouble::ControlDouble(double &data, double min, double max, int precision
     connect(this, SIGNAL(valueChanged(double)),  SLOT(slotChange()));
 }
 
+void ControlDouble::setData(QString &data)
+{
+}
+
 void ControlDouble::slotChange()
 {
     data = this->value();

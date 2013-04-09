@@ -13,6 +13,10 @@ ControlString::ControlString(QString &string, QStringList list) :
     connect(this, SIGNAL(activated(int)), SLOT(slotChange()));
 }
 
+void ControlString::setData(QString &data)
+{
+}
+
 void ControlString::slotChange()
 {
     string = this->currentText();

@@ -17,6 +17,10 @@ ControlImage::ControlImage(Image **image, QVector<Image *> images, int index)
     connect(this, SIGNAL(activated(int)), SLOT(slotChange()));
 }
 
+void ControlImage::setData(QString &data)
+{
+}
+
 void ControlImage::slotChange()
 {
     *image = images.at(this->currentIndex());

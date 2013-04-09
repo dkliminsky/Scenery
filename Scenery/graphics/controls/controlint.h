@@ -13,7 +13,7 @@ class ControlInt : public QWidget, public IControl
     Q_OBJECT
 public:
     explicit ControlInt(int &data, int min, int max);
-    void setData(QString &data) { ; }
+    void setData(QString &data);
     QString &getData() { return *(new QString("")); }
 
 private:
