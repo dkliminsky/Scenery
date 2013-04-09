@@ -16,9 +16,9 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     }
     connect(ui->scenesComboBox, SIGNAL(activated(int)), SLOT(changeScene(int)));
 
-    manager->setScene(3);
-    ui->scenesComboBox->setCurrentIndex(3);
-    ui->scenesStackedWidget->setCurrentIndex(3);
+    manager->setScene(0);
+    ui->scenesComboBox->setCurrentIndex(0);
+    ui->scenesStackedWidget->setCurrentIndex(0);
 
     startTimer(500);
 }

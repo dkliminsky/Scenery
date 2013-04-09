@@ -3,11 +3,13 @@
 Strings::Strings()
 {
     control(backColor=Color(0,0,0,0.2), "Background");
+    control(&lineImage, "Line image", "images/lines/", "line1.png");
     control(color1=Color(1,1,1,0.5), "Color 1");
     control(color2=Color(1,1,1,1), "Color 2");
     control(height1=8.0, "Width 1", 0.0, 10.0, 1);
     control(height2=2.0, "Width 2", 0.0, 10.0, 1);
     control(count=1, "Count strings", 0, 100);
+    control(stringParts=50, "Parts", 0, 200);
     control(frequency=100, "Frequency/100", 0, 500);
     control(Amax=50, "Amplitude max", 0, 200);
     control(force=1.0, "Force", 0, 50, 1);
@@ -19,7 +21,7 @@ Strings::Strings()
 
 void Strings::setup()
 {
-    lineImage = loadImage("images/line5.png");
+    size(getWidth(0), getHeight(0));
 }
 
 void Strings::paint()
@@ -29,7 +31,6 @@ void Strings::paint()
     float cell = (float)width / count;
     float w = 2.0*M_PI*frequency/100.0;
 
-    size(width, height);
     background(backColor);
 
     if (strings.count() < count) {
@@ -177,6 +178,7 @@ void Strings::paint()
         strings[i].y4s = strings[i].y4;
     }
 
+    lineParts(stringParts);
     color(color1);
     lineWidth(height1);
     for(int i=0; i<strings.count(); i++) {

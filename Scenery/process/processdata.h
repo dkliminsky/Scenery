@@ -44,8 +44,17 @@ struct SeqArea {
     double angle;
 };
 
-typedef vector<Area>    Areas;
-typedef vector<SeqArea> SeqAreas;
-typedef deque<SeqAreas> SeqAreasBuffer;
+struct ContourPt {
+    ContourPt(int x=0, int y=0) { this->x = x; this->y = y; }
+    int x;
+    int y;
+};
+
+typedef vector<ContourPt>   Contour;
+typedef vector<Contour>     Contours;
+
+typedef vector<Area>        Areas;
+typedef vector<SeqArea>     SeqAreas;
+typedef deque<SeqAreas>     SeqAreasBuffer;
 
 #endif // PROCESSDATA_H

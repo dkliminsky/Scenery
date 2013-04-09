@@ -11,9 +11,11 @@ public:
     Image(const QString &fileName);
     GLuint getID() { return id; }
     void setID(GLuint id) { this->id = id; }
+    QString getFileName() { return fileName; }
 
 private:
     GLuint id;
+    QString fileName;
 
 };
 

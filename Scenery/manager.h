@@ -16,6 +16,7 @@
 #include "scenes/strings.h"
 #include "scenes/drawing.h"
 #include "scenes/brush.h"
+#include "scenes/inking.h"
 
 typedef QVector<Process *> Processes;
 typedef QVector<Input *>   Inputs;

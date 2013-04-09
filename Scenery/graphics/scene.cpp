@@ -13,10 +13,12 @@ void Scene::setProcessCount(int n)
     areasVector.resize(n);
     widthVector.resize(n);
     heightVector.resize(n);
+    contoursVector.resize(n);
 }
 
 void Scene::setupEvent(void *view)
 {
+    qDebug() << "Scene changed!";
     this->view = static_cast<View *>(view);
     sceneChanged();
     firstPaint = true;
@@ -29,6 +31,7 @@ void Scene::paintEvent()
         setup();
     }
 
+    updateSize();
     paint();
     flush();
 }
@@ -61,6 +64,12 @@ SeqAreas &Scene::getSeqAreas(int n)
 {
     Q_ASSERT(n < seqAreasVector.size());
     return seqAreasVector[n];
+}
+
+Contours &Scene::getContours(int n)
+{
+    Q_ASSERT(n < contoursVector.size());
+    return contoursVector[n];
 }
 
 int Scene::time()

@@ -75,6 +75,18 @@ ProcessWindow::ProcessWindow(Process *process, QString file, QWidget *parent) :
     connect(ui->haarMaxXSpin, SIGNAL(valueChanged(int)), SLOT(slotHaarParam()));
     connect(ui->haarMaxYSpin, SIGNAL(valueChanged(int)), SLOT(slotHaarParam()));
 
+    // Contour
+
+    connect(ui->contourThreshold1Slider, SIGNAL(valueChanged(int)),
+            ui->contourThreshold1Label, SLOT(setNum(int)));
+    connect(ui->contourThreshold2Slider, SIGNAL(valueChanged(int)),
+            ui->contourThreshold2Label, SLOT(setNum(int)));
+
+    connect(ui->contourThreshold1Slider, SIGNAL(valueChanged(int)),
+            SLOT(slotContourParam()));
+    connect(ui->contourThreshold2Slider, SIGNAL(valueChanged(int)),
+            SLOT(slotContourParam()));
+
     // HoughCircles
 
     connect(ui->houghCirclesParam1Slider, SIGNAL(valueChanged(int)),
@@ -370,7 +382,7 @@ void ProcessWindow::slotMode(QString mode)
     }
     else if ( mode == "Contour" ) {
         ui->modesWidget->setCurrentIndex(4);
-        process->setMode(Process::ProcessHaar);
+        process->setMode(Process::ProcessContour);
     }
     else if ( mode == "HoughCircles" ) {
         ui->modesWidget->setCurrentIndex(5);
@@ -412,6 +424,14 @@ void ProcessWindow::slotHaarParam()
     param.maxSizeX = ui->haarMaxXSpin->value();
     param.maxSizeY = ui->haarMaxYSpin->value();
     process->setHaarParam(param);
+}
+
+void ProcessWindow::slotContourParam()
+{
+    Process::ContourParam param;
+    param.threshold1 = ui->contourThreshold1Slider->value();
+    param.threshold2 = ui->contourThreshold2Slider->value();
+    process->setContourParam(param);
 }
 
 void ProcessWindow::slotHoughCircleParam()

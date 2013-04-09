@@ -37,6 +37,11 @@ int View::getPaintTimeScene()
     return differenceTimePaint;
 }
 
+void View::addImage(Image *image)
+{
+    images.append(image);
+}
+
 void View::initializeGL()
 {
     initializeGLFunctions();
@@ -50,6 +55,12 @@ void View::initializeGL()
     glEnable(GL_BLEND);
     glEnable(GL_LINE_SMOOTH);
     glDisable(GL_DEPTH_TEST);
+
+    //image->setID(view->bindTexture(QPixmap(fileName), GL_TEXTURE_2D));
+    //image->setID(view->bindTexture(image));
+
+
+
 
     // Задаём фильтрацию вблизи и вдали:
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

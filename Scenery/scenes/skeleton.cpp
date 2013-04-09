@@ -1,8 +1,13 @@
 #include "skeleton.h"
 
-void Skeleton::setup()
+Skeleton::Skeleton()
 {
 
+}
+
+void Skeleton::setup()
+{
+    background(0,0,0);
 }
 
 void Skeleton::paint()

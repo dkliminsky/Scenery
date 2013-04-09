@@ -3,6 +3,7 @@
 #include <QLayout>
 #include <QLabel>
 #include <QSlider>
+#include <QDir>
 #include <QDebug>
 
 Control::Control()
@@ -45,6 +46,34 @@ void Control::control(QString &string, QString description, QStringList list)
 void Control::control(Color &color, QString description)
 {
     ControlColor *data = new ControlColor(color);
+    addWidget(data, description);
+}
+
+void Control::control(Image **image, QString description, QString path, QString file)
+{
+    QDir dir(path);
+    Q_ASSERT(dir.exists());
+    Q_ASSERT(dir.count() > 0);
+    QStringList filters;
+    filters << "*.png" << "*.jpg" << "*.jpeg";
+    QStringList list = dir.entryList(filters);
+    QVector<Image *> images;
+    int index = 0;
+
+    for (int i = 0; i < list.size(); i++) {
+        QString name = list.at(i);
+        Image *imageDir = new Image(path + name);
+        images.append(imageDir);
+        addImage(imageDir);
+
+        if (name == file) {
+            index = i;
+        }
+    }
+
+    *image = images.at(index);
+
+    ControlImage *data = new ControlImage(image, images, index);
     addWidget(data, description);
 }
 

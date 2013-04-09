@@ -9,7 +9,7 @@ DebugWindow::DebugWindow(QString name, int width, int height)
     debug = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
 
     cvNamedWindow(name.toStdString().c_str(), CV_WINDOW_FREERATIO);
-    //cvNamedWindow("Hit", CV_WINDOW_FREERATIO);
+    cvNamedWindow("Hit", CV_WINDOW_FREERATIO);
 }
 
 DebugWindow::~DebugWindow()
@@ -45,6 +45,7 @@ void DebugWindow::show(IplImage *image, Process *process)
         drawSeqAreas(debug, process->getSeqAreas(), CV_RGB(255,0,0));
         break;
     case Process::ProcessContour:
+        cvSet(debug, CV_RGB(255,255,255), process->getHitImage());
         //        for(CvSeq* seq = process->getContours(); seq != 0; seq = seq->h_next){
         //            // нарисовать контур
         //            cvDrawContours(image, seq, CV_RGB(0,0,250), CV_RGB(0,0,250), 0, 1, 8);
@@ -64,7 +65,7 @@ void DebugWindow::show(IplImage *image, Process *process)
     drawTransform(debug, process, CV_RGB(255,255,0) );
 
     cvShowImage(name.toStdString().c_str(), debug);
-    //cvShowImage("Hit", process->getHitImage());
+    cvShowImage("Hit", process->getHitImage());
 }
 
 void DebugWindow::drawAreas(IplImage *image, Areas &areas, CvScalar color, int type)
