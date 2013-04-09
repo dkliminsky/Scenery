@@ -6,6 +6,7 @@
 #include <QTime>
 
 #include "iscene.h"
+#include "elements/image.h"
 
 class View : public QGLWidget, protected QGLFunctions
 {
@@ -16,6 +17,8 @@ public:
     int getFPS() { return fpsResult; }
     int getTimeScene();
     int getPaintTimeScene();
+
+    void addImage(Image *image);
 
 protected:
     void initializeGL();
@@ -39,6 +42,8 @@ private:
     int fpsRest;
     int fpsFrames;
     int fpsResult;
+
+    QVector<Image *> images;
 };
 
 #endif // VIEW_H

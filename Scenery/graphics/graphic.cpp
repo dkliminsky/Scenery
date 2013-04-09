@@ -13,21 +13,38 @@ Graphic::Graphic()
     heightScene = 0;
 
     lineWidth_ = 1;
+    lineParts_ = 0;
+
+    firstSceneChange = true;
 }
 
 void Graphic::sceneChanged()
 {
+    if (firstSceneChange) {
+        Q_ASSERT(view);
+        for (int i = 0; i < images.size(); i++) {
+            images.at(i)->setID(view->bindTexture(QPixmap(images.at(i)->getFileName()), GL_TEXTURE_2D));
+        }
+        firstSceneChange = false;
+    }
+
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+}
+
+void Graphic::updateSize()
+{
+    if (widthScene > 0 && heightScene > 0) {
+        glLoadIdentity();
+        glScalef((GLfloat)this->widthView/(GLfloat)this->widthScene,
+                 (GLfloat)this->heightView/(GLfloat)this->heightScene, 1.0f);
+    }
 }
 
 Image *Graphic::loadImage(const QString &fileName)
 {
     Image *image = new Image(fileName);
-    //image->setID(view->bindTexture(image));
-
-    Q_ASSERT(view);
-    image->setID(view->bindTexture(QPixmap(fileName), GL_TEXTURE_2D));
+    images.append(image);
     return image;
 }
 
@@ -63,8 +80,15 @@ void Graphic::background(const Color &color)
 
 void Graphic::lineWidth(GLfloat width)
 {
+    Q_ASSERT(width >= 0);
     glLineWidth(width);
     lineWidth_ = width;
+}
+
+void Graphic::lineParts(int parts)
+{
+    Q_ASSERT(parts >= 0);
+    lineParts_ = parts;
 }
 
 void Graphic::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle)
@@ -222,7 +246,11 @@ void Graphic::line(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
 {
     float dx = x2 - x1;
     float dy = y2 - y1;
-    double k = fmax(fabs(dx), fabs(dy));
+    double k = lineParts_;
+
+    if (lineParts_ == 0)
+        k = fmax(fabs(dx), fabs(dy));
+
     for(int i=0; i<k; i++){
         image(img, x1 + dx*(i/k), y1 + dy*(i/k), lineWidth_, lineWidth_);
     }
@@ -230,9 +258,13 @@ void Graphic::line(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
 
 void Graphic::bezier(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4)
 {
-    double k = 100;
     double xPrev = x1;
     double yPrev = y1;
+    double k = lineParts_;
+
+    if (lineParts_ == 0)
+        k = 100;
+
     for(int i=1; i<=k; i++){
         double t = i / k;
         double x = pow(1.0-t, 3)*x1 + 3*pow(1.0-t, 2)*t*x2 + 3*(1.0-t)*pow(t, 2)*x3 + pow(t, 3)*x4;
@@ -246,9 +278,13 @@ void Graphic::bezier(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3,
 void Graphic::bezier(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
                                  GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4)
 {
-    double k = 101;
     double xPrev = x1;
     double yPrev = y1;
+    double k = lineParts_;
+
+    if (lineParts_ == 0)
+        k = 100;
+
     for(int i=1; i<=k; i++){
         double t = i / k;
         double x = pow(1.0-t, 3)*x1 + 3*pow(1.0-t, 2)*t*x2 + 3*(1.0-t)*pow(t, 2)*x3 + pow(t, 3)*x4;
@@ -263,11 +299,8 @@ void Graphic::bezier(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
 
 void Graphic::size(int width, int height)
 {
-    glLoadIdentity();
-    glScalef((GLfloat)this->widthView/(GLfloat)width,
-             (GLfloat)this->heightView/(GLfloat)height, 1.0f);
-    widthScene = width;
-    heightScene = height;
+    this->widthScene = width;
+    this->heightScene = height;
 }
 
 void Graphic::flush()

@@ -16,6 +16,13 @@ public:
 private:
     Image *lineImage;
 
+    Color backColor;
+    Color lineColor;
+
+    int lineSize;
+    int clearSize;
+    bool isClear;
+
 };
 
 #endif // DRAWING_H

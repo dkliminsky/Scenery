@@ -17,6 +17,7 @@ Cage::Cage()
 
     control(backColor=Color(1,1,1,1), "Background");
     control(boxColor,  "Box");
+    control(&box, "Box Image", "images/forms/", "box2.png");
     control(cellSize=10, "Cell size", 2, 50);
     control(boxSize=20, "Box size", 1, 50);
     control(boxDeviation=10, "Box deviation", 1, 50);
@@ -31,7 +32,7 @@ Cage::Cage()
 
 void Cage::setup()
 {
-    box = loadImage("images/box.png");
+    size(getWidth(0), getHeight(0));
 }
 
 void Cage::paint()
@@ -45,7 +46,7 @@ void Cage::paint()
     if (maxX >= MATRIX_SIZE || maxY >= MATRIX_SIZE)
         return;
 
-    size(width, height);
+    //size(width, height);
     background(backColor);
 
     applyWave();

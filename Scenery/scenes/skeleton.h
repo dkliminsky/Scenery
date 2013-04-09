@@ -6,7 +6,7 @@
 class Skeleton : public Scene
 {
 public:
-    Skeleton(){}
+    Skeleton();
 
     QString name() { return "None"; }
 

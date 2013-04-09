@@ -1,6 +1,9 @@
 #ifndef CONTROL_H
 #define CONTROL_H
 
+#include "graphic.h"
+
+#include "elements/image.h"
 #include "elements/color.h"
 
 #include "controls/controlint.h"
@@ -8,12 +11,13 @@
 #include "controls/controlbool.h"
 #include "controls/controlstring.h"
 #include "controls/controlcolor.h"
+#include "controls/controlimage.h"
 
 #include <QWidget>
 #include <QGridLayout>
 #include <QLabel>
 
-class Control
+class Control : public Graphic
 {
 public:
     Control();
@@ -25,6 +29,7 @@ public:
     void control(bool &x, QString description);
     void control(QString &string, QString description, QStringList list);
     void control(Color &color, QString description);
+    void control(Image **image, QString description, QString path, QString file="");
 
 private:
     QWidget *widget;

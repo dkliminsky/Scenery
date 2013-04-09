@@ -33,8 +33,8 @@ Process::Process(int width, int height) :
     // Contour
 
     bordImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
-    storageContour = 0;
-    storageHulls = 0;
+    contourStorage = cvCreateMemStorage(0);
+    hullsStorage = 0;
 
     // HoughCircles
 
@@ -70,11 +70,11 @@ Process::~Process()
     cvReleaseImage(&grayImage);
     cvReleaseImage(&bordImage);
 
-    if (storageContour)
-        cvReleaseMemStorage(&storageContour);
+    cvReleaseMemStorage(&haarStorage);
+    cvReleaseMemStorage(&contourStorage);
 
-    if (storageHulls)
-        cvReleaseMemStorage(&storageHulls);
+    if (hullsStorage)
+        cvReleaseMemStorage(&hullsStorage);
 
     qDebug() << "Destructor End: Process";
 }
@@ -105,10 +105,8 @@ void Process::setDefaultParam()
     //setHaarFile("haarcascades/haarcascade_frontalface_default.xml");
 
     // Contour
-
-    //    param.threshold1 = 10;
-    //    param.threshold2 = 100;
-
+    contourParam.threshold1 = 10;
+    contourParam.threshold2 = 100;
 
     // HoughCircles
 
@@ -168,6 +166,11 @@ void Process::step()
         break;
 
     case ProcessContour:
+        findContours();
+        findClusters(hitImage, areas);
+        transform2DAreas(areas);
+        findSeqAreas(areas, seqAreas);
+        filterSeqAreas(seqAreas, seqAreasBuffer);
         break;
 
     case ProcessHoughCircles:
@@ -220,6 +223,11 @@ void Process::setHaarParam(Process::HaarParam param)
     if ( !(haarParam.scaleFactor > 1.01) ) {
         haarParam.scaleFactor = 1.1;
     }
+}
+
+void Process::setContourParam(Process::ContourParam param)
+{
+    contourParam = param;
 }
 
 void Process::setSeqAreaParam(Process::SeqAreaParam param)
@@ -600,8 +608,6 @@ void Process::findHaar()
                                      haarParam.scaleFactor, 3, CV_HAAR_DO_CANNY_PRUNING,
                                      cvSize(haarParam.minSizeX, haarParam.minSizeY),
                                      cvSize(haarParam.maxSizeX, haarParam.maxSizeY));
-
-
     areas.clear();
 
     for (int i=0; i<seq->total; i++) {
@@ -618,29 +624,40 @@ void Process::findHaar()
 
 void Process::findContours()
 {
-//    cvCvtColor(image, grayImage, CV_RGB2GRAY);
+    cvClearMemStorage(contourStorage);
+    contours.clear();
 
-////    if (param.contour.smooth) {
+    cvCvtColor(image, grayImage, CV_RGB2GRAY);
+
+//    if (param.contour.smooth) {
 //        cvSmooth(grayImage, grayImage, CV_BLUR, 3, 3);
-////    }
+//    }
 
-//    cvCanny(grayImage, bordImage, param.threshold1, param.threshold2, 3);
+    cvCanny(grayImage, hitImage, contourParam.threshold1, contourParam.threshold2, 3);
 
-//    if (storageContour)
-//        cvReleaseMemStorage(&storageContour);
+    // находим контуры
+    int contoursCont;
+    contoursCont = cvFindContours(bordImage, contourStorage, &contoursSeq, sizeof(CvContour),
+                                  CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0));
 
-//    storageContour = cvCreateMemStorage(0);
-
-//    // находим контуры
-//    int contoursCont;
-//    contoursCont = cvFindContours(bordImage, storageContour, &contours, sizeof(CvContour),
-//                                  CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0));
+    for(CvSeq* seq = contoursSeq; seq != 0; seq = seq->h_next) {
+        Contour contour;
+        for( int i=0; i<seq->total; ++i ) {
+            CvPoint* cvP = (CvPoint*)cvGetSeqElem(seq, i);
+            ContourPt pt;
+            pt.x = cvP->x;
+            pt.y = cvP->y;
+            contour.push_back(pt);
+        }
+        contours.push_back(contour);
+        qDebug() << "Contour!";
+    }
 
     // пример работы с контуром
     //for(CvSeq* seq = contours; seq != 0; seq = seq->h_next){
         // нарисовать контур
         // cvDrawContours(dstImage, seq, CV_RGB(255,216,0), CV_RGB(0,0,250), 0, 1, 8);
-        // Работаем с точкамипоследовательности
+        // Работаем с точками последовательности
          //CvPoint* p = (CvPoint*)cvGetSeqElem ( seq, i );
     //}
 
@@ -662,27 +679,27 @@ void Process::findContours()
 
 void Process::findHulls()
 {
-    if (storageHulls)
-        cvReleaseMemStorage(&storageHulls);
+    if (hullsStorage)
+        cvReleaseMemStorage(&hullsStorage);
 
-    storageHulls = cvCreateMemStorage(0);
+    hullsStorage = cvCreateMemStorage(0);
 
     bool isFirst =  true;
     CvSeq *curHulls = NULL;
-    hulls = NULL;
+    hullsSeq = NULL;
 
-    for(CvSeq* seq = contours; seq != 0; seq = seq->h_next){
+    for(CvSeq* seq = contoursSeq; seq != 0; seq = seq->h_next){
 
         if (! (seq->flags & CV_SEQ_FLAG_HOLE))
         {
 
             if (isFirst) {
                 isFirst = false;
-                hulls = cvConvexHull2(seq, storageHulls, CV_CLOCKWISE, 1);
-                curHulls = hulls;
+                hullsSeq = cvConvexHull2(seq, hullsStorage, CV_CLOCKWISE, 1);
+                curHulls = hullsSeq;
             }
             else {
-                curHulls->h_next = cvConvexHull2(seq, storageHulls, CV_CLOCKWISE, 1);
+                curHulls->h_next = cvConvexHull2(seq, hullsStorage, CV_CLOCKWISE, 1);
                 curHulls = curHulls->h_next;
 
             }

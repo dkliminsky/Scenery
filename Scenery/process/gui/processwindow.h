@@ -33,7 +33,7 @@ public slots:
     void slotMotionParam();
     void slotHaarFile(int index);
     void slotHaarParam();
-
+    void slotContourParam();
     void slotHoughCircleParam();
 
     void slotClusterMode(QString mode);

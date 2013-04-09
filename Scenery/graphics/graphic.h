@@ -16,26 +16,32 @@ class Graphic: public Utils
 public:
     Graphic();
 
-    Image *loadImage(const QString &fileName);
-    void image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle=0);
+    void size(int width, int height);
+
+    void background(GLfloat r, GLfloat g, GLfloat b, GLfloat a=1);
+    void background(const Color &color);
+
+    void color(GLfloat r, GLfloat g, GLfloat b, GLfloat a=1);
+    void color(const Color &color);
+
+    void lineWidth(GLfloat width);
+    void lineParts(int parts);
     void line(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
     void line(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
+
     void bezier(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
                 GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4);
     void bezier(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
                             GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4);
 
-    void color(GLfloat r, GLfloat g, GLfloat b, GLfloat a=1);
-    void color(const Color &color);
-    void background(GLfloat r, GLfloat g, GLfloat b, GLfloat a=1);
-    void background(const Color &color);
-    void lineWidth(GLfloat width);
+    Image *loadImage(const QString &fileName);
+    void image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle=0);
 
-    void size(int widthView, int heightView);
     void flush();
 
 protected:
     View *view;
+    void addImage(Image *image) { images.append(image); }
 
     int widthView;
     int heightView;
@@ -43,8 +49,11 @@ protected:
     int heightScene;
 
     void sceneChanged();
+    void updateSize();
 
 private:
+    bool firstSceneChange;
+    QVector<Image *> images;
 
     struct ImageBuffer {
         GLuint id;
@@ -81,7 +90,7 @@ private:
     QVector<ImageBuffer> imageBuffers;
     Color curColor;
     GLfloat lineWidth_;
-
+    GLfloat lineParts_;
 };
 
 #endif // GRAPHIC_H

@@ -2,4 +2,5 @@
 
 Image::Image(const QString &fileName)
 {
+    this->fileName = fileName;
 }

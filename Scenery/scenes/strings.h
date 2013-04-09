@@ -21,6 +21,7 @@ private:
 
     double height1;
     double height2;
+    int stringParts;
     int count;
     int frequency;
     int Amax;

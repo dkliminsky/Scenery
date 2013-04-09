@@ -2,19 +2,34 @@
 
 Drawing::Drawing()
 {
+    control(backColor=Color(0,0,0,0), "Background");
+    control(lineColor=Color(1,0,0,1), "Line Color");
+    control(lineSize=10, "Line size", 0, 200);
+    control(clearSize=10, "Line size", 0, 200);
+    control(isClear=false, "Clear");
+
+    lineImage = loadImage("images/line2.png");
 }
 
 void Drawing::setup()
 {
+    size(getWidth(0), getHeight(0));
     background(0.0f, 0.0f, 0.0f, 1.0f);
-    lineImage = loadImage("images/line5.png");
 }
 
 void Drawing::paint()
 {
-    size(getWidth(0), getHeight(0));
-    color(1,0,0);
-    lineWidth(15);
+    background(backColor);
+    color(lineColor);
+
+    if (isClear) {
+        lineWidth(clearSize);
+        color(0,0,0,1);
+    }
+    else {
+        lineWidth(lineSize);
+        color(lineColor);
+    }
 
     SeqAreas &seqAreas = getSeqAreas(0);
     for (unsigned int i=0; i<seqAreas.size(); i++) {

@@ -6,11 +6,10 @@
 #include <math.h>
 
 #include "iscene.h"
-#include "graphic.h"
 #include "control.h"
 #include "process/process.h"
 
-class Scene: public IScene, public Graphic, public Control
+class Scene: public IScene, public Control
 {
 public:
     Scene();
@@ -25,11 +24,13 @@ public:
     void setHeight(int n, int height) { heightVector[n] = height; }
     void setAreas(int n, Areas areas) { areasVector[n] = areas; }
     void setSeqAreas(int n, SeqAreas seqAreas) { seqAreasVector[n] = seqAreas; }
+    void setContours(int n, Contours contours) { contoursVector[n] = contours; }
 
     int &getWidth (int n);
     int &getHeight(int n);
     Areas &getAreas(int n);
     SeqAreas &getSeqAreas(int n);
+    Contours &getContours(int n);
 
     int time();
     int dtime();
@@ -44,6 +45,7 @@ private:
     QVector<int> heightVector;
     QVector<Areas> areasVector;
     QVector<SeqAreas> seqAreasVector;
+    QVector<Contours> contoursVector;
 
     bool firstPaint;
 

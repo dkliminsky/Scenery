@@ -64,6 +64,9 @@ public:
     // Возвращает структуру с последовательностью регионов
     SeqAreas &getSeqAreas() { return *seqAreasResult; }
 
+    //
+    Contours &getContours() { return contours; }
+
     // ====================================================================
     // Color Parameters
     // ====================================================================
@@ -126,6 +129,8 @@ public:
         int threshold1; // Границы поиска
         int threshold2;
     };
+
+    void setContourParam(ContourParam param);
 
     // ====================================================================
     // HoughCircles Parameters
@@ -253,19 +258,22 @@ private:
     // ====================================================================
     // Contour
     // ====================================================================
+    Contours contours;
 
-    void findContours();
-    CvSeq *getContours() { return contours; }
-
-    void findHulls();
-    CvSeq *getHulls() { return hulls; }
+    ContourParam contourParam;
 
     IplImage *bordImage;
-    CvMemStorage* storageContour;
-    CvMemStorage* storageHulls;
+    CvMemStorage* contourStorage;
+    CvMemStorage* hullsStorage;
 
-    CvSeq* contours;
-    CvSeq* hulls;
+    CvSeq* contoursSeq;
+    CvSeq* hullsSeq;
+
+    void findContours();
+    //CvSeq *getContours() { return contoursSeq; }
+
+    void findHulls();
+    //CvSeq *getHulls() { return hullsSeq; }
 
     // ====================================================================
     // HoughCircles

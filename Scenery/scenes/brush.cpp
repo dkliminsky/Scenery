@@ -4,17 +4,18 @@ Brush::Brush()
 {
     control(speedLimit=30, "Speed limit", 0, 100);
     control(strokeWidth=120, "Stroke Width", 0, 300);
-}
 
-void Brush::setup()
-{
     imgStroke = loadImage("images/stroke02.png");
     imgLine   = loadImage("images/line2.png");
 }
 
-void Brush::paint()
+void Brush::setup()
 {
     size(getWidth(0), getHeight(0));
+}
+
+void Brush::paint()
+{
     background(0.0f, 0.0f, 0.0f, 1.0f);
 
     SeqAreas &seqAreas = getSeqAreas(0);

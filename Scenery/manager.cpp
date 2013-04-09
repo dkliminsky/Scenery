@@ -8,6 +8,8 @@
 Manager::Manager()
 {
     qDebug() << "Constructor Begin: Manager";
+    qDebug() << "TEST";
+
 
     isPlay = false;
     ProcessTools::initRGB2HSV();
@@ -16,7 +18,7 @@ Manager::Manager()
 
     Input *input = new Input(Input::None, "", cameraWidth, cameraHeight);
     //InputThread *input = new InputThread(InputThread::Video, "video/tesla.mp4");
-    input->start();
+    //input->start();
     inputs.append(input);
 
     Process *process = new Process(input->getWidth(), input->getHeigth());
@@ -32,6 +34,7 @@ Manager::Manager()
     scenes.append(new Strings());
     scenes.append(new Brush());
     scenes.append(new Drawing());
+    scenes.append(new Inking());
 
     QGLFormat format;
     format.setDoubleBuffer(false);
@@ -46,6 +49,8 @@ Manager::Manager()
     firstProcess = true;
     firstEndProcess = true;
 
+    qDebug() << "Input run";
+    input->start();
     startTimer(17);
     qDebug() << "Constructor End: Manager";
 }
@@ -121,11 +126,14 @@ void Manager::step()
             if (firstSetData) {
                 qDebug() << "First Set Data";
                 firstSetData = false;
+
+                qDebug() << processes[0]->getAreas().size();
             }
 
             // set process data in scene
             scenes.at(curScene)->setAreas(0, processes[0]->getAreas());
             scenes.at(curScene)->setSeqAreas(0, processes[0]->getSeqAreas());
+            scenes.at(curScene)->setContours(0, processes[0]->getContours());
 
             if (firstProcess) {
                 qDebug() << "First Process";
