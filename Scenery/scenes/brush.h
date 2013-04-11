@@ -14,12 +14,6 @@ public:
     void paint();
 
 private:
-    bool isStroke;
-    Color strokeColor;
-    Image *strokeImages[10];
-    int strokeSize;
-    int strokeLimit;
-
     bool isBlot;
     Color blotColor;
     Image *blotImages[10];

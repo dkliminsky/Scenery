@@ -11,8 +11,11 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     this->manager = manager;
 
     for(int i=0; i<manager->getScenes().size(); i++) {
-        ui->scenesComboBox->addItem(manager->getScenes().at(i)->name());
-        ui->scenesStackedWidget->addWidget(manager->getScenes().at(i)->getWidget());
+        Scene *scene = manager->getScenes().at(i);
+        ui->scenesComboBox->addItem(scene->name());
+        scene->getLayout()->setRowStretch(scene->getLayout()->count()-1, 1);
+        ui->scenesStackedWidget->addWidget(scene->getWidget());
+
     }
     connect(ui->scenesComboBox, SIGNAL(activated(int)), SLOT(changeScene(int)));
 

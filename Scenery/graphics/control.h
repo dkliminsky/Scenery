@@ -24,7 +24,8 @@ class Control : public Graphic
 public:
     Control();
 
-    QWidget *getWidget() { return widget; }
+    QWidget     *getWidget() { return widget; }
+    QGridLayout *getLayout() { return layout; }
     QVector<IControl *> &getControls() { return controls; }
 
     void control(int &x, QString description, int min=0, int max=100);
