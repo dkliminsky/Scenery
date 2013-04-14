@@ -14,7 +14,6 @@
 #include "scenes/skeleton.h"
 #include "scenes/cage.h"
 #include "scenes/strings.h"
-#include "scenes/drawing.h"
 #include "scenes/brush.h"
 #include "scenes/inking.h"
 

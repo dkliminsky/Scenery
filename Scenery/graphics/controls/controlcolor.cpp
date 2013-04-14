@@ -1,5 +1,7 @@
 #include "controlcolor.h"
 
+#include <QDebug>
+
 ControlColor::ControlColor(Color &color) :
     color(color)
 {
@@ -27,12 +29,17 @@ ControlColor::ControlColor(Color &color) :
     spinA->setSingleStep(0.05);
     spinA->setValue(color.a);
 
+    button = new QPushButton("Change");
+    colorDialog = new QColorDialog(this);
+    colorDialog->setOptions(QColorDialog::ShowAlphaChannel);
+
     hLayout = new QHBoxLayout();
     hLayout->setContentsMargins(0, 0, 0, 0);
     hLayout->addWidget(spinR);
     hLayout->addWidget(spinG);
     hLayout->addWidget(spinB);
     hLayout->addWidget(spinA);
+    hLayout->addWidget(button);
 
     this->setLayout(hLayout);
 
@@ -40,6 +47,20 @@ ControlColor::ControlColor(Color &color) :
     connect(spinG, SIGNAL(valueChanged(double)),  SLOT(slotChange()));
     connect(spinB, SIGNAL(valueChanged(double)),  SLOT(slotChange()));
     connect(spinA, SIGNAL(valueChanged(double)),  SLOT(slotChange()));
+    connect(button, SIGNAL(clicked()), SLOT(slotColorDialog()));
+    connect(colorDialog, SIGNAL(currentColorChanged(QColor)), SLOT(slotColorDialogSelected(QColor)));
+
+    isSlotOn = true;
+}
+
+void ControlColor::updateData()
+{
+    isSlotOn = false;
+    spinR->setValue(color.r);
+    spinG->setValue(color.g);
+    spinB->setValue(color.b);
+    spinA->setValue(color.a);
+    isSlotOn = true;
 }
 
 void ControlColor::setData(QString &data)
@@ -48,8 +69,27 @@ void ControlColor::setData(QString &data)
 
 void ControlColor::slotChange()
 {
-    color.r = spinR->value();
-    color.g = spinG->value();
-    color.b = spinB->value();
-    color.a = spinA->value();
+    if (isSlotOn) {
+        color.r = spinR->value();
+        color.g = spinG->value();
+        color.b = spinB->value();
+        color.a = spinA->value();
+    }
+}
+
+void ControlColor::slotColorDialog()
+{
+    QColor c(color.r*255.0, color.g*255.0, color.b*255.0, color.a*255.0);
+    colorDialog->setCurrentColor(c);
+    colorDialog->show();
+}
+
+void ControlColor::slotColorDialogSelected(QColor c)
+{
+    qDebug() << "Color";
+    color.r = c.red() / 255.0;
+    color.g = c.green() / 255.0;
+    color.b = c.blue() / 255.0;
+    color.a = c.alpha() / 255.0;
+    updateData();
 }

@@ -6,6 +6,7 @@
 class IControl
 {
 public:
+    virtual void updateData() = 0;
     virtual void setData(QString &data) = 0;
     virtual QString &getData() = 0;
 };

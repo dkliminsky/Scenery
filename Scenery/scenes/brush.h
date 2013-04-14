@@ -12,6 +12,7 @@ public:
 
     void setup();
     void paint();
+    void push(int id);
 
 private:
     bool isBlot;

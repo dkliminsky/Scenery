@@ -2,10 +2,11 @@
 
 Brush::Brush()
 {
-    control(isBlot=false, "Enable blot");
-    control(blotColor=Color(1,1,1,1), "Blot Color");
-    control(blotSize=100, "Blot size", 0, 300);
-    control(blotLimit=50, "Blot Speed limit", 0, 100);
+    button(1, "Rand color");
+    button(isBlot=true, "Enable blot");
+    button(blotColor=Color(1,1,1,1), "Blot Color");
+    button(blotSize=100, "Blot size", 0, 300);
+    button(blotLimit=50, "Blot Speed limit", 0, 100);
 
     blotImages[0] = loadImage("images/brushes/blot01.png");
     blotImages[1] = loadImage("images/brushes/blot02.png");
@@ -39,4 +40,9 @@ void Brush::paint()
             }
         }
     }
+}
+
+void Brush::push(int id)
+{
+    blotColor.randomRGB();
 }

@@ -10,13 +10,12 @@ Manager::Manager()
     qDebug() << "Constructor Begin: Manager";
     qDebug() << "TEST";
 
-
     isPlay = false;
     ProcessTools::initRGB2HSV();
     int cameraWidth = 640;
     int cameraHeight = 480;
 
-    Input *input = new Input(Input::None, "", cameraWidth, cameraHeight);
+    Input *input = new Input(Input::Camera, "", cameraWidth, cameraHeight);
     //InputThread *input = new InputThread(InputThread::Video, "video/tesla.mp4");
     //input->start();
     inputs.append(input);
@@ -33,7 +32,6 @@ Manager::Manager()
     scenes.append(new Cage());
     scenes.append(new Strings());
     scenes.append(new Brush());
-    scenes.append(new Drawing());
     scenes.append(new Inking());
 
     QGLFormat format;
@@ -153,7 +151,6 @@ void Manager::step()
         // set video stream in scene
     }
 
-    //qDebug() << "!!";
     view->updateGL();
 }
 

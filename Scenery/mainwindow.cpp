@@ -7,13 +7,16 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    qDebug() << "Constructor Begin: MainWindow";
+
     ui->setupUi(this);
     this->manager = manager;
 
     for(int i=0; i<manager->getScenes().size(); i++) {
         Scene *scene = manager->getScenes().at(i);
         ui->scenesComboBox->addItem(scene->name());
-        scene->getLayout()->setRowStretch(scene->getLayout()->count()-1, 1);
+        if (scene->getLayout()->count() > 0)
+            scene->getLayout()->setRowStretch(scene->getLayout()->count()-1, 1);
         ui->scenesStackedWidget->addWidget(scene->getWidget());
 
     }
@@ -26,6 +29,8 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     ui->scenesStackedWidget->setCurrentIndex(0);
 
     startTimer(500);
+
+    qDebug() << "Constructor End: MainWindow";
 }
 
 MainWindow::~MainWindow()

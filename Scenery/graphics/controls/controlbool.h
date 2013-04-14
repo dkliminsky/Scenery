@@ -10,6 +10,7 @@ class ControlBool : public QCheckBox, public IControl
     Q_OBJECT
 public:
     explicit ControlBool(bool &data);
+    void updateData(){}
     void setData(QString &data);
     QString &getData();
 
