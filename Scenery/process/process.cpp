@@ -32,7 +32,6 @@ Process::Process(int width, int height) :
 
     // Contour
 
-    bordImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
     contourStorage = cvCreateMemStorage(0);
     hullsStorage = 0;
 
@@ -66,9 +65,7 @@ Process::~Process()
     wait();
 
     cvReleaseImage(&hitImage);
-
     cvReleaseImage(&grayImage);
-    cvReleaseImage(&bordImage);
 
     cvReleaseMemStorage(&haarStorage);
     cvReleaseMemStorage(&contourStorage);
@@ -636,9 +633,8 @@ void Process::findContours()
     cvCanny(grayImage, hitImage, contourParam.threshold1, contourParam.threshold2, 3);
 
     // находим контуры
-    int contoursCont =
-        cvFindContours(bordImage, contourStorage, &contoursSeq, sizeof(CvContour),
-                       CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0));
+    cvFindContours(hitImage, contourStorage, &contoursSeq, sizeof(CvContour),
+                   CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0));
 
     for(CvSeq* seq = contoursSeq; seq != 0; seq = seq->h_next) {
         Contour contour;
@@ -648,9 +644,9 @@ void Process::findContours()
             pt.x = cvP->x;
             pt.y = cvP->y;
             contour.push_back(pt);
+            //qDebug() << cvP->x << cvP->y;
         }
         contours.push_back(contour);
-        qDebug() << "Contour!";
     }
 
     // пример работы с контуром

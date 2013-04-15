@@ -21,8 +21,9 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
 
     }
     connect(ui->scenesComboBox, SIGNAL(activated(int)), SLOT(changeScene(int)));
-
     connect(ui->actionFullScreen, SIGNAL(toggled(bool)), SLOT(setFullScreen(bool)));
+
+    //connect(ui->processParamButton, SIGNAL(clicked()), );
 
     manager->setScene(0);
     ui->scenesComboBox->setCurrentIndex(0);
@@ -61,4 +62,9 @@ void MainWindow::setFullScreen(bool full)
         manager->getView()->showFullScreen();
     else
         manager->getView()->showNormal();
+}
+
+void MainWindow::slotProcessParam()
+{
+
 }

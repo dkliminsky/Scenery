@@ -262,7 +262,6 @@ private:
 
     ContourParam contourParam;
 
-    IplImage *bordImage;
     CvMemStorage* contourStorage;
     CvMemStorage* hullsStorage;
 

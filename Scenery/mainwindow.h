@@ -16,7 +16,11 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(Manager *manager, QWidget *parent = 0);
     ~MainWindow();
-    
+
+    void saveControls(Scene *scene, QString file, int state=0);
+    void loadControls(Scene *scene, QString file, int state=0);
+    void loadControlsStates(QString file);
+
 protected:
     void closeEvent(QCloseEvent *);
     void timerEvent(QTimerEvent *);
@@ -28,6 +32,7 @@ private:
 public slots:
     void changeScene(int n);
     void setFullScreen(bool full);
+    void slotProcessParam();
 
 };
 

@@ -150,7 +150,7 @@ ProcessWindow::~ProcessWindow()
 
 void ProcessWindow::closeEvent(QCloseEvent *)
 {
-    qApp->exit(0);
+
 }
 
 void ProcessWindow::loadParam()

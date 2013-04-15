@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>390</width>
+    <width>560</width>
     <height>453</height>
    </rect>
   </property>
@@ -73,6 +73,20 @@
         <widget class="QComboBox" name="scenesComboBox"/>
        </item>
        <item>
+        <widget class="QPushButton" name="saveControlsStatesButton">
+         <property name="text">
+          <string>Save</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="processParamButton">
+         <property name="text">
+          <string>Process</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -89,7 +103,16 @@
      </widget>
     </item>
     <item>
-     <widget class="QStackedWidget" name="scenesStackedWidget"/>
+     <widget class="QWidget" name="widget_2" native="true">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QStackedWidget" name="scenesStackedWidget"/>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="controlsStatesTable"/>
+       </item>
+      </layout>
+     </widget>
     </item>
     <item>
      <spacer name="verticalSpacer">
@@ -111,8 +134,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>390</width>
-     <height>25</height>
+     <width>560</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
