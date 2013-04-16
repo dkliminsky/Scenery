@@ -1,6 +1,7 @@
 #include "controlimage.h"
 
-ControlImage::ControlImage(Image **image, QVector<Image *> images, int index)
+ControlImage::ControlImage(Image **image, QString name, QVector<Image *> images, int index) :
+    IControl(name)
 {
     Q_ASSERT(index <= images.size());
 
@@ -14,11 +15,25 @@ ControlImage::ControlImage(Image **image, QVector<Image *> images, int index)
     this->addItems(list);
     this->setCurrentIndex(index);
 
-    connect(this, SIGNAL(activated(int)), SLOT(slotChange()));
+    connect(this, SIGNAL(currentIndexChanged(int)), SLOT(slotChange()));
+}
+
+void ControlImage::updateData()
+{
+    // ...
 }
 
 void ControlImage::setData(QString &data)
 {
+    int i = this->findText(data);
+    if (i >= 0) {
+        this->setCurrentIndex(i);
+    }
+}
+
+QString ControlImage::getData()
+{
+    return (*image)->getFileName();
 }
 
 void ControlImage::slotChange()

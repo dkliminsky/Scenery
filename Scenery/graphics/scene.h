@@ -49,12 +49,12 @@ public:
 
     // Scene API: Control
     void button(int id, QString description);
-    void button(int &x, QString description, int min=0, int max=100);
-    void button(double &x, QString description, double min=0, double max=100, int precision=1);
-    void button(bool &x, QString description);
-    void button(QString &string, QString description, QStringList list);
-    void button(Color &color, QString description);
-    void button(Image **image, QString description, QString path, QString file="");
+    void control(int &x, QString description, int min=0, int max=100);
+    void control(double &x, QString description, double min=0, double max=100, int precision=1);
+    void control(bool &x, QString description);
+    void control(QString &string, QString description, QStringList list);
+    void control(Color &color, QString description);
+    void control(Image **image, QString description, QString path, QString file="");
 
 
     void setProcessCount(int n);

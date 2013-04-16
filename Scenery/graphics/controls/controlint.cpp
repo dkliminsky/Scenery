@@ -1,10 +1,11 @@
 #include "controlint.h"
 
-ControlInt::ControlInt(int &data, int min, int max) :
-    data(data)
+#include <QDebug>
+
+ControlInt::ControlInt(int &data, QString name, int min, int max) :
+    IControl(name), data(data)
 {
     slider = new QSlider();
-    slider->setValue(data);
     slider->setRange(min, max);
     slider->setOrientation(Qt::Horizontal);
 
@@ -19,10 +20,24 @@ ControlInt::ControlInt(int &data, int min, int max) :
     this->setLayout(hLayout);
 
     connect(slider, SIGNAL(valueChanged(int)), SLOT(slotChange()));
+
+    updateData();
+}
+
+void ControlInt::updateData()
+{
+    slider->setValue(data);
 }
 
 void ControlInt::setData(QString &data)
 {
+    this->data = QString(data).toInt();
+    updateData();
+}
+
+QString ControlInt::getData()
+{
+    return QString().setNum(data);
 }
 
 void ControlInt::slotChange()

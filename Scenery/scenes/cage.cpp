@@ -15,19 +15,19 @@ Cage::Cage()
     cyPrev = 0;
     isCenterPrev = false;
 
-    button(backColor=Color(1,1,1,1), "Background");
-    button(boxColor,  "Box");
-    button(&box, "Box Image", "images/forms/", "box2.png");
-    button(cellSize=10, "Cell size", 2, 50);
-    button(boxSize=20, "Box size", 1, 50);
-    button(boxDeviation=10, "Box deviation", 1, 50);
-    button(influence=0, "Influence", 0, 10);
-    button(prob=10, "Prob", 0, 100);
-    button(isWave=false, "Wave");
-    button(waveWidth=20, "Wave width", 1, 200);
-    button(waveForce=10, "Wave force", 1, 50);
-    button(waveSpeed=7,  "Wave speed", 1, 50);
-    button(isWaveDebug=false, "Wave Debug");
+    control(backColor=Color(1,1,1,1), "Background");
+    control(boxColor,  "Box");
+    control(&box, "Box Image", "images/forms/", "box2.png");
+    control(cellSize=10, "Cell size", 2, 50);
+    control(boxSize=20, "Box size", 1, 50);
+    control(boxDeviation=10, "Box deviation", 1, 50);
+    control(influence=0, "Influence", 0, 10);
+    control(prob=10, "Prob", 0, 100);
+    control(isWave=false, "Wave");
+    control(waveWidth=20, "Wave width", 1, 200);
+    control(waveForce=10, "Wave force", 1, 50);
+    control(waveSpeed=7,  "Wave speed", 1, 50);
+    control(isWaveDebug=false, "Wave Debug");
 }
 
 void Cage::setup()

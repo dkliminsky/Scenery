@@ -8,23 +8,19 @@
 Manager::Manager()
 {
     qDebug() << "Constructor Begin: Manager";
-    qDebug() << "TEST";
 
     isPlay = false;
     ProcessTools::initRGB2HSV();
     int cameraWidth = 640;
     int cameraHeight = 480;
 
-    Input *input = new Input(Input::Camera, "", cameraWidth, cameraHeight);
+    Input *input = new Input(Input::None, "", cameraWidth, cameraHeight);
     //InputThread *input = new InputThread(InputThread::Video, "video/tesla.mp4");
     //input->start();
     inputs.append(input);
 
     Process *process = new Process(input->getWidth(), input->getHeigth());
     processes.append(process);
-
-    processWindow = new ProcessWindow(process, "process.ini");
-    processWindow->show();
 
     debug = new DebugWindow("main", cameraWidth, cameraHeight);
 
@@ -124,8 +120,6 @@ void Manager::step()
             if (firstSetData) {
                 qDebug() << "First Set Data";
                 firstSetData = false;
-
-                qDebug() << processes[0]->getAreas().size();
             }
 
             // set process data in scene

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "manager.h"
+#include "processwindow.h"
 
 namespace Ui {
 class MainWindow;
@@ -28,11 +29,13 @@ protected:
 private:
     Ui::MainWindow *ui;
     Manager *manager;
+    ProcessWindow *processWindow;
 
 public slots:
     void changeScene(int n);
     void setFullScreen(bool full);
-    void slotProcessParam();
+    void slotSaveControls();
+    void slotLoadControls();
 
 };
 

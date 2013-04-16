@@ -114,42 +114,42 @@ int Scene::dtime()
 }
 
 
-void Scene::button(int &x, QString description, int min, int max)
+void Scene::control(int &x, QString description, int min, int max)
 {
-    ControlInt *data = new ControlInt(x, min, max);
+    ControlInt *data = new ControlInt(x, description, min, max);
     addWidgetValue(data, description);
     controls.append(data);
 }
 
-void Scene::button(double &x, QString description, double min, double max, int precision)
+void Scene::control(double &x, QString description, double min, double max, int precision)
 {
-    ControlDouble *data = new ControlDouble(x, min, max, precision);
+    ControlDouble *data = new ControlDouble(x, description, min, max, precision);
     addWidgetValue(data, description);
     controls.append(data);
 }
 
-void Scene::button(bool &x, QString description)
+void Scene::control(bool &x, QString description)
 {
-    ControlBool *data = new ControlBool(x);
+    ControlBool *data = new ControlBool(x, description);
     addWidgetValue(data, description);
     controls.append(data);
 }
 
-void Scene::button(QString &string, QString description, QStringList list)
+void Scene::control(QString &string, QString description, QStringList list)
 {
-    ControlString *data = new ControlString(string, list);
+    ControlString *data = new ControlString(string, description, list);
     addWidgetValue(data, description);
     controls.append(data);
 }
 
-void Scene::button(Color &color, QString description)
+void Scene::control(Color &color, QString description)
 {
-    ControlColor *data = new ControlColor(color);
+    ControlColor *data = new ControlColor(color, description);
     addWidgetValue(data, description);
     controls.append(data);
 }
 
-void Scene::button(Image **image, QString description, QString path, QString file)
+void Scene::control(Image **image, QString description, QString path, QString file)
 {
     QDir dir(path);
     Q_ASSERT(dir.exists());
@@ -177,7 +177,7 @@ void Scene::button(Image **image, QString description, QString path, QString fil
 
     *image = images.at(index);
 
-    ControlImage *data = new ControlImage(image, images, index);
+    ControlImage *data = new ControlImage(image, description, images, index);
     addWidgetValue(data, description);
     controls.append(data);
 }

@@ -2,21 +2,21 @@
 
 Strings::Strings()
 {
-    button(backColor=Color(0,0,0,0.2), "Background");
-    button(&lineImage, "Line image", "images/lines/", "line1.png");
-    button(color1=Color(1,1,1,0.5), "Color 1");
-    button(color2=Color(1,1,1,1), "Color 2");
-    button(height1=8.0, "Width 1", 0.0, 10.0, 1);
-    button(height2=2.0, "Width 2", 0.0, 10.0, 1);
-    button(count=1, "Count strings", 0, 100);
-    button(stringParts=50, "Parts", 0, 200);
-    button(frequency=100, "Frequency/100", 0, 500);
-    button(Amax=50, "Amplitude max", 0, 200);
-    button(force=1.0, "Force", 0, 50, 1);
-    button(damping=0.1, "Damping", 0, 10, 1);
-    button(isSag=false, "Sag");
-    button(isShadow=false, "Shadow");
-    button(isDebug=false, "Debug");
+    control(backColor=Color(0,0,0,0.2), "Background");
+    control(&lineImage, "Line image", "images/lines/", "line1.png");
+    control(color1=Color(1,1,1,0.5), "Color 1");
+    control(color2=Color(1,1,1,1), "Color 2");
+    control(height1=8.0, "Width 1", 0.0, 10.0, 1);
+    control(height2=2.0, "Width 2", 0.0, 10.0, 1);
+    control(count=1, "Count strings", 0, 100);
+    control(stringParts=50, "Parts", 0, 200);
+    control(frequency=100, "Frequency/100", 0, 500);
+    control(Amax=50, "Amplitude max", 0, 200);
+    control(force=1.0, "Force", 0, 50, 1);
+    control(damping=0.1, "Damping", 0, 10, 1);
+    control(isSag=false, "Sag");
+    control(isShadow=false, "Shadow");
+    control(isDebug=false, "Debug");
 }
 
 void Strings::setup()

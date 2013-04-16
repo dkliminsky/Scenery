@@ -2,32 +2,28 @@
 
 #include <QDebug>
 
-ControlColor::ControlColor(Color &color) :
-    color(color)
+ControlColor::ControlColor(Color &color, QString name) :
+    IControl(name), color(color)
 {
     spinR = new QDoubleSpinBox();
     spinR->setRange(0, 1);
     spinR->setDecimals(2);
     spinR->setSingleStep(0.05);
-    spinR->setValue(color.r);
 
     spinG = new QDoubleSpinBox();
     spinG->setRange(0, 1);
     spinG->setDecimals(2);
     spinG->setSingleStep(0.05);
-    spinG->setValue(color.g);
 
     spinB = new QDoubleSpinBox();
     spinB->setRange(0, 1);
     spinB->setDecimals(2);
     spinB->setSingleStep(0.05);
-    spinB->setValue(color.b);
 
     spinA = new QDoubleSpinBox();
     spinA->setRange(0, 1);
     spinA->setDecimals(2);
     spinA->setSingleStep(0.05);
-    spinA->setValue(color.a);
 
     button = new QPushButton("Change");
     colorDialog = new QColorDialog(this);
@@ -50,7 +46,7 @@ ControlColor::ControlColor(Color &color) :
     connect(button, SIGNAL(clicked()), SLOT(slotColorDialog()));
     connect(colorDialog, SIGNAL(currentColorChanged(QColor)), SLOT(slotColorDialogSelected(QColor)));
 
-    isSlotOn = true;
+    updateData();
 }
 
 void ControlColor::updateData()
@@ -65,6 +61,20 @@ void ControlColor::updateData()
 
 void ControlColor::setData(QString &data)
 {
+    QStringList list = data.split(",");
+    if (list.size() == 4) {
+        color.r = list.at(0).toFloat();
+        color.g = list.at(1).toFloat();
+        color.b = list.at(2).toFloat();
+        color.a = list.at(3).toFloat();
+        updateData();
+    }
+}
+
+QString ControlColor::getData()
+{
+    return QString().setNum(color.r) + "," + QString().setNum(color.g) + "," +
+           QString().setNum(color.b) + "," + QString().setNum(color.a);
 }
 
 void ControlColor::slotChange()
@@ -86,7 +96,6 @@ void ControlColor::slotColorDialog()
 
 void ControlColor::slotColorDialogSelected(QColor c)
 {
-    qDebug() << "Color";
     color.r = c.red() / 255.0;
     color.g = c.green() / 255.0;
     color.b = c.blue() / 255.0;

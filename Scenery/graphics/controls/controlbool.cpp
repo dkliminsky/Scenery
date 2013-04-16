@@ -1,10 +1,15 @@
 #include "controlbool.h"
 
-ControlBool::ControlBool(bool &data) :
-    data(data)
+ControlBool::ControlBool(bool &data, QString name) :
+    IControl(name), data(data)
+{
+    connect(this, SIGNAL(clicked()), SLOT(slotChange()));
+    updateData();
+}
+
+void ControlBool::updateData()
 {
     this->setChecked(data);
-    connect(this, SIGNAL(clicked()), SLOT(slotChange()));
 }
 
 void ControlBool::setData(QString &data)
@@ -13,12 +18,12 @@ void ControlBool::setData(QString &data)
         this->data = true;
     else
         this->data = false;
+
+    updateData();
 }
 
-QString &ControlBool::getData()
+QString ControlBool::getData()
 {
-
-
     if (data)
         return *(new QString("true"));
     else

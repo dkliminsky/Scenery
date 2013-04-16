@@ -7,7 +7,6 @@
 
 #include "process/process.h"
 #include "process/input.h"
-#include "process/gui/processwindow.h"
 #include "process/gui/debugwindow.h"
 #include "graphics/view.h"
 
@@ -32,6 +31,7 @@ public:
     Processes &getProcesses() { return processes; }
     Inputs    &getInputs()    { return inputs; }
     Scenes    &getScenes()    { return scenes; }
+    Scene     *getCurScene()  { return scenes.at(curScene); }
     View      *getView()      { return view; }
 
     void setScene(int n);
@@ -46,7 +46,6 @@ private:
     int curScene;
 
     View *view;
-    ProcessWindow *processWindow;
     DebugWindow *debug;
 
     bool isPlay;
