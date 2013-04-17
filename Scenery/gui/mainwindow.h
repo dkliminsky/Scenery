@@ -20,7 +20,7 @@ public:
 
     void saveControls(Scene *scene, QString file, int state=0);
     void loadControls(Scene *scene, QString file, int state=0);
-    void loadControlsStates(QString file);
+    QStringList loadControlsStates(QString file);
 
 protected:
     void closeEvent(QCloseEvent *);
@@ -30,6 +30,7 @@ private:
     Ui::MainWindow *ui;
     Manager *manager;
     ProcessWindow *processWindow;
+    QStringList states;
 
 public slots:
     void changeScene(int n);

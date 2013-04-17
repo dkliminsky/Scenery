@@ -73,6 +73,32 @@ void MainWindow::loadControls(Scene *scene, QString file, int state)
     settings.endGroup();
 }
 
+QStringList MainWindow::loadControlsStates(QString file)
+{
+    QStringList list;
+    QSettings settings(file, QSettings::IniFormat);
+    settings.beginGroup("/"+scene->name());
+    bool isState = true;
+    int i = 0;
+    while (isState) {
+        QString state = "/state_name"+QString::number(i);
+        if ( settings.contains(state))
+        {
+            list << settings.value(state);
+            i++;
+        }
+        else {
+            isState = false;
+        }
+    }
+    settings.endGroup();
+
+    if (list.count() == 0)
+        list << "Default";
+
+    return list;
+}
+
 void MainWindow::closeEvent(QCloseEvent *)
 {
     qApp->exit(0);

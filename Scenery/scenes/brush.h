@@ -15,11 +15,20 @@ public:
     void push(int id);
 
 private:
-    bool isBlot;
+    QString mode;
+
+    Color backColor;
+
+    Color lineColor;
+    int lineSize;
+    int lineLimit;
+
     Color blotColor;
     Image *blotImages[10];
     int blotSize;
     int blotLimit;
+
+
 };
 
 #endif // BRUSH_H
