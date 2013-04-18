@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTableWidget>
 
 #include "manager.h"
 #include "processwindow.h"
@@ -18,9 +19,9 @@ public:
     explicit MainWindow(Manager *manager, QWidget *parent = 0);
     ~MainWindow();
 
-    void saveControls(Scene *scene, QString file, int state=0);
-    void loadControls(Scene *scene, QString file, int state=0);
-    QStringList loadControlsStates(QString file);
+    void saveControls(Scene *scene, QString file, int state, QString name);
+    void loadControls(Scene *scene, QString file, int state);
+    QStringList loadControlsStates(Scene *scene, QString file);
 
 protected:
     void closeEvent(QCloseEvent *);
@@ -30,10 +31,12 @@ private:
     Ui::MainWindow *ui;
     Manager *manager;
     ProcessWindow *processWindow;
-    QStringList states;
+    int curState;
 
 public slots:
     void changeScene(int n);
+    void changeState(int n);
+
     void setFullScreen(bool full);
     void slotSaveControls();
     void slotLoadControls();
