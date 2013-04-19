@@ -6,6 +6,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QCoreApplication::setOrganizationName("Turlicht");
+    QCoreApplication::setApplicationName("Scenery");
     Manager manager;
     MainWindow mainWindow(&manager);
     mainWindow.show();

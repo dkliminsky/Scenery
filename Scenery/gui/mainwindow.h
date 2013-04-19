@@ -33,6 +33,11 @@ private:
     ProcessWindow *processWindow;
     int curState;
 
+    void loadSettings();
+    void addState(QString name);
+    void delState(int n);
+
+
 public slots:
     void changeScene(int n);
     void changeState(int n);
@@ -40,6 +45,8 @@ public slots:
     void setFullScreen(bool full);
     void slotSaveControls();
     void slotLoadControls();
+    void slotAddState();
+    void slotDelState();
 
 };
 

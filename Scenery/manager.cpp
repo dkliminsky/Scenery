@@ -8,7 +8,6 @@
 Manager::Manager()
 {
     qDebug() << "Constructor Begin: Manager";
-
     isPlay = false;
 
     ProcessTools::initRGB2HSV();

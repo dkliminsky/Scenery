@@ -13,6 +13,7 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
 
     ui->setupUi(this);
     this->manager = manager;
+    loadSettings();
 
     for(int i=0; i<manager->getScenes().size(); i++) {
         Scene *scene = manager->getScenes().at(i);
@@ -27,8 +28,10 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     connect(ui->scenesComboBox, SIGNAL(activated(int)), SLOT(changeScene(int)));
     connect(ui->actionFullScreen, SIGNAL(toggled(bool)), SLOT(setFullScreen(bool)));
     connect(ui->processParamButton, SIGNAL(clicked()), processWindow, SLOT(show()));
-    connect(ui->saveControlsStatesButton, SIGNAL(clicked()), SLOT(slotSaveControls()));
-    connect(ui->loadControlsStatesButton, SIGNAL(clicked()), SLOT(slotLoadControls()));
+    connect(ui->saveStateButton, SIGNAL(clicked()), SLOT(slotSaveControls()));
+    connect(ui->loadStateButton, SIGNAL(clicked()), SLOT(slotLoadControls()));
+    connect(ui->addStateButton, SIGNAL(clicked()), SLOT(slotAddState()));
+    connect(ui->delStateButton, SIGNAL(clicked()), SLOT(slotDelState()));
 
     changeScene(0);
     ui->scenesComboBox->setCurrentIndex(0);
@@ -101,6 +104,11 @@ QStringList MainWindow::loadControlsStates(Scene *scene, QString file)
 
 void MainWindow::closeEvent(QCloseEvent *)
 {
+    QSettings settings;
+    settings.setValue("MainWindow/Geometry", saveGeometry());
+    settings.setValue("MainWindow/State", saveState());
+    settings.setValue("View/Geometry", manager->getView()->saveGeometry());
+
     qApp->exit(0);
 }
 
@@ -108,6 +116,37 @@ void MainWindow::timerEvent(QTimerEvent *)
 {
     ui->graphicFPSLabel->setNum(manager->getView()->getFPS());
     ui->input1FPSLabel->setNum(manager->getInputs().at(0)->getFPS());
+}
+
+void MainWindow::loadSettings()
+{
+    QSettings settings;
+    restoreGeometry(settings.value("MainWindow/Geometry").toByteArray());
+    restoreState(settings.value("MainWindow/State").toByteArray());
+    manager->getView()->restoreGeometry(settings.value("View/Geometry").toByteArray());
+}
+
+void MainWindow::addState(QString name)
+{
+    QTableWidget *table = ui->controlsStatesTable;
+    int i = table->rowCount();
+    table->setRowCount(i + 1);
+
+    TableButton *button = new TableButton(i);
+    connect(button, SIGNAL(signalClicked(int)), SLOT(changeState(int)));
+    table->setCellWidget(i, 0, button);
+
+    QTableWidgetItem *item1 = new QTableWidgetItem(name);
+    table->setItem(i, 1, item1);
+}
+
+void MainWindow::delState(int n)
+{
+    if (n == 0)
+        return;
+
+    ui->controlsStatesTable->removeRow(n);
+    changeState(n - 1);
 }
 
 void MainWindow::changeScene(int n)
@@ -119,14 +158,9 @@ void MainWindow::changeScene(int n)
 
     ui->scenesStackedWidget->setCurrentIndex(n);
     ui->controlsStatesTable->clearContents();
-    ui->controlsStatesTable->setRowCount(list.count());
+    ui->controlsStatesTable->setRowCount(0);
     for (int i=0; i<list.count(); ++i) {
-        TableButton *button = new TableButton(i);
-        connect(button, SIGNAL(signalClicked(int)), SLOT(changeState(int)));
-        ui->controlsStatesTable->setCellWidget(i, 0, button);
-
-        QTableWidgetItem *item1 = new QTableWidgetItem(list.at(i));
-        ui->controlsStatesTable->setItem(i, 1, item1);
+        addState(list.at(i));
     }
 
     changeState(0);
@@ -134,13 +168,15 @@ void MainWindow::changeScene(int n)
 
 void MainWindow::changeState(int n)
 {
+    Q_ASSERT(n < ui->controlsStatesTable->rowCount());
+
     curState = n;
     for (int i=0; i<ui->controlsStatesTable->rowCount(); ++i) {
-        ui->controlsStatesTable->item(i, 1)->setIcon(QIcon());
+        QTableWidgetItem *item = ui->controlsStatesTable->item(i, 1);
+        item->setIcon(QIcon());
     }
 
     ui->controlsStatesTable->item(n, 1)->setIcon(QIcon(":/icons/icons/play.png"));
-    //ui->controlsStatesTable->setRangeSelected(QTableWidgetSelectionRange(0, n, 1, n), true);
     loadControls(manager->getCurScene(), "controls.ini", n);
 }
 
@@ -161,5 +197,15 @@ void MainWindow::slotSaveControls()
 void MainWindow::slotLoadControls()
 {
     loadControls(manager->getCurScene(), "controls.ini", curState);
+}
+
+void MainWindow::slotAddState()
+{
+    addState("New state");
+}
+
+void MainWindow::slotDelState()
+{
+    delState(curState);
 }
 
