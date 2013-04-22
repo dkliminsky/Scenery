@@ -146,6 +146,13 @@ void MainWindow::delState(int n)
         return;
 
     ui->controlsStatesTable->removeRow(n);
+
+    for (int i=0; i<ui->controlsStatesTable->rowCount(); i++) {
+        TableButton *button = new TableButton(i);
+        connect(button, SIGNAL(signalClicked(int)), SLOT(changeState(int)));
+        ui->controlsStatesTable->setCellWidget(i, 0, button);
+    }
+
     changeState(n - 1);
 }
 
