@@ -1,24 +1,20 @@
 #ifndef CONTROLBOOL_H
 #define CONTROLBOOL_H
 
-#include <QCheckBox>
-
 #include "icontrol.h"
 
-class ControlBool : public QCheckBox, public IControl
+class ControlBool : public IControl
 {
-    Q_OBJECT
 public:
-    explicit ControlBool(bool &data, QString name);
-    void updateData();
-    void setData(QString &data);
-    QString getData();
+    explicit ControlBool(bool &_data, QString name);
+    bool &data() { return _data; }
+
+    void update();
+    void set(QString &data);
+    QString get();
 
 private:
-    bool &data;
-
-public slots:
-    void slotChange();
+    bool &_data;
 
 };
 

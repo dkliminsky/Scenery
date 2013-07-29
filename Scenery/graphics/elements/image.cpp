@@ -1,6 +1,7 @@
 #include "image.h"
 
-Image::Image(const QString &fileName)
+Image::Image(const QString &name, GLuint id)
 {
-    this->fileName = fileName;
+    this->_name = name;
+    this->_id = id;
 }

@@ -8,14 +8,15 @@
 class Image : public QImage
 {
 public:
-    Image(const QString &fileName);
-    GLuint getID() { return id; }
-    void setID(GLuint id) { this->id = id; }
-    QString getFileName() { return fileName; }
+    Image(const QString &name, GLuint id=0);
+    QString name() { return _name; }
+    GLuint id() { return _id; }
+
+    void _setId(GLuint id) { _id = id; }
 
 private:
-    GLuint id;
-    QString fileName;
+    GLuint _id;
+    QString _name;
 
 };
 

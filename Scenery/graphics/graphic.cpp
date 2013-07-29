@@ -3,56 +3,15 @@
 #include <math.h>
 #include <QDebug>
 
-Graphic::Graphic()
+Graphic::Graphic(Utils *utils)
 {
-    view = 0;
+    this->utils = utils;
 
     widthView = 0;
     heightView = 0;
-    widthScene = 0;
-    heightScene = 0;
 
     lineWidth_ = 1;
     lineParts_ = 0;
-
-    firstSceneChange = true;
-}
-
-void Graphic::sceneChanged()
-{
-    if (firstSceneChange) {
-        Q_ASSERT(view);
-        for (int i = 0; i < images.size(); i++) {
-            images.at(i)->setID(view->bindTexture(QPixmap(images.at(i)->getFileName()), GL_TEXTURE_2D));
-        }
-        firstSceneChange = false;
-    }
-
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-}
-
-void Graphic::updateSize()
-{
-    if (widthScene > 0 && heightScene > 0) {
-        glLoadIdentity();
-        glScalef((GLfloat)this->widthView/(GLfloat)this->widthScene,
-                 (GLfloat)this->heightView/(GLfloat)this->heightScene, 1.0f);
-    }
-}
-
-Image *Graphic::loadImage(const QString &fileName)
-{
-    Image *image = new Image(fileName);
-    images.append(image);
-    return image;
-}
-
-Image *Graphic::loadImage()
-{
-    Image *image = new Image("");
-    images.append(image);
-    return image;
 }
 
 void Graphic::color(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
@@ -74,9 +33,9 @@ void Graphic::background(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
     glColor4f(r, g, b, a);
     glBegin(GL_QUADS);
         glVertex2f(0, 0);
-        glVertex2f(0, heightScene);
-        glVertex2f(widthScene, heightScene);
-        glVertex2f(widthScene, 0);
+        glVertex2f(0, heightView);
+        glVertex2f(widthView, heightView);
+        glVertex2f(widthView, 0);
     glEnd();
 }
 
@@ -100,18 +59,18 @@ void Graphic::lineParts(int parts)
 
 void Graphic::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle)
 {
-    if (imageBuffers.size() > 0 && imageBuffers.last().id != img->getID()){
+    if (imageBuffers.size() > 0 && imageBuffers.last().id != img->id()){
         flush();
     }
 
     GLfloat x1 = x - width/2.0;
-    GLfloat y1 = y - height/2.0;
+    GLfloat y1 = y + height/2.0;
     GLfloat x2 = x + width/2.0;
-    GLfloat y2 = y - height/2.0;
+    GLfloat y2 = y + height/2.0;
     GLfloat x3 = x + width/2.0;
-    GLfloat y3 = y + height/2.0;
+    GLfloat y3 = y - height/2.0;
     GLfloat x4 = x - width/2.0;
-    GLfloat y4 = y + height/2.0;
+    GLfloat y4 = y - height/2.0;
 
     if (angle != 0) {
         // Повернем углы прямоугольника относительно координаты x и y
@@ -139,7 +98,7 @@ void Graphic::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat hei
     }
 
     ImageBuffer buf;
-    buf.id = img->getID();
+    buf.id = img->id();
     buf.x1 = x1;
     buf.y1 = y1;
     buf.x2 = x2;
@@ -242,6 +201,7 @@ void Graphic::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat hei
 
 void Graphic::line(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
 {
+    glColor4f(curColor.r, curColor.g, curColor.b, curColor.a);
     glLineWidth(lineWidth_);
     glBegin(GL_LINES);
         glVertex2f(x1, y1);
@@ -297,8 +257,8 @@ void Graphic::bezier(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
         double x = pow(1.0-t, 3)*x1 + 3*pow(1.0-t, 2)*t*x2 + 3*(1.0-t)*pow(t, 2)*x3 + pow(t, 3)*x4;
         double y = pow(1.0-t, 3)*y1 + 3*pow(1.0-t, 2)*t*y2 + 3*(1.0-t)*pow(t, 2)*y3 + pow(t, 3)*y4;
         image(img, x+(xPrev-x)/2.0, y+(yPrev-y)/2.0,
-              distance(xPrev, yPrev, x, y), lineWidth_,
-              angle(xPrev, yPrev, x, y));
+              utils->distance(xPrev, yPrev, x, y), lineWidth_,
+              utils->angle(xPrev, yPrev, x, y));
         xPrev = x;
         yPrev = y;
     }
@@ -308,6 +268,9 @@ void Graphic::size(int width, int height)
 {
     this->widthScene = width;
     this->heightScene = height;
+
+    glScalef((GLfloat)widthView/(GLfloat)width,
+             (GLfloat)heightView/(GLfloat)height, 1.0f);
 }
 
 void Graphic::flush()
@@ -361,7 +324,8 @@ void Graphic::flush()
     }
 
     glBindTexture(GL_TEXTURE_2D, imageBuffers.at(0).id);
-    //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     //GLfloat envColor[4] = {1, 1, 1, 0};
     //glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, envColor);
 

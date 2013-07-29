@@ -6,16 +6,23 @@
 class IControl
 {
 public:
-    IControl(QString name) { this->name = name; }
+    enum Type {
+        ControlBool,
+        ControlInt,
+        ControlDouble,
+        ControlString,
+        ControlImage,
+        ControlColor
+    };
 
-    QString &getName() { return name; }
+    IControl(QString name) { _name = name; }
 
-    virtual void updateData() = 0;
-    virtual void setData(QString &data) = 0;
-    virtual QString getData() = 0;
+    QString &name() { return _name; }
+    virtual void set(QString &data) = 0;
+    virtual QString get() = 0;
 
 protected:
-    QString name;
+    QString _name;
 
 };
 

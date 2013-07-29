@@ -2,65 +2,63 @@
 
 #include <QDebug>
 
-
-View::View(QGLFormat &format) :
-    QGLWidget(format)
+View::View(QGLFormat &format, QWidget *parent)
+     : QGLWidget(format, parent)
 {
-    timePaint = 0;
-    prevTimePaint = 0;
-    differenceTimePaint = 0;
+    setWindowTitle("Scenery View");
+    emptyScene = new EmptyScene();
+    setScene(emptyScene);
 
-    scene = 0;
-    fpsRest = 0;
-    fpsFrames = 0;
-    fpsResult = 0;
+    _utils = new Utils();
+    _graphic = new Graphic(_utils);
 
-    fpsTime.start();
+    show();
 }
 
-void View::setScene(IScene *scene)
+View::~View()
+{
+    delete emptyScene;
+    delete _utils;
+    delete _graphic;
+}
+
+void View::setScene(SScene *scene)
 {
     this->scene = scene;
-    timeScene.restart();
-    timePaint = timeScene.elapsed();
     scene->setupEvent(this);
     scene->resizeEvent(width, height);
 }
 
-int View::getTimeScene()
+void View::bindImage(Image *image)
 {
-    return timeScene.elapsed();
+    GLuint id = bindTexture(QPixmap(image->name()), GL_TEXTURE_2D);
+    image->_setId(id);
 }
 
-int View::getPaintTimeScene()
+int View::time()
 {
-    return differenceTimePaint;
+    return 0;
 }
 
-void View::addImage(Image *image)
+int View::dtime()
 {
-    images.append(image);
+    return 0;
+}
+
+int View::fps()
+{
+    return 0;
 }
 
 void View::initializeGL()
 {
     initializeGLFunctions();
 
-    GLint texMaxSize;
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texMaxSize);
-    //qDebug() << "Max texture size:" << texMaxSize;
-
     glShadeModel(GL_SMOOTH);
     glEnable(GL_ALPHA_TEST);
     glEnable(GL_BLEND);
     glEnable(GL_LINE_SMOOTH);
     glDisable(GL_DEPTH_TEST);
-
-    //image->setID(view->bindTexture(QPixmap(fileName), GL_TEXTURE_2D));
-    //image->setID(view->bindTexture(image));
-
-
-
 
     // Задаём фильтрацию вблизи и вдали:
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -79,6 +77,7 @@ void View::resizeGL(int width, int height)
 {
     this->width   = width;
     this->height  = height;
+    graphic()->setViewSize(width, height);
 
     glViewport(0, 0, (GLint)width, (GLint)height);
     glMatrixMode(GL_PROJECTION);
@@ -88,28 +87,14 @@ void View::resizeGL(int width, int height)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    if (scene)
-        scene->resizeEvent(width, height);
+    scene->resizeEvent(width, height);
 }
 
 void View::paintGL()
 {
-    prevTimePaint = timePaint;
-    timePaint = timeScene.elapsed();
-    differenceTimePaint = timePaint - prevTimePaint;
-
-    if (scene)
-        scene->paintEvent();
-
-    fpsFrames++;
-    int fpsElapsed = fpsTime.elapsed();
-
-    if (fpsElapsed + fpsRest > 999) {
-        fpsRest = fpsElapsed + fpsRest - 999;
-        fpsResult = fpsFrames;
-        fpsFrames = 0;
-        fpsTime.restart();
-    }
+    glLoadIdentity();
+    scene->paintEvent();
+    graphic()->flush();
 
     GLenum errCode = glGetError();
     if (errCode != GL_NO_ERROR) {

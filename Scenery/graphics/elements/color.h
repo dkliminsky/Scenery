@@ -10,7 +10,6 @@ public:
     Color(const Color &color);
 
     Color & operator=(const Color &color);
-
     void setRGBA(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
 
     void randomRGB();

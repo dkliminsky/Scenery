@@ -3,20 +3,19 @@
 
 #include <QGLFunctions>
 #include <QVector>
-
-#include "view.h"
 #include "utils.h"
 #include "elements/image.h"
 #include "elements/color.h"
 #include "elements/point.h"
 
-
-class Graphic: public Utils
+class Graphic
 {
 public:
-    Graphic();
+    Graphic(Utils *utils);
 
     void size(int width, int height);
+    int width() { return widthView; }
+    int height() { return heightView; }
 
     void background(GLfloat r, GLfloat g, GLfloat b, GLfloat a=1);
     void background(const Color &color);
@@ -34,27 +33,21 @@ public:
     void bezier(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
                             GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4);
 
-    Image *loadImage(const QString &fileName);
-    Image *loadImage();
     void image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle=0);
 
     void flush();
 
+    void setViewSize(int width, int height) { widthView = width; heightView = height; }
+
 protected:
-    View *view;
-    void addImage(Image *image) { images.append(image); }
+    int widthView;     // реальный размер окна в пикселах
+    int heightView;    //
 
-    int widthView;
-    int heightView;
-    int widthScene;
-    int heightScene;
-
-    void sceneChanged();
-    void updateSize();
+    int widthScene;     // желаемый размер окна в виртуальных пикселах
+    int heightScene;    //
 
 private:
-    bool firstSceneChange;
-    QVector<Image *> images;
+    Utils *utils;
 
     struct ImageBuffer {
         GLuint id;

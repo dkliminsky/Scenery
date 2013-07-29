@@ -1,197 +1,158 @@
 #include "scene.h"
-#include <QtGlobal>
-#include <QLayout>
-#include <QLabel>
-#include <QSlider>
-#include <QDir>
-#include <QDebug>
 
 Scene::Scene()
 {
-    qDebug() << "Constructor Begin: Scene";
-
-    setProcessCount(1);
-    firstPaint = true;
-
-    // Controls
-    widget = new QWidget();
-    layout = new QGridLayout();
-    layout->setContentsMargins(0, 0, 0, 0);
-    //layout->setSpacing(3);
-    widget->setLayout(layout);
-
-    qDebug() << "Constructor End: Scene";
+    view = 0;
 }
 
-void Scene::setProcessCount(int n)
+void Scene::size(int width, int height)
 {
-    seqAreasVector.resize(n);
-    areasVector.resize(n);
-    widthVector.resize(n);
-    heightVector.resize(n);
-    contoursVector.resize(n);
+    view->graphic()->size(width, height);
 }
 
-void Scene::setupEvent(void *view)
+int Scene::width()
 {
-    qDebug() << "Scene changed!";
-    this->view = static_cast<View *>(view);
-    sceneChanged();
-    firstPaint = true;
+    return view->graphic()->width();
 }
 
-void Scene::paintEvent()
+int Scene::height()
 {
-    if (firstPaint) {
-        firstPaint = false;
-        setup();
+    return view->graphic()->height();
+}
+
+void Scene::background(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+{
+    view->graphic()->background(r, g, b, a);
+}
+
+void Scene::background(const Color &color)
+{
+    view->graphic()->background(color);
+}
+
+void Scene::color(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+{
+    view->graphic()->color(r, g, b, a);
+}
+
+void Scene::color(const Color &color)
+{
+    view->graphic()->color(color);
+}
+
+void Scene::lineWidth(GLfloat width)
+{
+    view->graphic()->lineWidth(width);
+}
+
+void Scene::lineParts(int parts)
+{
+    view->graphic()->lineParts(parts);
+}
+
+void Scene::line(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
+{
+    view->graphic()->line(x1, y1, x2, y2);
+}
+
+void Scene::line(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
+{
+    view->graphic()->line(img, x1, y1, x2, y2);
+}
+
+void Scene::bezier(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4)
+{
+    view->graphic()->bezier(x1, y1, x2, y2, x3, y3, x4, y4);
+}
+
+void Scene::bezier(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4)
+{
+    view->graphic()->bezier(img, x1, y1, x2, y2, x3, y3, x4, y4);
+}
+
+Image *Scene::loadImage(const QString &fileName)
+{
+    Image *image = new Image(fileName);
+    if (view) {
+        view->bindImage(image);
     }
-
-    updateSize();
-    paint();
-    flush();
-    updateControlData();
-}
-
-void Scene::resizeEvent(int width, int height)
-{
-    widthView = width;
-    heightView = height;
-}
-
-void Scene::pushButton(int id)
-{
-    push(id);
-}
-
-void Scene::updateControlData()
-{
-    for (int i = 0; i < controls.count(); ++i) {
-        controls.at(i)->updateData();
+    else {
+        imagesBuffer.append(image);
     }
+    return image;
 }
 
-int &Scene::getWidth(int n)
+void Scene::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle)
 {
-    Q_ASSERT(n < widthVector.size());
-    return widthVector[n];
+    view->graphic()->image(img, x, y, width, height, angle);
 }
 
-int &Scene::getHeight(int n)
+void Scene::text(GLint x, GLint y, const QString & str, const QFont & fnt)
 {
-    Q_ASSERT(n < heightVector.size());
-    return heightVector[n];
+    view->renderText(x, y, str, fnt);
 }
 
-Areas &Scene::getAreas(int n)
+void Scene::flush()
 {
-    Q_ASSERT(n < areasVector.size());
-    return areasVector[n];
-}
-
-SeqAreas &Scene::getSeqAreas(int n)
-{
-    Q_ASSERT(n < seqAreasVector.size());
-    return seqAreasVector[n];
-}
-
-Contours &Scene::getContours(int n)
-{
-    Q_ASSERT(n < contoursVector.size());
-    return contoursVector[n];
+    view->graphic()->flush();
 }
 
 int Scene::time()
 {
-    Q_ASSERT(view);
-    return view->getTimeScene();
+    return view->time();
 }
 
 int Scene::dtime()
 {
-    Q_ASSERT(view);
-    return view->getPaintTimeScene();
+    return view->dtime();
 }
 
-
-void Scene::control(int &x, QString description, int min, int max)
+int Scene::fps()
 {
-    ControlInt *data = new ControlInt(x, description, min, max);
-    addWidgetValue(data, description);
-    controls.append(data);
+    return view->fps();
 }
 
-void Scene::control(double &x, QString description, double min, double max, int precision)
+int Scene::random(int high)
 {
-    ControlDouble *data = new ControlDouble(x, description, min, max, precision);
-    addWidgetValue(data, description);
-    controls.append(data);
+    return view->utils()->random(high);
 }
 
-void Scene::control(bool &x, QString description)
+bool Scene::chance(double probability)
 {
-    ControlBool *data = new ControlBool(x, description);
-    addWidgetValue(data, description);
-    controls.append(data);
+    return view->utils()->chance(probability);
 }
 
-void Scene::control(QString &string, QString description, QStringList list)
+float Scene::distance(float x1, float y1, float x2, float y2)
 {
-    ControlString *data = new ControlString(string, description, list);
-    addWidgetValue(data, description);
-    controls.append(data);
+    return view->utils()->distance(x1, y1, x2, y2);
 }
 
-void Scene::control(Color &color, QString description)
+double Scene::distance(double x1, double y1, double x2, double y2)
 {
-    ControlColor *data = new ControlColor(color, description);
-    addWidgetValue(data, description);
-    controls.append(data);
+    return view->utils()->distance(x1, y1, x2, y2);
 }
 
-void Scene::control(Image **image, QString description, QString path, QString file)
+float Scene::angle(float x1, float y1, float x2, float y2)
 {
-    QDir dir(path);
-    Q_ASSERT(dir.exists());
-    QStringList filters;
-    filters << "*.png" << "*.jpg" << "*.jpeg";
-    QStringList list = dir.entryList(filters);
+    return view->utils()->angle(x1, y1, x2, y2);
+}
 
-    if (list.size() == 0) {
-        *image = loadImage();
-        return;
+void Scene::setupEvent(void *view)
+{
+    this->view = static_cast<View *>(view);
+    for(int i=0; i<imagesBuffer.size(); i++) {
+        this->view->bindImage(imagesBuffer.at(i));
     }
-
-    QVector<Image *> images;
-    int index = 0;
-    for (int i = 0; i < list.size(); i++) {
-        QString name = list.at(i);
-        Image *imageDir = new Image(path + name);
-        images.append(imageDir);
-        addImage(imageDir);
-
-        if (name == file) {
-            index = i;
-        }
-    }
-
-    *image = images.at(index);
-
-    ControlImage *data = new ControlImage(image, description, images, index);
-    addWidgetValue(data, description);
-    controls.append(data);
+    imagesBuffer.clear();
+    setup();
 }
 
-void Scene::button(int id, QString description)
+void Scene::paintEvent()
 {
-    ControlButton *data = new ControlButton(this, id, description);
-    addWidgetValue(data, "Button");
+    paint();
 }
 
-void Scene::addWidgetValue(QWidget *widget, QString description)
+void Scene::resizeEvent(int width, int height)
 {
-    int row = layout->rowCount();
-    layout->addWidget(new QLabel(description), row, 1);
-    layout->addWidget(widget, row, 2);
+    resize(width, height);
 }
-

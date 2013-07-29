@@ -8,12 +8,14 @@ class Skeleton : public Scene
 public:
     Skeleton();
 
-    QString name() { return "None"; }
+    QString name() { return "Skeleton"; }
 
     void setup();
     void paint();
+    void resize(int width, int height);
 
 private:
+    Image *imageShip;
 
 };
 

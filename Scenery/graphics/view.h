@@ -5,20 +5,24 @@
 #include <QGLFunctions>
 #include <QTime>
 
-#include "iscene.h"
-#include "elements/image.h"
+#include "sscene.h"
+#include "graphic.h"
+#include "emptyscene.h"
+#include "elements/color.h"
 
 class View : public QGLWidget, protected QGLFunctions
 {
 public:
-    View(QGLFormat &format);
-    void setScene(IScene *scene);
+    View(QGLFormat &format, QWidget *parent = 0);
+    ~View();
+    void setScene(SScene *scene);
+    Utils *utils() { return _utils; }
+    Graphic *graphic() { return _graphic; }
 
-    int getFPS() { return fpsResult; }
-    int getTimeScene();
-    int getPaintTimeScene();
-
-    void addImage(Image *image);
+    void bindImage(Image *image);
+    int time();
+    int dtime();
+    int fps();
 
 protected:
     void initializeGL();
@@ -28,22 +32,13 @@ protected:
 private:
     GLint width;
     GLint height;
-    IScene *scene;
-    QTime timeScene;
-    int timePaint;
-    int prevTimePaint;
-    int differenceTimePaint;
+    SScene *scene;
+    SScene *emptyScene;
 
-    int time;
-    int timeMean;
-    int timeNum;
+    Utils *_utils;
+    Graphic *_graphic;
 
-    QTime fpsTime;
-    int fpsRest;
-    int fpsFrames;
-    int fpsResult;
-
-    QVector<Image *> images;
+    QTime timer;
 };
 
 #endif // VIEW_H
