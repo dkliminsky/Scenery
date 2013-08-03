@@ -1,9 +1,52 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "QString"
+#include <QString>
+#include <math.h>
 #include "sscene.h"
 #include "view.h"
+
+class SceneProcess
+{
+public:
+    SceneProcess(){}
+
+    int width() {
+        if (view->datas()->size() > n) return view->datas()->at(n).width;
+        else return 0;
+    }
+
+    int height() {
+        if (view->datas()->size() > n) return view->datas()->at(n).height;
+        else return 0;
+    }
+
+    Areas &areas() {
+        if (view->datas()->size() > n) return view->datas()->at(n).areas;
+        else return _areas;
+    }
+
+   SeqAreas &seqAreas() {
+        if (view->datas()->size() > n) return view->datas()->at(n).seqAreas;
+        else return _seqArea;
+    }
+
+   Contours &contours() {
+        if (view->datas()->size() > n) return view->datas()->at(n).contours;
+        else return _contour;
+    }
+
+    void _setN(unsigned int n) { this->n = n; }
+    void _setView(View *view) { this->view = view; }
+
+private:
+    View *view;
+    unsigned int n;
+
+    Areas _areas;
+    SeqAreas _seqArea;
+    Contours _contour;
+};
 
 typedef QVector<Image *> Images;
 
@@ -11,12 +54,15 @@ class Scene: public SScene
 {
 public:
     Scene();
+    ~Scene();
+
+    // Scene APIs
 
     // Virtual functions
     virtual QString name() { return "Noname"; }
     virtual void setup(){}
     virtual void paint(){}
-    virtual void resize(int, int){}
+    virtual void resize(){}
 
     // Graphics functions
     void size(int width, int height);
@@ -58,25 +104,26 @@ public:
     double distance(double x1, double y1, double x2, double y2);
     float angle(float x1, float y1, float x2, float y2);
 
-    // Scene API: Control
-    //void button(int id, QString description);
-    //void control(int &x, QString description, int min=0, int max=100);
-    //void control(double &x, QString description, double min=0, double max=100, int precision=1);
-    //void control(bool &x, QString description);
-    //void control(QString &string, QString description, QStringList list);
-    //void control(Color &color, QString description);
-    //void control(Image **image, QString description, QString path, QString file="");
+    // Control function
+    void signal(int id, QString description);
+    void control(int &x, QString description, int min=0, int max=100);
+    void control(double &x, QString description, double min=0, double max=100, int precision=1);
+    void control(bool &x, QString description);
+    void control(QString &string, QString description, QStringList list);
+    void control(Color &color, QString description);
+    void control(Image **image, QString description, QString path, QString file="");
 
-    // Controls
-    //QVector<IControl *> &getControls() { return controls; }
+    // Process function
+    SceneProcess *process(int n);
 
 protected:
     void virtual setupEvent(void *view);
     void virtual paintEvent();
-    void virtual resizeEvent(int width, int height);
+    void virtual resizeEvent();
 
 private:
     View *view;
+    SceneProcess _process;
     Images imagesBuffer;
 };
 

@@ -11,11 +11,11 @@
 class Graphic
 {
 public:
-    Graphic(Utils *utils);
+    Graphic();
 
-    void size(int width, int height);
     int width() { return widthView; }
     int height() { return heightView; }
+    void size(int width, int height);
 
     void background(GLfloat r, GLfloat g, GLfloat b, GLfloat a=1);
     void background(const Color &color);
@@ -47,7 +47,7 @@ protected:
     int heightScene;    //
 
 private:
-    Utils *utils;
+    Utils utils;
 
     struct ImageBuffer {
         GLuint id;

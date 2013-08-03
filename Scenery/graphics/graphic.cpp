@@ -3,15 +3,22 @@
 #include <math.h>
 #include <QDebug>
 
-Graphic::Graphic(Utils *utils)
+Graphic::Graphic()
 {
-    this->utils = utils;
-
     widthView = 0;
     heightView = 0;
 
     lineWidth_ = 1;
     lineParts_ = 0;
+}
+
+void Graphic::size(int width, int height)
+{
+    this->widthScene = width;
+    this->heightScene = height;
+
+    glScalef((GLfloat)widthView/(GLfloat)width,
+             (GLfloat)heightView/(GLfloat)height, 1.0f);
 }
 
 void Graphic::color(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
@@ -59,6 +66,8 @@ void Graphic::lineParts(int parts)
 
 void Graphic::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle)
 {
+    Q_ASSERT(img);
+
     if (imageBuffers.size() > 0 && imageBuffers.last().id != img->id()){
         flush();
     }
@@ -257,20 +266,11 @@ void Graphic::bezier(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
         double x = pow(1.0-t, 3)*x1 + 3*pow(1.0-t, 2)*t*x2 + 3*(1.0-t)*pow(t, 2)*x3 + pow(t, 3)*x4;
         double y = pow(1.0-t, 3)*y1 + 3*pow(1.0-t, 2)*t*y2 + 3*(1.0-t)*pow(t, 2)*y3 + pow(t, 3)*y4;
         image(img, x+(xPrev-x)/2.0, y+(yPrev-y)/2.0,
-              utils->distance(xPrev, yPrev, x, y), lineWidth_,
-              utils->angle(xPrev, yPrev, x, y));
+              utils.distance(xPrev, yPrev, x, y), lineWidth_,
+              utils.angle(xPrev, yPrev, x, y));
         xPrev = x;
         yPrev = y;
     }
-}
-
-void Graphic::size(int width, int height)
-{
-    this->widthScene = width;
-    this->heightScene = height;
-
-    glScalef((GLfloat)widthView/(GLfloat)width,
-             (GLfloat)heightView/(GLfloat)height, 1.0f);
 }
 
 void Graphic::flush()

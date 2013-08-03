@@ -12,7 +12,7 @@ public:
 
     void setup();
     void paint();
-    void resize(int width, int height);
+    void resize();
 
 private:
     Image *imageShip;

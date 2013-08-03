@@ -5,7 +5,12 @@
 #include "graphics/view.h"
 
 #include "graphics/sscene.h"
+
 #include "scenes/skeleton.h"
+#include "scenes/cage.h"
+//#include "scenes/strings.h"
+//#include "scenes/brush.h"
+//#include "scenes/inking.h"
 
 class Manager : public QObject
 {

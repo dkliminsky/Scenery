@@ -7,6 +7,7 @@
 
 #include "sscene.h"
 #include "graphic.h"
+#include "process/processdata.h"
 #include "emptyscene.h"
 #include "elements/color.h"
 
@@ -16,8 +17,9 @@ public:
     View(QGLFormat &format, QWidget *parent = 0);
     ~View();
     void setScene(SScene *scene);
-    Utils *utils() { return _utils; }
-    Graphic *graphic() { return _graphic; }
+    ProcessDatas *datas()   { return &_datas; }
+    Utils        *utils()   { return &_utils; }
+    Graphic      *graphic() { return &_graphic; }
 
     void bindImage(Image *image);
     int time();
@@ -35,8 +37,9 @@ private:
     SScene *scene;
     SScene *emptyScene;
 
-    Utils *_utils;
-    Graphic *_graphic;
+    ProcessDatas _datas;
+    Utils _utils;
+    Graphic _graphic;
 
     QTime timer;
 };

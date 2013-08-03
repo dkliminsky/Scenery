@@ -50,11 +50,22 @@ struct ContourPt {
     int y;
 };
 
+typedef vector<Area>        Areas;
+typedef vector<SeqArea>     SeqAreas;
 typedef vector<ContourPt>   Contour;
 typedef vector<Contour>     Contours;
 
-typedef vector<Area>        Areas;
-typedef vector<SeqArea>     SeqAreas;
-typedef deque<SeqAreas>     SeqAreasBuffer;
+struct ProcessData
+{
+public:
+    int width;
+    int height;
+
+    Areas    areas;
+    SeqAreas seqAreas;
+    Contours contours;
+};
+
+typedef vector<ProcessData> ProcessDatas;
 
 #endif // PROCESSDATA_H

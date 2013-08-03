@@ -19,6 +19,8 @@ using std::string;
 using std::list;
 using std::vector;
 
+typedef deque<SeqAreas> SeqAreasBuffer;
+
 
 class Process : public ProcessFilters, public QThread, public Clustering
 {

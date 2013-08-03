@@ -5,6 +5,11 @@ Scene::Scene()
     view = 0;
 }
 
+Scene::~Scene()
+{
+
+}
+
 void Scene::size(int width, int height)
 {
     view->graphic()->size(width, height);
@@ -77,6 +82,10 @@ Image *Scene::loadImage(const QString &fileName)
         view->bindImage(image);
     }
     else {
+        // Если экземпляр view еще не доступен,
+        // добавим изображения в буфер и вызовем
+        // для них bindImage позднее, когда придет
+        // экземпляр view
         imagesBuffer.append(image);
     }
     return image;
@@ -137,6 +146,48 @@ float Scene::angle(float x1, float y1, float x2, float y2)
     return view->utils()->angle(x1, y1, x2, y2);
 }
 
+void Scene::signal(int id, QString description)
+{
+
+}
+
+void Scene::control(int &x, QString description, int min, int max)
+{
+
+}
+
+void Scene::control(double &x, QString description, double min, double max, int precision)
+{
+
+}
+
+void Scene::control(bool &x, QString description)
+{
+
+}
+
+void Scene::control(QString &string, QString description, QStringList list)
+{
+
+}
+
+void Scene::control(Color &color, QString description)
+{
+
+}
+
+void Scene::control(Image **image, QString description, QString path, QString file)
+{
+    *image = loadImage(path + file);
+}
+
+SceneProcess *Scene::process(int n)
+{
+    _process._setView(view);
+    _process._setN(n);
+    return &_process;
+}
+
 void Scene::setupEvent(void *view)
 {
     this->view = static_cast<View *>(view);
@@ -152,7 +203,7 @@ void Scene::paintEvent()
     paint();
 }
 
-void Scene::resizeEvent(int width, int height)
+void Scene::resizeEvent()
 {
-    resize(width, height);
+    resize();
 }

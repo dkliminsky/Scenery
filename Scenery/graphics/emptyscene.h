@@ -10,7 +10,7 @@ public:
 
     void virtual setupEvent(void *){}
     void virtual paintEvent(){}
-    void virtual resizeEvent(int, int){}
+    void virtual resizeEvent(){}
 };
 
 #endif // EMPTYSCENE_H

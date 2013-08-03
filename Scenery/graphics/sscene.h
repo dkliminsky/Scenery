@@ -4,12 +4,12 @@
 class SScene
 {
 public:
-    SScene() {}
+    SScene(){}
     virtual ~SScene(){}
 
     void virtual setupEvent(void *view) = 0;
     void virtual paintEvent() = 0;
-    void virtual resizeEvent(int width, int height) = 0;
+    void virtual resizeEvent() = 0;
 };
 
 #endif // SSCENE_H

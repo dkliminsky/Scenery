@@ -9,24 +9,19 @@ View::View(QGLFormat &format, QWidget *parent)
     emptyScene = new EmptyScene();
     setScene(emptyScene);
 
-    _utils = new Utils();
-    _graphic = new Graphic(_utils);
-
     show();
 }
 
 View::~View()
 {
     delete emptyScene;
-    delete _utils;
-    delete _graphic;
 }
 
 void View::setScene(SScene *scene)
 {
     this->scene = scene;
     scene->setupEvent(this);
-    scene->resizeEvent(width, height);
+    scene->resizeEvent();
 }
 
 void View::bindImage(Image *image)
@@ -87,7 +82,7 @@ void View::resizeGL(int width, int height)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    scene->resizeEvent(width, height);
+    scene->resizeEvent();
 }
 
 void View::paintGL()
