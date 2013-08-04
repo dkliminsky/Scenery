@@ -5,7 +5,6 @@
 
 #include "manager.h"
 #include "processwindow.h"
-#include "processdebug.h"
 
 typedef QVector<ProcessWindow *> ProcessWindows;
 
@@ -29,8 +28,11 @@ private:
     Ui::MainWindow *ui;
     Manager *manager;
     ProcessWindows processWindows;
+    int curScene;
 
 public slots:
+    void setFullScreen(bool full);
+
     void slotEditProcess(int row, int colomn);
     void slotChangeScene(int row, int colomn);
 

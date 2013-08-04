@@ -5,11 +5,13 @@ ManagerVLMT::ManagerVLMT()
     int cameraWidth = 640;
     int cameraHeight = 480;
 
-    inputs += new Input(Input::Camera, "", cameraWidth, cameraHeight);
+    inputs += new Input(Input::Camera, "",
+                        cameraWidth, cameraHeight);
     cameraWidth = inputs.at(0)->getWidth();
     cameraHeight = inputs.at(0)->getHeight();
 
-    processes += new Process(cameraWidth, cameraHeight);
+    processes += new Process("VLMT: Main Process",
+                             cameraWidth, cameraHeight);
     debug = new ProcessDebug("Debug", cameraWidth, cameraHeight);
 
     QGLFormat format;

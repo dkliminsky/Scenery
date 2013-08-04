@@ -9,7 +9,7 @@
 #include "scenes/VLMT/brush.h"
 #include "scenes/VLMT/inking.h"
 
-#include "gui/processdebug.h"
+#include "process/processdebug.h"
 
 class ManagerVLMT : public Manager
 {
@@ -17,7 +17,9 @@ public:
     ManagerVLMT();
     ~ManagerVLMT();
 
-private:
+    virtual QString name() { return "VLMT"; }
+
+protected:
     void timerEvent(QTimerEvent *);
 
 private:

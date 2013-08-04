@@ -2,7 +2,7 @@
 #define DEBUGWINDOW_H
 
 #include <QList>
-#include <opencv/cv.h>
+//#include <opencv/cv.h>
 #include <opencv/highgui.h>
 
 #include "process/process.h"

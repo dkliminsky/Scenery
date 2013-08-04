@@ -61,8 +61,8 @@ public:
     // Virtual functions
     virtual QString name() { return "Noname"; }
     virtual void setup(){}
-    virtual void paint(){}
     virtual void resize(){}
+    virtual void paint(){}
 
     // Graphics functions
     void size(int width, int height);

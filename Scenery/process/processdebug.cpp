@@ -22,6 +22,9 @@ void ProcessDebug::show(IplImage *image, Process *process)
     if (!image)
         return;
 
+    if (!process->getDebug())
+        return;
+
     cvCopy(image, debug);
 
     switch (process->getMode()) {

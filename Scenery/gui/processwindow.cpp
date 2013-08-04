@@ -11,6 +11,7 @@ ProcessWindow::ProcessWindow(Process *process, QString file, QWidget *parent) :
     ui->setupUi(this);
     this->process = process;
     this->file = file;
+    name = "Process " + process->name();
 
     connect(ui->saveButton, SIGNAL(pressed()), SLOT(saveParam()));
 
@@ -157,7 +158,7 @@ void ProcessWindow::loadParam()
 {
     QSettings settings(file, QSettings::IniFormat);
 
-    settings.beginGroup("/Process");
+    settings.beginGroup(name);
 
         QString mode = settings.value("/Mode").toString();
         if ( mode == "None" ) {
@@ -283,7 +284,7 @@ void ProcessWindow::saveParam()
 {
     QSettings settings(file, QSettings::IniFormat);
 
-    settings.beginGroup("/Process"); //+QString::number(column));
+    settings.beginGroup(name);
 
         settings.setValue("/Name", "main");
 

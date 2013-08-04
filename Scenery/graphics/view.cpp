@@ -10,6 +10,11 @@ View::View(QGLFormat &format, QWidget *parent)
     setScene(emptyScene);
 
     show();
+
+    fpsRest = 0;
+    fpsFrames = 0;
+    fpsResult = 0;
+    fpsTime.start();
 }
 
 View::~View()
@@ -36,11 +41,6 @@ int View::time()
 }
 
 int View::dtime()
-{
-    return 0;
-}
-
-int View::fps()
 {
     return 0;
 }
@@ -94,5 +94,15 @@ void View::paintGL()
     GLenum errCode = glGetError();
     if (errCode != GL_NO_ERROR) {
         qDebug() << "OpenGL Error!";
+    }
+
+    // Counting FPS
+    fpsFrames++;
+    int fpsElapsed = fpsTime.elapsed();
+    if (fpsElapsed + fpsRest > 999) {
+        fpsRest = fpsElapsed + fpsRest - 999;
+        fpsResult = fpsFrames;
+        fpsFrames = 0;
+        fpsTime.restart();
     }
 }

@@ -1,6 +1,7 @@
 ﻿#ifndef PROCESS_H
 #define PROCESS_H
 
+#include "node.h"
 #include "clustering.h"
 #include "processdata.h"
 #include "processfilters.h"
@@ -22,10 +23,10 @@ using std::vector;
 typedef deque<SeqAreas> SeqAreasBuffer;
 
 
-class Process : public ProcessFilters, public QThread, public Clustering
+class Process : public Node, public ProcessFilters, public QThread, public Clustering
 {
 public:
-    Process(int width, int height);
+    Process(QString name, int width, int height);
     ~Process();
 
     int getWidth() { return width; }
@@ -33,6 +34,10 @@ public:
 
     void step();
 
+    void setDebug(bool isDebug) { this->isDebug = isDebug; }
+    bool getDebug() { return isDebug; }
+
+    int getTime() { return timeResult; }
 
     // ====================================================================
     // Input
@@ -206,8 +211,11 @@ private:
     int width;   // Ширина и высота изображений,
     int height;  // которые будут обрабатываться
 
+    bool isDebug;
+
     int timeMean;
     int timeNum;
+    int timeResult;
 
     // ====================================================================
     // Input

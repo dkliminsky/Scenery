@@ -24,7 +24,7 @@ public:
     void bindImage(Image *image);
     int time();
     int dtime();
-    int fps();
+    int fps() { return fpsResult; }
 
 protected:
     void initializeGL();
@@ -42,6 +42,11 @@ private:
     Graphic _graphic;
 
     QTime timer;
+
+    QTime fpsTime;
+    int fpsRest;
+    int fpsFrames;
+    int fpsResult;
 };
 
 #endif // VIEW_H

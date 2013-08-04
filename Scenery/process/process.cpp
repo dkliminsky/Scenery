@@ -3,7 +3,8 @@
 #include <QDebug>
 #include <typeinfo>
 
-Process::Process(int width, int height) :
+Process::Process(QString name, int width, int height) :
+    Node(name),
     ProcessFilters(width, height)
 {
     qDebug() << "Constructor Begin: Process";
@@ -13,8 +14,11 @@ Process::Process(int width, int height) :
     this->width  = width;
     this->height = height;
 
+    isDebug = false;
+
     timeMean = 0;
     timeNum = 0;
+    timeResult = 0;
 
     // Common
 
@@ -180,13 +184,11 @@ void Process::step()
 
     timeMean += time.elapsed();
     timeNum++;
-
     if ( timeNum == 10 ) {
-        //qDebug() << "Process time:" << timeMean/10;
+        timeResult = timeMean/10;
         timeMean = 0;
         timeNum = 0;
     }
-
 }
 
 void Process::setImage(IplImage *image)

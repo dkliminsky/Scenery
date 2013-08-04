@@ -11,8 +11,8 @@ public:
     QString name() { return "Skeleton"; }
 
     void setup();
-    void paint();
     void resize();
+    void paint();
 
 private:
     Image *imageShip;

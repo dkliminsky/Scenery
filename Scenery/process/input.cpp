@@ -29,10 +29,9 @@ Input::Input(Device device, QString name, int width, int height)
 
     frame = arrFrame[0];
 
-    fpsRest = 0;
-    fpsFrames = 0;
-    fpsResult = 0;
-    fpsTime.start();
+    timeMean = 0;
+    timeNum = 0;
+    timeResult = 0;
 
     qDebug() << "Constructor End: Input";
 }
@@ -55,6 +54,9 @@ Input::~Input()
 
 void Input::run()
 {
+    QTime time;
+    time.start();
+
     if (!capture)
         return;
 
@@ -69,14 +71,12 @@ void Input::run()
     frame = arrFrame[curFrame];
     cvCopy(newFrame, frame);
 
-    fpsFrames++;
-    int fpsElapsed = fpsTime.elapsed();
-
-    if (fpsElapsed + fpsRest > 999) {
-        fpsRest = fpsElapsed + fpsRest - 999;
-        fpsResult = fpsFrames;
-        fpsFrames = 0;
-        fpsTime.restart();
+    timeMean += time.elapsed();
+    timeNum++;
+    if ( timeNum == 10 ) {
+        timeResult = timeMean/10;
+        timeMean = 0;
+        timeNum = 0;
     }
 }
 

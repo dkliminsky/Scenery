@@ -50,6 +50,9 @@
          <property name="selectionMode">
           <enum>QAbstractItemView::NoSelection</enum>
          </property>
+         <attribute name="verticalHeaderDefaultSectionSize">
+          <number>19</number>
+         </attribute>
          <column>
           <property name="text">
            <string>Input</string>
@@ -67,7 +70,7 @@
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>80</height>
+           <height>120</height>
           </size>
          </property>
          <property name="editTriggers">
@@ -82,6 +85,9 @@
          <attribute name="horizontalHeaderMinimumSectionSize">
           <number>27</number>
          </attribute>
+         <attribute name="verticalHeaderDefaultSectionSize">
+          <number>19</number>
+         </attribute>
          <column>
           <property name="text">
            <string>Process</string>
@@ -90,6 +96,11 @@
          <column>
           <property name="text">
            <string>Time</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Debug</string>
           </property>
          </column>
         </widget>
@@ -102,9 +113,17 @@
          <property name="selectionMode">
           <enum>QAbstractItemView::SingleSelection</enum>
          </property>
+         <attribute name="verticalHeaderDefaultSectionSize">
+          <number>19</number>
+         </attribute>
          <column>
           <property name="text">
            <string>Scene</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Time</string>
           </property>
          </column>
         </widget>

@@ -26,7 +26,7 @@ public:
     int getWidth() { return width;}
     int getHeight() { return height;}
 
-    int getFPS() { return fpsResult; }
+    int getTime() { return timeResult; }
 
 protected:
     void run();
@@ -45,10 +45,9 @@ private:
     void initCamera();
     void initVideo();
 
-    QTime fpsTime;
-    int fpsRest;
-    int fpsFrames;
-    int fpsResult;
+    int timeMean;
+    int timeNum;
+    int timeResult;
 };
 
 #endif // INPUT_H

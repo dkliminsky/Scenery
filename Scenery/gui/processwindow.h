@@ -23,6 +23,7 @@ private:
     Ui::ProcessWindow *ui;
     Process *process;
     QString file;
+    QString name;
 
 public slots:
     void loadParam();

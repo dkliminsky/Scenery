@@ -19,6 +19,8 @@ public:
     explicit Manager(QObject *parent = 0);
     ~Manager();
 
+    virtual QString name() = 0;
+
     Processes &getProcesses() { return processes; }
     Inputs    &getInputs()    { return inputs; }
     Scenes    &getScenes()    { return scenes; }
