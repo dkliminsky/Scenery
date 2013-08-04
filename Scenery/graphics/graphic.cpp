@@ -17,8 +17,9 @@ void Graphic::size(int width, int height)
     this->widthScene = width;
     this->heightScene = height;
 
-    glScalef((GLfloat)widthView/(GLfloat)width,
-             (GLfloat)heightView/(GLfloat)height, 1.0f);
+    if (width > 0 && height > 0)
+        glScalef((GLfloat)widthView/(GLfloat)width,
+                 (GLfloat)heightView/(GLfloat)height, 1.0f);
 }
 
 void Graphic::color(GLfloat r, GLfloat g, GLfloat b, GLfloat a)

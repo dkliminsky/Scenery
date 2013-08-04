@@ -2,15 +2,15 @@
 #define MANAGER_H
 
 #include <QObject>
+#include "process/process.h"
+#include "process/input.h"
 #include "graphics/view.h"
+#include "graphics/scene.h"
 
-#include "graphics/sscene.h"
-
-#include "scenes/skeleton.h"
-#include "scenes/cage.h"
-//#include "scenes/strings.h"
-//#include "scenes/brush.h"
-//#include "scenes/inking.h"
+typedef QVector<Process *> Processes;
+typedef QVector<Input *>   Inputs;
+typedef QVector<View *>    Views;
+typedef QVector<Scene *>   Scenes;
 
 class Manager : public QObject
 {
@@ -19,11 +19,18 @@ public:
     explicit Manager(QObject *parent = 0);
     ~Manager();
 
-protected:
-    void timerEvent(QTimerEvent *);
+    Processes &getProcesses() { return processes; }
+    Inputs    &getInputs()    { return inputs; }
+    Scenes    &getScenes()    { return scenes; }
+    Views     &getViews()     { return views; }
 
-private:
-    View *view;
+protected:
+    virtual void timerEvent(QTimerEvent *) = 0;
+
+    Processes processes;
+    Inputs    inputs;
+    Views     views;
+    Scenes    scenes;
 
 signals:
     

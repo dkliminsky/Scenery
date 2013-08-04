@@ -1,6 +1,6 @@
-#include "debugwindow.h"
+#include "processdebug.h"
 
-DebugWindow::DebugWindow(QString name, int width, int height)
+ProcessDebug::ProcessDebug(QString name, int width, int height)
 {
     this->name = name;
     this->width = width;
@@ -12,12 +12,12 @@ DebugWindow::DebugWindow(QString name, int width, int height)
     //cvNamedWindow("Hit", CV_WINDOW_FREERATIO);
 }
 
-DebugWindow::~DebugWindow()
+ProcessDebug::~ProcessDebug()
 {
     cvDestroyAllWindows();
 }
 
-void DebugWindow::show(IplImage *image, Process *process)
+void ProcessDebug::show(IplImage *image, Process *process)
 {
     if (!image)
         return;
@@ -71,7 +71,7 @@ void DebugWindow::show(IplImage *image, Process *process)
     //cvShowImage("Hit", process->getHitImage());
 }
 
-void DebugWindow::drawAreas(IplImage *image, Areas &areas, CvScalar color, int type)
+void ProcessDebug::drawAreas(IplImage *image, Areas &areas, CvScalar color, int type)
 {
     vector<Area>::iterator it = areas.begin();
     for (; it != areas.end(); ++it) {
@@ -90,7 +90,7 @@ void DebugWindow::drawAreas(IplImage *image, Areas &areas, CvScalar color, int t
     }
 }
 
-void DebugWindow::drawAreasReal(IplImage *image, Areas &areas, CvScalar color, int type)
+void ProcessDebug::drawAreasReal(IplImage *image, Areas &areas, CvScalar color, int type)
 {
     vector<Area>::iterator it = areas.begin();
     for (; it != areas.end(); ++it) {
@@ -111,7 +111,7 @@ void DebugWindow::drawAreasReal(IplImage *image, Areas &areas, CvScalar color, i
     }
 }
 
-void DebugWindow::drawSeqAreas(IplImage *image, SeqAreas &seqAreas, CvScalar color, int type)
+void ProcessDebug::drawSeqAreas(IplImage *image, SeqAreas &seqAreas, CvScalar color, int type)
 {
     vector<SeqArea>::iterator it = seqAreas.begin();
     for (; it != seqAreas.end(); ++it) {
@@ -155,7 +155,7 @@ void DebugWindow::drawSeqAreas(IplImage *image, SeqAreas &seqAreas, CvScalar col
     }
 }
 
-void DebugWindow::drawTransform(IplImage *image, Process *process, CvScalar color)
+void ProcessDebug::drawTransform(IplImage *image, Process *process, CvScalar color)
 {
     int p[4][2];
 

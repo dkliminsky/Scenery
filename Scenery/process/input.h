@@ -24,7 +24,7 @@ public:
     IplImage* getFrame() { return frame; }
 
     int getWidth() { return width;}
-    int getHeigth() { return height;}
+    int getHeight() { return height;}
 
     int getFPS() { return fpsResult; }
 

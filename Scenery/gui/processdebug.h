@@ -7,11 +7,11 @@
 
 #include "process/process.h"
 
-class DebugWindow
+class ProcessDebug
 {
 public:
-    DebugWindow(QString name, int width, int height);
-    ~DebugWindow();
+    ProcessDebug(QString name, int width, int height);
+    ~ProcessDebug();
 
     void show(IplImage *image, Process *process);
 
