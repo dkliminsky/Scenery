@@ -118,20 +118,15 @@ void Process::setDefaultParam()
     houghCirclesParam.minRadius = 0;
     houghCirclesParam.maxRadius = 0;
 
-    // Sequences
+    // Areas & Sequences
+    filterAreaParam.isFilterOutframe = false;
     seqAreaParam.count = 1;
     seqAreaParam.lenghtLimit = 1000;
-
     filterSeqAreaParam.buffSize = 0;
-
-    //seqAreasBuffer.resize(1);
-
 
     seqAreas.resize(1);
     seqAreas[0].number = 0;
     seqAreasResult = &seqAreas;
-
-
 }
 
 void Process::step()
@@ -147,6 +142,7 @@ void Process::step()
         findColor();
         findClusters(hitImage, areas);
         transform2DAreas(areas);
+        filterAreas(areas);
         findSeqAreas(areas, seqAreas);
         filterSeqAreas(seqAreas, seqAreasBuffer);
         break;
@@ -155,6 +151,7 @@ void Process::step()
         findMotion();
         findClusters(hitImage, areas);
         transform2DAreas(areas);
+        filterAreas(areas);
         findSeqAreas(areas, seqAreas);
         filterSeqAreas(seqAreas, seqAreasBuffer);
         cvCopy(image, prevImage);
@@ -227,6 +224,11 @@ void Process::setHaarParam(Process::HaarParam param)
 void Process::setContourParam(Process::ContourParam param)
 {
     contourParam = param;
+}
+
+void Process::setFilterAreaParam(Process::FilterAreaParam param)
+{
+    filterAreaParam = param;
 }
 
 void Process::setSeqAreaParam(Process::SeqAreaParam param)
@@ -506,6 +508,22 @@ void Process::findSeqAreas(Areas &areas, SeqAreas &seqAreas)
     seqAreasResult = &seqAreas;
 }
 
+void Process::filterAreas(Areas &areas)
+{
+    // С производительностью нужно что-то делать...
+    if (filterAreaParam.isFilterOutframe) {
+        Areas oldAreas = areas;
+        areas.clear();
+
+        for (unsigned int i=0; i<oldAreas.size(); i++) {
+            if (oldAreas.at(i).pt[0] <= width  && oldAreas.at(i).pt[0] >= 0 &&
+                oldAreas.at(i).pt[1] <= height && oldAreas.at(i).pt[1] >= 0 ) {
+                areas.push_back(oldAreas.at(i));
+            }
+        }
+    }
+}
+
 void Process::filterSeqAreas(SeqAreas &seqAreas, SeqAreasBuffer &seqAreasBuffer)
 {
     if ( filterSeqAreaParam.buffSize == 0 )
@@ -514,6 +532,7 @@ void Process::filterSeqAreas(SeqAreas &seqAreas, SeqAreasBuffer &seqAreasBuffer)
     seqAreasBuffer.push_back(seqAreas);
 
     if ( seqAreasBuffer.size() < filterSeqAreaParam.buffSize*2+1 ) {
+        // Заполняем буфер пустыми значениями
 
         SeqAreas &last = seqAreasBuffer.back();
         for ( unsigned int i = 0; i < last.size(); i++) {
@@ -524,13 +543,14 @@ void Process::filterSeqAreas(SeqAreas &seqAreas, SeqAreasBuffer &seqAreasBuffer)
         return;
     }
 
-    while ( seqAreasBuffer.size() > filterSeqAreaParam.buffSize*2+1 )
+    while ( seqAreasBuffer.size() > filterSeqAreaParam.buffSize*2+1 ) {
+        // Удаляем лишнее из буфера
         seqAreasBuffer.pop_front();
-
+    }
 
     switch(filterSeqAreaParam.buffSize) {
     case 1:
-        for ( unsigned int i = 0; i < seqAreas.size(); i++) {
+        for (unsigned int i = 0; i < seqAreas.size(); i++) {
 
             SeqArea &prev = seqAreasBuffer.at(0).at(i);
             SeqArea &curr = seqAreasBuffer.at(1)[i];
@@ -539,13 +559,13 @@ void Process::filterSeqAreas(SeqAreas &seqAreas, SeqAreasBuffer &seqAreasBuffer)
             //qDebug() << "!!" << prev.number << curr.number << next.number;
 
             // Устранение всплесков
-            if ( prev.number == 0 && next.number == 0)
+            if (prev.number == 0 && next.number == 0)
             {
                 curr.number = 0;
             }
 
             // Устранение пропусков
-            if ( prev.number > 0 && curr.number == 0 && next.number > 0)
+            if (prev.number > 0 && curr.number == 0 && next.number > 0)
             {
                 curr.number = prev.number + 1;
                 curr.pt[0] = ( prev.pt[0] + next.pt[0] ) / 2;

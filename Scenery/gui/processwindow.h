@@ -41,6 +41,7 @@ public slots:
     void slotClusterSimple();
     void slotClusterTable();
     void slotSeqArea();
+    void slotFilterArea();
     void slotFilterSeqArea();
     void slotTransform2D();
 

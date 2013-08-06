@@ -155,8 +155,12 @@ public:
     void setHoughCircleParam(HoughCirclesParam param) { houghCirclesParam = param; }
 
     // ====================================================================
-    // Sequences Parameters
+    // Areas & Sequences Parameters
     // ====================================================================
+    struct FilterAreaParam {
+        bool isFilterOutframe;
+    };
+
     struct SeqAreaParam {
         int count;
         double lenghtLimit;
@@ -167,6 +171,7 @@ public:
     };
 
     void setSeqAreaParam(SeqAreaParam param);
+    void setFilterAreaParam(FilterAreaParam param);
     void setFilterSeqAreaParam(FilterSeqAreaParam param);
 
     // ====================================================================
@@ -203,6 +208,9 @@ protected:
 
     // Поиск последовательностей регионов
     void findSeqAreas(Areas &areas, SeqAreas &seqAreas);
+
+    // Фильтр регионов
+    void filterAreas(Areas &areas);
 
     // Фильтр последовательностей регионов
     void filterSeqAreas(SeqAreas &seqAreas, SeqAreasBuffer &seqAreasBuffer);
@@ -295,9 +303,11 @@ private:
     void findHoughCircles();
 
     // ====================================================================
-    // Sequences
+    // Areas & Sequences
     // ====================================================================
+
     SeqAreaParam seqAreaParam;
+    FilterAreaParam filterAreaParam;
     FilterSeqAreaParam filterSeqAreaParam;
 
     // ====================================================================

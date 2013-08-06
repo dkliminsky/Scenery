@@ -56,7 +56,7 @@
        <item>
         <widget class="QStackedWidget" name="modesWidget">
          <property name="currentIndex">
-          <number>4</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="none"/>
          <widget class="QWidget" name="color">
@@ -676,7 +676,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="clustering">
       <attribute name="title">
        <string>Clustering</string>
       </attribute>
@@ -822,15 +822,31 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="sequence">
+     <widget class="QWidget" name="areasSequences">
       <attribute name="title">
-       <string>Sequence</string>
+       <string>Areas and Sequence</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="title">
+          <string>Areas Filter</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_13">
+          <item>
+           <widget class="QCheckBox" name="filterAreasOutframeCheckBox">
+            <property name="text">
+             <string>Filter outframe</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
-          <string>Sequence Areas</string>
+          <string>Sequences</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0">
@@ -863,7 +879,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_3">
          <property name="title">
-          <string>Sequence Filter</string>
+          <string>Sequences Filter</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_8">
           <item row="0" column="0">
@@ -876,7 +892,7 @@
           <item row="0" column="1">
            <widget class="QSpinBox" name="filterSeqAreaBufferSizeSpin">
             <property name="maximum">
-             <number>5</number>
+             <number>1</number>
             </property>
            </widget>
           </item>

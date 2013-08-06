@@ -122,13 +122,14 @@ ProcessWindow::ProcessWindow(Process *process, QString file, QWidget *parent) :
     connect(ui->clusterTableHeightSpin, SIGNAL(valueChanged(int)), SLOT(slotClusterTable()));
     connect(ui->clusterTableDensitySpin, SIGNAL(valueChanged(int)), SLOT(slotClusterTable()));
 
-    // Sequences
+    // Areas & Sequences
     connect(ui->seqAreaCountSpin, SIGNAL(valueChanged(int)), SLOT(slotSeqArea()));
     connect(ui->seqAreaLenghtLimitDoubleSpin, SIGNAL(valueChanged(double)), SLOT(slotSeqArea()));
 
+    connect(ui->filterAreasOutframeCheckBox, SIGNAL(clicked()), SLOT(slotFilterArea()));
     connect(ui->filterSeqAreaBufferSizeSpin, SIGNAL(valueChanged(int)), SLOT(slotFilterSeqArea()));
 
-    // transform2D
+    // Transform2D
     connect(ui->transform2DMxDoubleSpin, SIGNAL(valueChanged(double)), SLOT(slotTransform2D()));
     connect(ui->transform2DMyDoubleSpin, SIGNAL(valueChanged(double)), SLOT(slotTransform2D()));
     connect(ui->transform2DSxDoubleSpin, SIGNAL(valueChanged(double)), SLOT(slotTransform2D()));
@@ -254,10 +255,17 @@ void ProcessWindow::loadParam()
             slotClusterTable();
         settings.endGroup();
 
+        settings.beginGroup("/Areas");
+            ui->filterAreasOutframeCheckBox->setChecked( settings.value("/FilterOutframe").toBool() );
+            slotFilterArea();
+        settings.endGroup();
+
         settings.beginGroup("/Sequences");
             ui->seqAreaCountSpin->setValue( settings.value("/Count").toInt() );
             ui->seqAreaLenghtLimitDoubleSpin->setValue( settings.value("/LenghtLimit").toDouble() );
+            ui->filterSeqAreaBufferSizeSpin->setValue( settings.value("/BufferSize").toInt() );
             slotSeqArea();
+            slotFilterSeqArea();
         settings.endGroup();
 
         settings.beginGroup("/Transform2D");
@@ -335,13 +343,14 @@ void ProcessWindow::saveParam()
             settings.setValue("/TableDensity",  ui->clusterTableDensitySpin->value() );
         settings.endGroup();
 
-        settings.beginGroup("/Sequences");
-            settings.setValue("/Distance",  ui->clusterSimpleDistanceSpin->value() );
-            settings.setValue("/Limit",  ui->clusterSimpleLimitSpin->value() );
-            settings.setValue("/Density",  ui->clusterSimpleDensitySpin->value() );
+        settings.beginGroup("/Areas");
+            settings.setValue("/FilterOutframe", ui->filterAreasOutframeCheckBox->isChecked() );
+        settings.endGroup();
 
+        settings.beginGroup("/Sequences");
             settings.setValue("/Count", ui->seqAreaCountSpin->value() );
             settings.setValue("/LenghtLimit", ui->seqAreaLenghtLimitDoubleSpin->value() );
+            settings.setValue("/BufferSize", ui->filterSeqAreaBufferSizeSpin->value() );
         settings.endGroup();
 
         settings.beginGroup("/Transform2D");
@@ -485,6 +494,13 @@ void ProcessWindow::slotSeqArea()
     param.count = ui->seqAreaCountSpin->value();
     param.lenghtLimit = ui->seqAreaLenghtLimitDoubleSpin->value();
     process->setSeqAreaParam(param);
+}
+
+void ProcessWindow::slotFilterArea()
+{
+    Process::FilterAreaParam param;
+    param.isFilterOutframe = ui->filterAreasOutframeCheckBox->isChecked();
+    process->setFilterAreaParam(param);
 }
 
 void ProcessWindow::slotFilterSeqArea()
