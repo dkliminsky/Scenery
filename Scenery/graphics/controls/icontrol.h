@@ -15,13 +15,15 @@ public:
         ControlColor
     };
 
-    IControl(QString name) { _name = name; }
+    IControl(Type type, QString name) { _type = type; _name = name; }
 
+    Type type() { return _type; }
     QString &name() { return _name; }
     virtual void set(QString &data) = 0;
     virtual QString get() = 0;
 
 protected:
+    Type _type;
     QString _name;
 
 };

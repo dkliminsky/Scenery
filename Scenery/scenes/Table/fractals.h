@@ -16,6 +16,9 @@ public:
 
 private:
     int maxFractal;
+    Image *imageLine;
+
+    bool isBezier;
 
     struct Fractal {
         float x1;

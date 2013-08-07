@@ -2,11 +2,15 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
 
 #include "manager.h"
 #include "processwindow.h"
 
+#include "controls/controlboolwidget.h"
+
 typedef QVector<ProcessWindow *> ProcessWindows;
+typedef QVector<QWidget *> ControlWidgets;
 
 namespace Ui {
 class MainWindow;
@@ -28,6 +32,7 @@ private:
     Ui::MainWindow *ui;
     Manager *manager;
     ProcessWindows processWindows;
+    ControlWidgets controlWidgets;
     int curScene;
 
 public slots:

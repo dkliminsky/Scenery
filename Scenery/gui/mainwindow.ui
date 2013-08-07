@@ -132,7 +132,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QWidget" name="widgetControls" native="true"/>
+     <widget class="QStackedWidget" name="controlsStackedWidget"/>
     </item>
     <item>
      <spacer name="horizontalSpacer">

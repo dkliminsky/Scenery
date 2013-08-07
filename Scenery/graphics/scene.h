@@ -7,6 +7,8 @@
 #include "sscene.h"
 #include "view.h"
 
+#include "controls/controlbool.h"
+
 class SceneProcess
 {
 public:
@@ -50,6 +52,7 @@ private:
 };
 
 typedef QVector<Image *> Images;
+typedef QVector<IControl *> Controls;
 
 class Scene: public SScene
 {
@@ -117,6 +120,9 @@ public:
     // Process function
     SceneProcess *process(int n);
 
+    // Other
+    Controls &controls() { return _controls; }
+
 protected:
     void virtual setupEvent(void *view);
     void virtual paintEvent();
@@ -126,6 +132,8 @@ private:
     View *view;
     SceneProcess _process;
     Images imagesBuffer;
+    Controls _controls;
+
 };
 
 #endif // SCENE_H

@@ -27,7 +27,7 @@ ManagerTable::ManagerTable()
 
     views.at(0)->setScene(scenes.at(0));
 
-    views.at(0)->datas()->resize(5);
+    views.at(0)->datas()->resize(6);
     views.at(0)->datas()->at(0).width = cameraWidth;
     views.at(0)->datas()->at(0).height = cameraHeight;
     views.at(0)->datas()->at(1).width = cameraWidth;
@@ -38,6 +38,8 @@ ManagerTable::ManagerTable()
     views.at(0)->datas()->at(3).height = cameraHeight;
     views.at(0)->datas()->at(4).width = cameraWidth;
     views.at(0)->datas()->at(4).height = cameraHeight;
+    views.at(0)->datas()->at(5).width = cameraWidth;
+    views.at(0)->datas()->at(5).height = cameraHeight;
 
     startTimer(17);
 }
@@ -53,7 +55,8 @@ void ManagerTable::timerEvent(QTimerEvent *)
              !processes.at(1)->isRunning() &&
              !processes.at(2)->isRunning() &&
              !processes.at(3)->isRunning() &&
-             !processes.at(4)->isRunning() ) {
+             !processes.at(4)->isRunning() &&
+             !processes.at(5)->isRunning() ) {
 
             // Debug process
             debug->show(frame, processes.at(0));
@@ -61,6 +64,7 @@ void ManagerTable::timerEvent(QTimerEvent *)
             debug->show(frame, processes.at(2));
             debug->show(frame, processes.at(3));
             debug->show(frame, processes.at(4));
+            debug->show(frame, processes.at(5));
 
             //
             processes.at(0)->setImage(frame);
@@ -68,6 +72,7 @@ void ManagerTable::timerEvent(QTimerEvent *)
             processes.at(2)->setImage(frame);
             processes.at(3)->setImage(frame);
             processes.at(4)->setImage(frame);
+            processes.at(5)->setImage(frame);
 
             // set process data in scene
             views.at(0)->datas()->at(0).areas = processes.at(0)->getAreas();
@@ -80,12 +85,15 @@ void ManagerTable::timerEvent(QTimerEvent *)
             views.at(0)->datas()->at(3).seqAreas = processes.at(3)->getSeqAreas();
             views.at(0)->datas()->at(4).areas = processes.at(4)->getAreas();
             views.at(0)->datas()->at(4).seqAreas = processes.at(4)->getSeqAreas();
+            views.at(0)->datas()->at(5).areas = processes.at(5)->getAreas();
+            views.at(0)->datas()->at(5).seqAreas = processes.at(5)->getSeqAreas();
 
             processes.at(0)->start();
             processes.at(1)->start();
             processes.at(2)->start();
             processes.at(3)->start();
             processes.at(4)->start();
+            processes.at(5)->start();
         }
         inputs[0]->start();
     }

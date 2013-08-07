@@ -45,6 +45,40 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     connect(ui->tableScenes, &QTableWidget::cellDoubleClicked,
             this, &MainWindow::slotChangeScene);
 
+    for(int i=0; i<scenes.size(); i++) {
+        Scene *scene = scenes.at(i);
+
+        QWidget *widget = new QWidget();
+        QGridLayout *layout = new QGridLayout();
+        layout->setContentsMargins(0, 0, 0, 0);
+        //layout->setSpacing(3);
+
+        for (int j=0; j<scene->controls().size(); j++) {
+            IControl *control = scene->controls().at(j);
+            switch(control->type()) {
+            case IControl::ControlBool:
+                layout->addWidget(new QLabel(control->name()), j, 0);
+                layout->addWidget(new ControlBoolWidget(static_cast<ControlBool *>(control)), j, 1);
+                break;
+            case IControl::ControlInt:
+                break;
+            case IControl::ControlDouble:
+                break;
+            case IControl::ControlString:
+                break;
+            case IControl::ControlImage:
+                break;
+            case IControl::ControlColor:
+                break;
+            }
+        }
+        widget->setLayout(layout);
+        ui->controlsStackedWidget->addWidget(widget);
+    }
+
+//        if (scene->getLayout()->count() > 0)
+//            scene->getLayout()->setRowStretch(scene->getLayout()->count()-1, 1);
+
     connect(ui->actionFullScreen, SIGNAL(toggled(bool)), SLOT(setFullScreen(bool)));
 
     startTimer(500);

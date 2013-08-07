@@ -1,7 +1,7 @@
 #include "controlbool.h"
 
 ControlBool::ControlBool(bool &data, QString name) :
-    IControl(name), _data(data)
+    IControl(IControl::ControlBool, name), _data(data)
 {
 
 }
@@ -24,12 +24,10 @@ QString ControlBool::get()
         data = "false";
 
     return data;
+}
 
-    /*
-    if (data)
-        return *(new QString("true"));
-    else
-        return *(new QString("false"));
-    */
+bool &ControlBool::value()
+{
+    return _data;
 }
 

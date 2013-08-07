@@ -7,7 +7,8 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-
+    for (int i=0; i<_controls.size(); i++)
+        delete _controls[i];
 }
 
 void Scene::size(int width, int height)
@@ -163,7 +164,7 @@ void Scene::control(double &x, QString description, double min, double max, int 
 
 void Scene::control(bool &x, QString description)
 {
-
+    _controls += new ControlBool(x, description);
 }
 
 void Scene::control(QString &string, QString description, QStringList list)

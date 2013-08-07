@@ -13,6 +13,8 @@ public:
     void set(QString &data);
     QString get();
 
+    bool &value();
+
 private:
     bool &_data;
 

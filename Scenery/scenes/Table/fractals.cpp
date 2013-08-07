@@ -3,6 +3,9 @@
 Fractals::Fractals()
 {
     maxFractal = 5;
+
+    control(isBezier=true, "Bezier");
+    control(&imageLine, "Line image", "images/forms/", "line1.png");
 }
 
 void Fractals::setup()
@@ -26,6 +29,14 @@ void Fractals::paint()
     createPoints(fractals);
     createFractals(fractals, fractals);
 
+    lineWidth(3);
+    color(0.1, 0.1, 0.1, 0.2);
+    drawFractals(fractals, maxFractal-2);
+
+    lineWidth(2);
+    color(0.5, 0.5, 0.5, 0.3);
+    drawFractals(fractals, maxFractal-1);
+
     lineWidth(1);
     color(1, 1, 1, 1);
     drawFractals(fractals, maxFractal);
@@ -41,7 +52,7 @@ void Fractals::createPoints(QVector<Fractals::Fractal> &fractals)
     Fractal fractal;
 
     int count = 0;
-    for(int i=0; i<6; i++) {
+    for(int i=0; i<10; i++) {
         if (process(i)->seqAreas().size() > 0 &&
             process(i)->seqAreas().at(0).number > 0) {
             float x = process(i)->seqAreas().at(0).pt[0];
@@ -121,10 +132,19 @@ void Fractals::drawLinks(QVector<Fractals::Fractal> &fractals)
 
 void Fractals::drawFractals(QVector<Fractal> &fractals, int maxDeep, int deep)
 {
+    if (maxDeep < 1)
+        return;
+
+    if (isBezier && deep == maxDeep && fractals.size() == 3) {
+        lineParts(10);
+        bezier(fractals.at(0).x1, fractals.at(0).y1, fractals.at(1).x1, fractals.at(1).y1,
+               fractals.at(2).x1, fractals.at(2).y1, fractals.at(2).x2, fractals.at(2).y2);
+    }
+
     for  (int i=0; i<fractals.size(); i++) {
         const Fractal &fractal = fractals.at(i);
 
-        if (deep == maxDeep) {
+        if (!isBezier && deep == maxDeep) {
             line(fractal.x1, fractal.y1, fractal.x2, fractal.y2);
         }
 
