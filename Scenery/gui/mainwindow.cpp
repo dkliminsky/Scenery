@@ -55,23 +55,30 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
 
         for (int j=0; j<scene->controls().size(); j++) {
             IControl *control = scene->controls().at(j);
+            layout->addWidget(new QLabel(control->name()), j, 0);
             switch(control->type()) {
             case IControl::ControlBool:
-                layout->addWidget(new QLabel(control->name()), j, 0);
                 layout->addWidget(new ControlBoolWidget(static_cast<ControlBool *>(control)), j, 1);
                 break;
             case IControl::ControlInt:
+                layout->addWidget(new ControlIntWidget(static_cast<ControlInt *>(control)), j, 1);
                 break;
             case IControl::ControlDouble:
+                layout->addWidget(new ControlDoubleWidget(static_cast<ControlDouble *>(control)), j, 1);
                 break;
             case IControl::ControlString:
+                layout->addWidget(new ControlStringWidget(static_cast<ControlString *>(control)), j, 1);
+                break;
+            case IControl::ControlColor:
+                layout->addWidget(new ControlColorWidget(static_cast<ControlColor *>(control)), j, 1);
                 break;
             case IControl::ControlImage:
                 break;
-            case IControl::ControlColor:
-                break;
             }
         }
+        if (layout->count() > 0)
+            layout->setRowStretch(layout->count()-1, 1);
+
         widget->setLayout(layout);
         ui->controlsStackedWidget->addWidget(widget);
     }
@@ -144,5 +151,6 @@ void MainWindow::slotChangeScene(int row, int column)
     if ( column == 0) {
         manager->getViews().at(0)->setScene(manager->getScenes().at(row));
         curScene = row;
+        ui->controlsStackedWidget->setCurrentIndex(row);
     }
 }

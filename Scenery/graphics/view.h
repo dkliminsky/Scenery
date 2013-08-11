@@ -23,7 +23,7 @@ public:
 
     void bindImage(Image *image);
     int time();
-    int dtime();
+    int dtime() { return timeStep; }
     int fps() { return fpsResult; }
 
 protected:
@@ -41,6 +41,8 @@ private:
     Utils _utils;
     Graphic _graphic;
 
+    int timeLast;
+    int timeStep;
     QTime timer;
 
     QTime fpsTime;

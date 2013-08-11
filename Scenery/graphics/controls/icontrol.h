@@ -16,6 +16,7 @@ public:
     };
 
     IControl(Type type, QString name) { _type = type; _name = name; }
+    virtual ~IControl() {};
 
     Type type() { return _type; }
     QString &name() { return _name; }

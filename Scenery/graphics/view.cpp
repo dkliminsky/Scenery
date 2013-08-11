@@ -11,6 +11,9 @@ View::View(QGLFormat &format, QWidget *parent)
 
     show();
 
+    timeLast = 0;
+    timeStep = 0;
+
     fpsRest = 0;
     fpsFrames = 0;
     fpsResult = 0;
@@ -27,6 +30,10 @@ void View::setScene(SScene *scene)
     this->scene = scene;
     scene->setupEvent(this);
     scene->resizeEvent();
+
+    timeLast = 0;
+    timeStep = 0;
+    timer.restart();
 }
 
 void View::bindImage(Image *image)
@@ -37,12 +44,7 @@ void View::bindImage(Image *image)
 
 int View::time()
 {
-    return 0;
-}
-
-int View::dtime()
-{
-    return 0;
+    return timer.elapsed();
 }
 
 void View::initializeGL()
@@ -98,6 +100,10 @@ void View::paintGL()
     if (errCode != GL_NO_ERROR) {
         qDebug() << "OpenGL Error!";
     }
+
+    // Counting Timing
+    timeStep = timer.elapsed() - timeLast;
+    timeLast = timer.elapsed();
 
     // Counting FPS
     fpsFrames++;

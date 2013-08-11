@@ -24,7 +24,7 @@ ManagerVLMT::ManagerVLMT()
     scenes += new Strings();
     scenes += new Inking();
 
-    views.at(0)->setScene(scenes.at(3));
+    views.at(0)->setScene(scenes.at(0));
 
     views.at(0)->datas()->resize(1);
     views.at(0)->datas()->at(0).width = 640;

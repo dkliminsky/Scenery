@@ -8,8 +8,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    //ManagerVLMT manager;
-    ManagerTable manager;
+    ManagerVLMT manager;
+    //ManagerTable manager;
 
     MainWindow mainWindow(&manager);
     mainWindow.show();

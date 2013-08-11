@@ -25,9 +25,3 @@ QString ControlBool::get()
 
     return data;
 }
-
-bool &ControlBool::value()
-{
-    return _data;
-}
-

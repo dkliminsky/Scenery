@@ -16,7 +16,8 @@ private:
 signals:
     
 public slots:
-    void slotChange();
+    void change();
+    void update();
     
 };
 

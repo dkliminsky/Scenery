@@ -152,14 +152,14 @@ void Scene::signal(int id, QString description)
 
 }
 
-void Scene::control(int &x, QString description, int min, int max)
+void Scene::control(int &x, QString description, int min, int max, int step)
 {
-
+    _controls += new ControlInt(x, description, min, max, step);
 }
 
 void Scene::control(double &x, QString description, double min, double max, int precision)
 {
-
+    _controls += new ControlDouble(x, description, min, max, precision);
 }
 
 void Scene::control(bool &x, QString description)
@@ -169,12 +169,12 @@ void Scene::control(bool &x, QString description)
 
 void Scene::control(QString &string, QString description, QStringList list)
 {
-
+    _controls += new ControlString(string, description, list);
 }
 
 void Scene::control(Color &color, QString description)
 {
-
+    _controls += new ControlColor(color, description);
 }
 
 void Scene::control(Image **image, QString description, QString path, QString file)

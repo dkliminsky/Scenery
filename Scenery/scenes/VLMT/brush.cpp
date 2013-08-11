@@ -25,11 +25,11 @@ Brush::Brush()
 
 void Brush::setup()
 {
-    background(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void Brush::paint()
 {
+    background(backColor);
     size(process(0)->width(), process(0)->height());
 
     if (mode == "Line") {

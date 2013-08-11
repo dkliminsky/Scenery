@@ -2,10 +2,8 @@
 
 Fractals::Fractals()
 {
-    maxFractal = 5;
-
-    control(isBezier=true, "Bezier");
-    control(&imageLine, "Line image", "images/forms/", "line1.png");
+    control(maxFractal=5, "Fractal Level", 1, 10);
+    control(isBezier=false, "Bezier");
 }
 
 void Fractals::setup()

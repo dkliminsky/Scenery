@@ -6,15 +6,11 @@
 class ControlBool : public IControl
 {
 public:
-    explicit ControlBool(bool &_data, QString name);
-    bool &data() { return _data; }
-
-    void update();
+    explicit ControlBool(bool &data, QString name);
     void set(QString &data);
     QString get();
 
-    bool &value();
-
+    bool &value() { return _data; }
 private:
     bool &_data;
 

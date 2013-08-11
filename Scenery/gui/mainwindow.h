@@ -8,6 +8,10 @@
 #include "processwindow.h"
 
 #include "controls/controlboolwidget.h"
+#include "controls/controlintwidget.h"
+#include "controls/controldoublewidget.h"
+#include "controls/controlstringwidget.h"
+#include "controls/controlcolorwidget.h"
 
 typedef QVector<ProcessWindow *> ProcessWindows;
 typedef QVector<QWidget *> ControlWidgets;

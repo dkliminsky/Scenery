@@ -8,6 +8,11 @@
 #include "view.h"
 
 #include "controls/controlbool.h"
+#include "controls/controlint.h"
+#include "controls/controldouble.h"
+#include "controls/controlstring.h"
+#include "controls/controlcolor.h"
+#include "controls/controlimage.h"
 
 class SceneProcess
 {
@@ -110,7 +115,7 @@ public:
 
     // Control function
     void signal(int id, QString description);
-    void control(int &x, QString description, int min=0, int max=100);
+    void control(int &x, QString description, int min=0, int max=999, int step=1);
     void control(double &x, QString description, double min=0, double max=100, int precision=1);
     void control(bool &x, QString description);
     void control(QString &string, QString description, QStringList list);
