@@ -28,3 +28,17 @@ Manager::~Manager()
     }
 }
 
+void Manager::processesStart()
+{
+    for (int i=0; i<processes.size(); i++)
+        processes.at(i)->start();
+}
+
+bool Manager::isProcessesComplete()
+{
+    for (int i=0; i<processes.size(); i++)
+        if (processes.at(i)->isRunning())
+            return false;
+    return true;
+}
+

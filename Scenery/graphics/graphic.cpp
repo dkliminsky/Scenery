@@ -74,13 +74,22 @@ void Graphic::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat hei
     }
 
     GLfloat x1 = x - width/2.0;
-    GLfloat y1 = y + height/2.0;
+    GLfloat y1 = y - height/2.0;
     GLfloat x2 = x + width/2.0;
-    GLfloat y2 = y + height/2.0;
+    GLfloat y2 = y - height/2.0;
     GLfloat x3 = x + width/2.0;
-    GLfloat y3 = y - height/2.0;
+    GLfloat y3 = y + height/2.0;
     GLfloat x4 = x - width/2.0;
-    GLfloat y4 = y - height/2.0;
+    GLfloat y4 = y + height/2.0;
+
+//    GLfloat x1 = x - width/2.0;
+//    GLfloat y1 = y + height/2.0;
+//    GLfloat x2 = x + width/2.0;
+//    GLfloat y2 = y + height/2.0;
+//    GLfloat x3 = x + width/2.0;
+//    GLfloat y3 = y - height/2.0;
+//    GLfloat x4 = x - width/2.0;
+//    GLfloat y4 = y - height/2.0;
 
     if (angle != 0) {
         // Повернем углы прямоугольника относительно координаты x и y
@@ -325,9 +334,13 @@ void Graphic::flush()
     }
 
     glBindTexture(GL_TEXTURE_2D, imageBuffers.at(0).id);
-//    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 //    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     //GLfloat envColor[4] = {1, 1, 1, 0};
+    //glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, envColor);
+
+    //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
+    //GLfloat envColor[4] = {curColor.r, curColor.g, curColor.b, curColor.a};
     //glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, envColor);
 
     glEnable(GL_TEXTURE_2D);

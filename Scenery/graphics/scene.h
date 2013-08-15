@@ -7,6 +7,8 @@
 #include "sscene.h"
 #include "view.h"
 
+#include "actions/actionbutton.h"
+
 #include "controls/controlbool.h"
 #include "controls/controlint.h"
 #include "controls/controldouble.h"
@@ -34,18 +36,26 @@ public:
         else return _areas;
     }
 
-   SeqAreas &seqAreas() {
+    SeqAreas &seqAreas() {
         if (view->datas()->size() > n) return view->datas()->at(n).seqAreas;
         else return _seqArea;
     }
 
-   Contours &contours() {
+    Contours &contours() {
         if (view->datas()->size() > n) return view->datas()->at(n).contours;
         else return _contour;
     }
 
-    void _setN(unsigned int n) { this->n = n; }
-    void _setView(View *view) { this->view = view; }
+    Image *image() {
+        _image.set(view->datas()->at(n).image->imageData,
+                   view->datas()->at(n).image->width,
+                   view->datas()->at(n).image->height,
+                   view->datas()->at(n).image->nChannels);
+        return &_image;
+    }
+
+   void _setN(unsigned int n) { this->n = n; }
+   void _setView(View *view) { this->view = view; }
 
 private:
     View *view;
@@ -54,10 +64,12 @@ private:
     Areas _areas;
     SeqAreas _seqArea;
     Contours _contour;
+    Image _image;
 };
 
 typedef QVector<Image *> Images;
 typedef QVector<IControl *> Controls;
+typedef QVector<ActionButton *> Actions;
 
 class Scene: public SScene
 {
@@ -72,6 +84,7 @@ public:
     virtual void setup(){}
     virtual void resize(){}
     virtual void paint(){}
+    virtual void action(int){}
 
     // Graphics functions
     void size(int width, int height);
@@ -95,6 +108,7 @@ public:
                             GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4);
 
     Image *loadImage(const QString &fileName);
+    Image *createImage(int width, int height, int channels);
     void image(Image *img, GLfloat x, GLfloat y,
                            GLfloat width, GLfloat height, GLfloat angle=0);
     void text(GLint x, GLint y, const QString & str,
@@ -114,7 +128,8 @@ public:
     float angle(float x1, float y1, float x2, float y2);
 
     // Control function
-    void signal(int id, QString description);
+    void signal(int id);
+    void button(int id, QString description);
     void control(int &x, QString description, int min=0, int max=999, int step=1);
     void control(double &x, QString description, double min=0, double max=100, int precision=1);
     void control(bool &x, QString description);
@@ -127,6 +142,7 @@ public:
 
     // Other
     Controls &controls() { return _controls; }
+    Actions &actions() { return _actions; }
 
 protected:
     void virtual setupEvent(void *view);
@@ -136,9 +152,12 @@ protected:
 private:
     View *view;
     SceneProcess _process;
-    Images imagesBuffer;
-    Controls _controls;
 
+    Images _images;
+    Controls _controls;
+    Actions _actions;
+
+    Images imagesBuffer;
 };
 
 #endif // SCENE_H

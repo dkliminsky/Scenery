@@ -7,6 +7,12 @@ Scene::Scene()
 
 Scene::~Scene()
 {
+    for (int i=0; i<_images.size(); i++)
+        delete _images[i];
+
+    for (int i=0; i<_actions.size(); i++)
+        delete _actions[i];
+
     for (int i=0; i<_controls.size(); i++)
         delete _controls[i];
 }
@@ -79,16 +85,24 @@ void Scene::bezier(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, G
 Image *Scene::loadImage(const QString &fileName)
 {
     Image *image = new Image(fileName);
+    _images += image;
     if (view) {
-        view->bindImage(image);
+        image->bind();
     }
     else {
         // Если экземпляр view еще не доступен,
         // добавим изображения в буфер и вызовем
-        // для них bindImage позднее, когда придет
-        // экземпляр view
-        imagesBuffer.append(image);
+        // для них bind позднее, когда придет
+        // сигнал setupEvent
+        imagesBuffer += image;
     }
+    return image;
+}
+
+Image *Scene::createImage(int width, int height, int channels)
+{
+    Image *image = new Image(width, height, channels);
+    _images += image;
     return image;
 }
 
@@ -147,9 +161,9 @@ float Scene::angle(float x1, float y1, float x2, float y2)
     return view->utils()->angle(x1, y1, x2, y2);
 }
 
-void Scene::signal(int id, QString description)
+void Scene::button(int id, QString description)
 {
-
+    _actions += new ActionButton(id, description);
 }
 
 void Scene::control(int &x, QString description, int min, int max, int step)
@@ -182,6 +196,11 @@ void Scene::control(Image **image, QString description, QString path, QString fi
     *image = loadImage(path + file);
 }
 
+void Scene::signal(int id)
+{
+    action(id);
+}
+
 SceneProcess *Scene::process(int n)
 {
     _process._setView(view);
@@ -193,7 +212,7 @@ void Scene::setupEvent(void *view)
 {
     this->view = static_cast<View *>(view);
     for(int i=0; i<imagesBuffer.size(); i++) {
-        this->view->bindImage(imagesBuffer.at(i));
+        imagesBuffer.at(i)->bind();
     }
     imagesBuffer.clear();
     setup();

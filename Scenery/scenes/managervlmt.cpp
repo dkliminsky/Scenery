@@ -29,6 +29,7 @@ ManagerVLMT::ManagerVLMT()
     views.at(0)->datas()->resize(1);
     views.at(0)->datas()->at(0).width = 640;
     views.at(0)->datas()->at(0).height = 480;
+    views.at(0)->datas()->at(0).image = cvCreateImage(cvSize(cameraWidth, cameraHeight), IPL_DEPTH_8U, 3);
 
     startTimer(17);
 }
@@ -56,6 +57,7 @@ void ManagerVLMT::timerEvent(QTimerEvent *)
             views.at(0)->datas()->at(0).areas = processes.at(0)->getAreas();
             views.at(0)->datas()->at(0).seqAreas = processes.at(0)->getSeqAreas();
             views.at(0)->datas()->at(0).contours = processes.at(0)->getContours();
+            cvCopy(processes.at(0)->getImage(), views.at(0)->datas()->at(0).image);
 
             processes.at(0)->start();
         }

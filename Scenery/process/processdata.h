@@ -4,6 +4,7 @@
 #include <vector>
 #include <list>
 #include <deque>
+#include "opencv2/core/core_c.h"
 
 using std::vector;
 using std::list;
@@ -64,6 +65,9 @@ public:
     Areas    areas;
     SeqAreas seqAreas;
     Contours contours;
+
+    IplImage *image;
+    IplImage *hit;
 };
 
 typedef vector<ProcessData> ProcessDatas;

@@ -14,5 +14,5 @@ void ControlImage::set(QString &data)
 
 QString ControlImage::get()
 {
-    return (*_img)->name();
+    return (*_img)->fileName();
 }

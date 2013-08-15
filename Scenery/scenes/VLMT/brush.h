@@ -12,7 +12,8 @@ public:
 
     void setup();
     void paint();
-    void push(int id);
+    void resize();
+    void action(int id);
 
 private:
     QString mode;

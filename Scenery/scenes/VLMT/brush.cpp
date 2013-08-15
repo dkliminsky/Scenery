@@ -2,11 +2,11 @@
 
 Brush::Brush()
 {
-    signal(0, "Rand color");
+    button(0, "Rand color");
 
     control(mode="None", "Type of brush", QStringList() << "Line" << "Blots");
 
-    control(backColor=Color(0,0,0,1), "Background");
+    control(backColor=Color(0,0,0,0), "Background");
 
     control(lineColor=Color(1,1,1,1), "Line Color");
     control(lineSize=8, "Line size", 0, 300);
@@ -25,12 +25,18 @@ Brush::Brush()
 
 void Brush::setup()
 {
+    background(0, 0, 0, 1);
+}
+
+void Brush::resize()
+{
+    background(0, 0, 0, 1);
 }
 
 void Brush::paint()
 {
-    background(backColor);
     size(process(0)->width(), process(0)->height());
+    background(backColor);
 
     if (mode == "Line") {
         SeqAreas &seqAreas = process(0)->seqAreas();
@@ -48,10 +54,7 @@ void Brush::paint()
         for (unsigned int i=0; i<seqAreas.size(); i++) {
             SeqArea &seqArea = seqAreas.at(i);
             if (seqArea.number > 1 && seqArea.length > blotLimit) {
-                glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
-                GLfloat envColor2[4] = {blotColor.r, blotColor.g, blotColor.b, 0};
-                glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, envColor2);
-
+                color(blotColor);
                 float x = seqArea.pt[0];
                 float y = seqArea.pt[1];
                 image(blotImages[random(5)], x, y,
@@ -61,7 +64,7 @@ void Brush::paint()
     }
 }
 
-void Brush::push(int id)
+void Brush::action(int id)
 {
     switch(id) {
     case 0:

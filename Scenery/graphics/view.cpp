@@ -36,12 +36,6 @@ void View::setScene(SScene *scene)
     timer.restart();
 }
 
-void View::bindImage(Image *image)
-{
-    GLuint id = bindTexture(QPixmap(image->name()), GL_TEXTURE_2D);
-    image->_setId(id);
-}
-
 int View::time()
 {
     return timer.elapsed();

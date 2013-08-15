@@ -21,7 +21,6 @@ public:
     Utils        *utils()   { return &_utils; }
     Graphic      *graphic() { return &_graphic; }
 
-    void bindImage(Image *image);
     int time();
     int dtime() { return timeStep; }
     int fps() { return fpsResult; }

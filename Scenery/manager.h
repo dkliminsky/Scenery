@@ -26,6 +26,9 @@ public:
     Scenes    &getScenes()    { return scenes; }
     Views     &getViews()     { return views; }
 
+    void processesStart();
+    bool isProcessesComplete();
+
 protected:
     virtual void timerEvent(QTimerEvent *) = 0;
 

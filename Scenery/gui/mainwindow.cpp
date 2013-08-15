@@ -53,29 +53,40 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
         layout->setContentsMargins(0, 0, 0, 0);
         //layout->setSpacing(3);
 
+        int n = 0;
+
+        for (int j=0; j<scene->actions().size(); j++) {
+            ActionButton *action = scene->actions().at(j);
+            layout->addWidget(new QLabel(action->name()), n, 0);
+            layout->addWidget(new ActionButtonWidget(scenes.at(i), action->id()), n, 1);
+            n++;
+        }
+
         for (int j=0; j<scene->controls().size(); j++) {
             IControl *control = scene->controls().at(j);
-            layout->addWidget(new QLabel(control->name()), j, 0);
+            layout->addWidget(new QLabel(control->name()), n, 0);
             switch(control->type()) {
             case IControl::ControlBool:
-                layout->addWidget(new ControlBoolWidget(static_cast<ControlBool *>(control)), j, 1);
+                layout->addWidget(new ControlBoolWidget(static_cast<ControlBool *>(control)), n, 1);
                 break;
             case IControl::ControlInt:
-                layout->addWidget(new ControlIntWidget(static_cast<ControlInt *>(control)), j, 1);
+                layout->addWidget(new ControlIntWidget(static_cast<ControlInt *>(control)), n, 1);
                 break;
             case IControl::ControlDouble:
-                layout->addWidget(new ControlDoubleWidget(static_cast<ControlDouble *>(control)), j, 1);
+                layout->addWidget(new ControlDoubleWidget(static_cast<ControlDouble *>(control)), n, 1);
                 break;
             case IControl::ControlString:
-                layout->addWidget(new ControlStringWidget(static_cast<ControlString *>(control)), j, 1);
+                layout->addWidget(new ControlStringWidget(static_cast<ControlString *>(control)), n, 1);
                 break;
             case IControl::ControlColor:
-                layout->addWidget(new ControlColorWidget(static_cast<ControlColor *>(control)), j, 1);
+                layout->addWidget(new ControlColorWidget(static_cast<ControlColor *>(control)), n, 1);
                 break;
             case IControl::ControlImage:
                 break;
             }
+            n++;
         }
+
         if (layout->count() > 0)
             layout->setRowStretch(layout->count()-1, 1);
 

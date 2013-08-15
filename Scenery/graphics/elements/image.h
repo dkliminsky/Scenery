@@ -5,19 +5,41 @@
 #include <QImage>
 #include <QString>
 
-class Image : public QImage
+class Image
 {
 public:
-    Image(const QString &name, GLuint id=0);
-    QString name() { return _name; }
-    GLuint id() { return _id; }
+    Image();
+    Image(int width, int height, int channels);
+    Image(const QString &fileName);
 
-    void _setId(GLuint id) { _id = id; }
+    int width() { return _width; }
+    int height() { return _height; }
+    int channels() { return _channels; }
+    int size() { return _width * _height * _channels; }
+    char *data() { return _data; }
+
+    QString fileName() { return _name; }
+    GLuint id() { return bindId; }
+
+    void set(char *data, int width, int height, int channels);
+    void update(char *data);
+    void bind();
+    void load(const QString &fileName);
 
 private:
-    GLuint _id;
+    char *_data;
+    int _width;
+    int _height;
+    int _channels;
+
     QString _name;
 
+    GLuint bindId;
+    int bindWidth;
+    int bindHeight;
+    int bindChannels;
+
+    void init();
 };
 
 #endif // IMAGE_H
