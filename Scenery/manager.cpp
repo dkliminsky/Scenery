@@ -4,11 +4,17 @@
 Manager::Manager(QObject *parent) :
     QObject(parent)
 {
+    qDebug() << "Manager: Constructor begin";
+
     ProcessTools::initRGB2HSV();
+
+    qDebug() << "Manager: Constructor end";
 }
 
 Manager::~Manager()
 {
+    qDebug() << "Manager: Destructor begin";
+
     for ( int i=0; i<processes.size(); i++){
         processes[i]->wait();
         delete processes[i];
@@ -26,6 +32,8 @@ Manager::~Manager()
     for ( int i=0; i<scenes.size(); i++){
         delete scenes[i];
     }
+
+    qDebug() << "Manager: Destructor begin";
 }
 
 void Manager::processesStart()

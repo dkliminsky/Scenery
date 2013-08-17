@@ -19,22 +19,15 @@ ManagerDance::ManagerDance()
     QGLFormat format;
     format.setDoubleBuffer(false);
     views += new View(format);
+    views.at(0)->datas()->append(processes.at(0));
+    views.at(0)->datas()->append(processes.at(1));
+    views.at(0)->datas()->append(processes.at(2));
 
     scenes += new DanceEffects();
     scenes += new Shift();
     scenes += new Skeleton();
 
-    views.at(0)->datas()->resize(3);
-    views.at(0)->datas()->at(0).width = cameraWidth;
-    views.at(0)->datas()->at(0).height = cameraHeight;
-    views.at(0)->datas()->at(0).image = cvCreateImage(cvSize(cameraWidth, cameraHeight), IPL_DEPTH_8U, 3);
-    views.at(0)->datas()->at(1).width = cameraWidth;
-    views.at(0)->datas()->at(1).height = cameraHeight;
-    views.at(0)->datas()->at(2).width = cameraWidth;
-    views.at(0)->datas()->at(2).height = cameraHeight;
-
     views.at(0)->setScene(scenes.at(0));
-
     startTimer(17);
 }
 
@@ -54,13 +47,6 @@ void ManagerDance::timerEvent(QTimerEvent *)
             processes.at(0)->setImage(frame);
             processes.at(1)->setImage(frame);
             processes.at(2)->setImage(frame);
-
-            // set process data in scene
-            cvCopy(processes.at(0)->getImage(), views.at(0)->datas()->at(0).image);
-            views.at(0)->datas()->at(1).areas = processes.at(1)->getAreas();
-            views.at(0)->datas()->at(1).seqAreas = processes.at(1)->getSeqAreas();
-            views.at(0)->datas()->at(2).areas = processes.at(2)->getAreas();
-            views.at(0)->datas()->at(2).seqAreas = processes.at(2)->getSeqAreas();
 
             processesStart();
         }

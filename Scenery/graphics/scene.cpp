@@ -106,6 +106,11 @@ Image *Scene::createImage(int width, int height, int channels)
     return image;
 }
 
+Image *Scene::copyImage(Image *img)
+{
+
+}
+
 void Scene::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle)
 {
     view->graphic()->image(img, x, y, width, height, angle);

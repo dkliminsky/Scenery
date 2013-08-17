@@ -31,13 +31,13 @@ void ProcessDebug::show(IplImage *image, Process *process)
     case Process::ProcessNone:
         break;
     case Process::ProcessColor:
-        cvSet(debug, CV_RGB(255,255,255), process->getHitImage());
+        cvSet(debug, CV_RGB(255,255,255), process->getHit());
         drawAreasReal(debug, process->getAreas(), CV_RGB(255,255,0));
         drawAreas(debug, process->getAreas(), CV_RGB(150,0,0));
         drawSeqAreas(debug, process->getSeqAreas(), CV_RGB(255,0,0));
         break;
     case Process::ProcessMotion:
-        cvSet(debug, CV_RGB(255,255,255), process->getHitImage());
+        cvSet(debug, CV_RGB(255,255,255), process->getHit());
         drawAreasReal(debug, process->getAreas(), CV_RGB(255,255,0));
         drawAreas(debug, process->getAreas(), CV_RGB(150,0,0));
         drawSeqAreas(debug, process->getSeqAreas(), CV_RGB(255,0,0));
@@ -48,7 +48,7 @@ void ProcessDebug::show(IplImage *image, Process *process)
         drawSeqAreas(debug, process->getSeqAreas(), CV_RGB(255,0,0));
         break;
     case Process::ProcessContour:
-        cvSet(debug, CV_RGB(255,255,255), process->getHitImage());
+        cvSet(debug, CV_RGB(255,255,255), process->getHit());
         drawAreasReal(debug, process->getAreas(), CV_RGB(255,255,0));
         drawAreas(debug, process->getAreas(), CV_RGB(150,0,0));
         drawSeqAreas(debug, process->getSeqAreas(), CV_RGB(255,0,0));

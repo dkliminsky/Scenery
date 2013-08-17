@@ -27,7 +27,7 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
 
     ui->tableProcesses->setRowCount(processes.size());
     for (int i=0; i<processes.size(); i++) {
-        QTableWidgetItem *item = new QTableWidgetItem(processes.at(i)->name());
+        QTableWidgetItem *item = new QTableWidgetItem(processes.at(i)->getName());
         ui->tableProcesses->setItem(i, 0, item);
         processWindows += new ProcessWindow(processes.at(i), manager->name() + ".ini");
     }

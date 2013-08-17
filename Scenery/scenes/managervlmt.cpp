@@ -10,13 +10,13 @@ ManagerVLMT::ManagerVLMT()
     cameraWidth = inputs.at(0)->getWidth();
     cameraHeight = inputs.at(0)->getHeight();
 
-    processes += new Process("VLMT: Main Process",
-                             cameraWidth, cameraHeight);
+    processes += new Process("Motion", cameraWidth, cameraHeight);
     debug = new ProcessDebug("Debug", cameraWidth, cameraHeight);
 
     QGLFormat format;
     format.setDoubleBuffer(false);
     views += new View(format);
+    views.at(0)->datas()->append(processes.at(0));
 
     scenes += new Skeleton();
     scenes += new Cage();
@@ -25,12 +25,6 @@ ManagerVLMT::ManagerVLMT()
     scenes += new Inking();
 
     views.at(0)->setScene(scenes.at(0));
-
-    views.at(0)->datas()->resize(1);
-    views.at(0)->datas()->at(0).width = 640;
-    views.at(0)->datas()->at(0).height = 480;
-    views.at(0)->datas()->at(0).image = cvCreateImage(cvSize(cameraWidth, cameraHeight), IPL_DEPTH_8U, 3);
-
     startTimer(17);
 }
 
@@ -47,24 +41,11 @@ void ManagerVLMT::timerEvent(QTimerEvent *)
         IplImage *frame = inputs.at(0)->getFrame();
 
         if ( !processes.at(0)->isRunning() ) {
-            // Debug process
             debug->show(frame, processes.at(0));
-
-            //
             processes.at(0)->setImage(frame);
-
-            // set process data in scene
-            views.at(0)->datas()->at(0).areas = processes.at(0)->getAreas();
-            views.at(0)->datas()->at(0).seqAreas = processes.at(0)->getSeqAreas();
-            views.at(0)->datas()->at(0).contours = processes.at(0)->getContours();
-            cvCopy(processes.at(0)->getImage(), views.at(0)->datas()->at(0).image);
-
             processes.at(0)->start();
         }
         inputs[0]->start();
-
-        // set video stream in scene
-        // ...
     }
 
     views.at(0)->updateGL();

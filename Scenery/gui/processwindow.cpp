@@ -11,7 +11,7 @@ ProcessWindow::ProcessWindow(Process *process, QString file, QWidget *parent) :
     ui->setupUi(this);
     this->process = process;
     this->file = file;
-    name = "Process " + process->name();
+    name = "Process " + process->getName();
 
     connect(ui->saveButton, SIGNAL(pressed()), SLOT(saveParam()));
 

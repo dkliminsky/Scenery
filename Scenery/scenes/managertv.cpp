@@ -24,9 +24,9 @@ void ManagerTV::timerEvent(QTimerEvent *)
             processes.at(0)->setImage(frame);
 
             // set process data in scene
-            views.at(0)->datas()->at(0).areas = processes.at(0)->getAreas();
-            views.at(0)->datas()->at(0).seqAreas = processes.at(0)->getSeqAreas();
-            views.at(0)->datas()->at(0).contours = processes.at(0)->getContours();
+//            views.at(0)->datas()->at(0).areas = processes.at(0)->getAreas();
+//            views.at(0)->datas()->at(0).seqAreas = processes.at(0)->getSeqAreas();
+//            views.at(0)->datas()->at(0).contours = processes.at(0)->getContours();
 
             processes.at(0)->start();
         }

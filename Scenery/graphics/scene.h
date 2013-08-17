@@ -22,44 +22,46 @@ public:
     SceneProcess(){}
 
     int width() {
-        if (view->datas()->size() > n) return view->datas()->at(n).width;
+        if (view->datas()->size() > n) return view->datas()->at(n)->getWidth();
         else return 0;
     }
 
     int height() {
-        if (view->datas()->size() > n) return view->datas()->at(n).height;
+        if (view->datas()->size() > n) return view->datas()->at(n)->getHeight();
         else return 0;
     }
 
     Areas &areas() {
-        if (view->datas()->size() > n) return view->datas()->at(n).areas;
+        if (view->datas()->size() > n) return view->datas()->at(n)->getAreas();
         else return _areas;
     }
 
     SeqAreas &seqAreas() {
-        if (view->datas()->size() > n) return view->datas()->at(n).seqAreas;
+        if (view->datas()->size() > n) return view->datas()->at(n)->getSeqAreas();
         else return _seqArea;
     }
 
     Contours &contours() {
-        if (view->datas()->size() > n) return view->datas()->at(n).contours;
+        if (view->datas()->size() > n) return view->datas()->at(n)->getContours();
         else return _contour;
     }
 
     Image *image() {
-        _image.set(view->datas()->at(n).image->imageData,
-                   view->datas()->at(n).image->width,
-                   view->datas()->at(n).image->height,
-                   view->datas()->at(n).image->nChannels);
+        if (view->datas()->size() > n) {
+            _image.set(view->datas()->at(n)->getImage()->imageData,
+                       view->datas()->at(n)->getImage()->width,
+                       view->datas()->at(n)->getImage()->height,
+                       view->datas()->at(n)->getImage()->nChannels);
+        }
         return &_image;
     }
 
-   void _setN(unsigned int n) { this->n = n; }
+   void _setN(int n) { this->n = n; }
    void _setView(View *view) { this->view = view; }
 
 private:
     View *view;
-    unsigned int n;
+    int n;
 
     Areas _areas;
     SeqAreas _seqArea;
@@ -109,6 +111,7 @@ public:
 
     Image *loadImage(const QString &fileName);
     Image *createImage(int width, int height, int channels);
+    Image *copyImage(Image *img);
     void image(Image *img, GLfloat x, GLfloat y,
                            GLfloat width, GLfloat height, GLfloat angle=0);
     void text(GLint x, GLint y, const QString & str,

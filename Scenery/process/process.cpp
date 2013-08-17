@@ -4,8 +4,7 @@
 #include <typeinfo>
 
 Process::Process(QString name, int width, int height) :
-    Node(name),
-    ProcessFilters(width, height)
+    Node(name)
 {
     qDebug() << "Constructor Begin: Process";
 
@@ -20,9 +19,11 @@ Process::Process(QString name, int width, int height) :
     timeNum = 0;
     timeResult = 0;
 
-    // Common
+    imageResult = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
+    hitResult = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
 
-    image = NULL;
+    // Common
+    image = 0;
     grayImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
     prevImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
     hitImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
@@ -67,6 +68,8 @@ Process::~Process()
     qDebug() << "Destructor Begin: Process";
 
     wait();
+
+    cvReleaseImage(&hitResult);
 
     cvReleaseImage(&hitImage);
     cvReleaseImage(&grayImage);
@@ -126,7 +129,7 @@ void Process::setDefaultParam()
 
     seqAreas.resize(1);
     seqAreas[0].number = 0;
-    seqAreasResult = &seqAreas;
+    seqAreasLast = &seqAreas;
 }
 
 void Process::step()
@@ -176,8 +179,14 @@ void Process::step()
         findSeqAreas(areas, seqAreas);
         filterSeqAreas(seqAreas, seqAreasBuffer);
         break;
-
     }
+
+    // Copy Data
+    imageResult = image;
+    cvCopy(hitImage, hitResult);
+    areasResult = areas;
+    seqAreasResult = *seqAreasLast;
+    contoursResult = contours;
 
     timeMean += time.elapsed();
     timeNum++;
@@ -503,9 +512,9 @@ void Process::findSeqAreas(Areas &areas, SeqAreas &seqAreas)
 
     }
 
-    // Предпологаем, что результат будет в seqAreasResult,
+    // Предпологаем, что результат будет в seqAreasLast,
     // если, например, не будет применено сглаживание
-    seqAreasResult = &seqAreas;
+    seqAreasLast = &seqAreas;
 }
 
 void Process::filterAreas(Areas &areas)
@@ -607,7 +616,7 @@ void Process::filterSeqAreas(SeqAreas &seqAreas, SeqAreasBuffer &seqAreasBuffer)
 
         //qDebug() << temp << seqAreas[0].number << seqAreas.size();
         seqAreas = seqAreasBuffer.back();
-        seqAreasResult = &seqAreasBuffer.at(1);
+        seqAreasLast = &seqAreasBuffer.at(1);
         break;
 
     }

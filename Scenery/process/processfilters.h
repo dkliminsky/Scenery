@@ -1,4 +1,4 @@
-#ifndef PROCESSFILTERS_H
+п»ї#ifndef PROCESSFILTERS_H
 #define PROCESSFILTERS_H
 
 #include "processtools.h"
@@ -17,11 +17,10 @@ public:
     void slitImage(IplImage* image);
     IplImage *getSlitImage() { return slit; }
 
-protected:
-    int width;   // Ширина и высота изображений,
-    int height;  // которые будут обрабатываться
-
 private:
+    int width;   // РЁРёСЂРёРЅР° Рё РІС‹СЃРѕС‚Р° РёР·РѕР±СЂР°Р¶РµРЅРёР№,
+    int height;  // РєРѕС‚РѕСЂС‹Рµ Р±СѓРґСѓС‚ РѕР±СЂР°Р±Р°С‚С‹РІР°С‚СЊСЃСЏ
+
     IplImage *gray;
     IplImage *slit;
 

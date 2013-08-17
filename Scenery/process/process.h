@@ -5,6 +5,7 @@
 #include "clustering.h"
 #include "processdata.h"
 #include "processfilters.h"
+#include "processtools.h"
 
 #include <QThread>
 #include <QTime>
@@ -19,18 +20,16 @@
 using std::string;
 using std::list;
 using std::vector;
+using std::deque;
 
 typedef deque<SeqAreas> SeqAreasBuffer;
 
 
-class Process : public Node, public ProcessFilters, public QThread, public Clustering
+class Process : public Node, public ProcessTools, public QThread, public Clustering
 {
 public:
-    Process(QString name, int width, int height);
+    Process(QString getName, int width, int height);
     ~Process();
-
-    int getWidth() { return width; }
-    int getHeight() { return height; }
 
     void step();
 
@@ -55,24 +54,24 @@ public:
     Mode getMode() { return mode; }
 
     void setImage(IplImage *image);
-    IplImage *getImage() { return image; }
+    //IplImage *getImage() { return image; }
 
     // ====================================================================
     // Output
     // ====================================================================
 
-    // Возвращает одноканальную картинку с отмеченными
-    // точками: 0 - не подходящий пиксель, 1 - подходящий
-    IplImage *getHitImage() { return hitImage; }
+//    // Возвращает одноканальную картинку с отмеченными
+//    // точками: 0 - не подходящий пиксель, 1 - подходящий
+//    IplImage *getHitImage() { return hitImage; }
 
-    // Возвращает структуру с найдеными регионами
-    Areas &getAreas() { return areas; }
+//    // Возвращает структуру с найдеными регионами
+//    Areas &getAreas() { return areas; }
 
-    // Возвращает структуру с последовательностью регионов
-    SeqAreas &getSeqAreas() { return *seqAreasResult; }
+//    // Возвращает структуру с последовательностью регионов
+//    SeqAreas &getSeqAreas() { return *seqAreasResult; }
 
-    //
-    Contours &getContours() { return contours; }
+//    //
+//    Contours &getContours() { return contours; }
 
     // ====================================================================
     // Color Parameters
@@ -216,9 +215,6 @@ protected:
     void filterSeqAreas(SeqAreas &seqAreas, SeqAreasBuffer &seqAreasBuffer);
 
 private:
-    int width;   // Ширина и высота изображений,
-    int height;  // которые будут обрабатываться
-
     bool isDebug;
 
     int timeMean;
@@ -238,7 +234,7 @@ private:
 
     Areas areas;
     SeqAreas seqAreas;
-    SeqAreas *seqAreasResult;
+    SeqAreas *seqAreasLast;
     SeqAreasBuffer seqAreasBuffer;
 
     IplImage *hitImage;    // Одноканальное изображение с найденными пикселями

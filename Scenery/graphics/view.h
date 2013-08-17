@@ -7,9 +7,11 @@
 
 #include "sscene.h"
 #include "graphic.h"
-#include "process/processdata.h"
+#include "node.h"
 #include "emptyscene.h"
 #include "elements/color.h"
+
+typedef QVector<Node *> Datas;
 
 class View : public QGLWidget, protected QGLFunctions
 {
@@ -17,9 +19,9 @@ public:
     View(QGLFormat &format, QWidget *parent = 0);
     ~View();
     void setScene(SScene *scene);
-    ProcessDatas *datas()   { return &_datas; }
-    Utils        *utils()   { return &_utils; }
-    Graphic      *graphic() { return &_graphic; }
+    Datas   *datas()   { return &_datas; }
+    Utils   *utils()   { return &_utils; }
+    Graphic *graphic() { return &_graphic; }
 
     int time();
     int dtime() { return timeStep; }
@@ -36,7 +38,7 @@ private:
     SScene *scene;
     SScene *emptyScene;
 
-    ProcessDatas _datas;
+    Datas _datas;
     Utils _utils;
     Graphic _graphic;
 

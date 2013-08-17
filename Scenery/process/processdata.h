@@ -8,7 +8,6 @@
 
 using std::vector;
 using std::list;
-using std::deque;
 
 struct Area {
     int pt[2];
@@ -55,21 +54,5 @@ typedef vector<Area>        Areas;
 typedef vector<SeqArea>     SeqAreas;
 typedef vector<ContourPt>   Contour;
 typedef vector<Contour>     Contours;
-
-struct ProcessData
-{
-public:
-    int width;
-    int height;
-
-    Areas    areas;
-    SeqAreas seqAreas;
-    Contours contours;
-
-    IplImage *image;
-    IplImage *hit;
-};
-
-typedef vector<ProcessData> ProcessDatas;
 
 #endif // PROCESSDATA_H
