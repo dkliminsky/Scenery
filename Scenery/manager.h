@@ -27,6 +27,7 @@ public:
     Views     &getViews()     { return views; }
 
     void processesStart();
+    void processesCopyData();
     bool isProcessesComplete();
 
 protected:

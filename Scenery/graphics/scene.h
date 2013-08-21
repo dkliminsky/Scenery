@@ -6,6 +6,7 @@
 #include <math.h>
 #include "sscene.h"
 #include "view.h"
+#include "sceneprocess.h"
 
 #include "actions/actionbutton.h"
 
@@ -15,59 +16,6 @@
 #include "controls/controlstring.h"
 #include "controls/controlcolor.h"
 #include "controls/controlimage.h"
-
-class SceneProcess
-{
-public:
-    SceneProcess(){}
-
-    int width() {
-        if (view->datas()->size() > n) return view->datas()->at(n)->getWidth();
-        else return 0;
-    }
-
-    int height() {
-        if (view->datas()->size() > n) return view->datas()->at(n)->getHeight();
-        else return 0;
-    }
-
-    Areas &areas() {
-        if (view->datas()->size() > n) return view->datas()->at(n)->getAreas();
-        else return _areas;
-    }
-
-    SeqAreas &seqAreas() {
-        if (view->datas()->size() > n) return view->datas()->at(n)->getSeqAreas();
-        else return _seqArea;
-    }
-
-    Contours &contours() {
-        if (view->datas()->size() > n) return view->datas()->at(n)->getContours();
-        else return _contour;
-    }
-
-    Image *image() {
-        if (view->datas()->size() > n) {
-            _image.set(view->datas()->at(n)->getImage()->imageData,
-                       view->datas()->at(n)->getImage()->width,
-                       view->datas()->at(n)->getImage()->height,
-                       view->datas()->at(n)->getImage()->nChannels);
-        }
-        return &_image;
-    }
-
-   void _setN(int n) { this->n = n; }
-   void _setView(View *view) { this->view = view; }
-
-private:
-    View *view;
-    int n;
-
-    Areas _areas;
-    SeqAreas _seqArea;
-    Contours _contour;
-    Image _image;
-};
 
 typedef QVector<Image *> Images;
 typedef QVector<IControl *> Controls;
@@ -129,6 +77,7 @@ public:
     float distance(float x1, float y1, float x2, float y2);
     double distance(double x1, double y1, double x2, double y2);
     float angle(float x1, float y1, float x2, float y2);
+    float pi();
 
     // Control function
     void signal(int id);

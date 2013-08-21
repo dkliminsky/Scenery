@@ -19,7 +19,6 @@ Process::Process(QString name, int width, int height) :
     timeNum = 0;
     timeResult = 0;
 
-    imageResult = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
     hitResult = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
 
     // Common
@@ -27,6 +26,7 @@ Process::Process(QString name, int width, int height) :
     grayImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
     prevImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
     hitImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
+    hitSubImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
 
     // Color & Motion
 
@@ -113,13 +113,17 @@ void Process::setDefaultParam()
     contourParam.threshold2 = 100;
 
     // HoughCircles
-
     houghCirclesParam.inverseRatio = 5;
     houghCirclesParam.minDistance = 100;
     houghCirclesParam.param1 = 100;
     houghCirclesParam.param2 = 100;
     houghCirclesParam.minRadius = 0;
     houghCirclesParam.maxRadius = 0;
+
+    // Subtraction
+    subtractionHitParam.isSubtraction = false;
+    subtractionHitParam.addCount = 0;
+    subtractionHitParam.isClear = false;
 
     // Areas & Sequences
     filterAreaParam.isFilterOutframe = false;
@@ -168,6 +172,7 @@ void Process::step()
 
     case ProcessContour:
         findContours();
+        transform2DContours(contours);
         findClusters(hitImage, areas);
         transform2DAreas(areas);
         findSeqAreas(areas, seqAreas);
@@ -181,13 +186,6 @@ void Process::step()
         break;
     }
 
-    // Copy Data
-    imageResult = image;
-    cvCopy(hitImage, hitResult);
-    areasResult = areas;
-    seqAreasResult = *seqAreasLast;
-    contoursResult = contours;
-
     timeMean += time.elapsed();
     timeNum++;
     if ( timeNum == 10 ) {
@@ -195,6 +193,15 @@ void Process::step()
         timeMean = 0;
         timeNum = 0;
     }
+}
+
+void Process::copyData()
+{
+    imageResult = image;
+    cvCopy(hitImage, hitResult);
+    areasResult = areas;
+    seqAreasResult = *seqAreasLast;
+    contoursResult = contours;
 }
 
 void Process::setImage(IplImage *image)
@@ -663,6 +670,12 @@ void Process::findContours()
 
     cvCanny(grayImage, hitImage, contourParam.threshold1, contourParam.threshold2, 3);
 
+    checkSubtraction();
+
+    //cvSub(hitImage, hitSubImage, hitImage);
+    //cvSubS(hitImage, cvScalar(0), hitImage, hitSubImage);
+    cvSet(hitImage, cvScalar(0), hitSubImage);
+
     // находим контуры
     cvFindContours(hitImage, contourStorage, &contoursSeq, sizeof(CvContour),
                    CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0));
@@ -768,12 +781,17 @@ void Process::findHoughCircles()
 
 }
 
-void Process::transform2DArea(Area &area)
+void Process::checkSubtraction()
 {
-    transform2DContrary(area.ptReal[0], area.ptReal[1], area.pt[0], area.pt[1]);
-    area.width = area.widthReal/trans2D.sx;
-    area.height = area.heightReal/trans2D.sy;
-    area.height -= area.height * (trans2D.deepHx - area.ptReal[0]) * trans2D.deepHs;
+    if ( subtractionHitParam.isClear ) {
+        cvSet(hitSubImage, cvScalar(0));
+        subtractionHitParam.isClear = false;
+    }
+
+    if ( subtractionHitParam.addCount > 0 ) {
+        cvSet(hitSubImage, cvScalar(1), hitImage);
+        subtractionHitParam.addCount -= 1;
+    }
 }
 
 void Process::transform2DAreas(Areas &areas)
@@ -782,6 +800,34 @@ void Process::transform2DAreas(Areas &areas)
     for (; it != areas.end(); ++it) {
         Area &area = *it;
         transform2DArea(area);
+    }
+}
+
+void Process::transform2DArea(Area &area)
+{
+    transform2DContrary(area.ptReal[0], area.ptReal[1], area.pt[0], area.pt[1]);
+    area.width = area.widthReal/trans2D.sx;
+    area.height = area.heightReal/trans2D.sy;
+    area.height -= area.height * (trans2D.deepHx - area.ptReal[0]) * trans2D.deepHs;
+}
+
+void Process::transform2DContours(Contours &contours)
+{
+    vector<Contour>::iterator it = contours.begin();
+    for (; it != contours.end(); ++it) {
+        Contour &contour = *it;
+        transform2DContour(contour);
+    }
+}
+
+void Process::transform2DContour(Contour &contour)
+{
+    vector<ContourPt>::iterator it = contour.begin();
+    for (; it != contour.end(); ++it) {
+        ContourPt &contourPt = *it;
+        contourPt.xReal = contourPt.x;
+        contourPt.yReal = contourPt.y;
+        transform2DContrary(contourPt.xReal, contourPt.yReal, contourPt.x, contourPt.y);
     }
 }
 

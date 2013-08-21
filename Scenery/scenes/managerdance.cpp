@@ -43,6 +43,7 @@ void ManagerDance::timerEvent(QTimerEvent *)
             debug->show(frame, processes.at(1));
             debug->show(frame, processes.at(2));
 
+            processesCopyData();
             //
             processes.at(0)->setImage(frame);
             processes.at(1)->setImage(frame);

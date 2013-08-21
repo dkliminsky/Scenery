@@ -42,6 +42,12 @@ void Manager::processesStart()
         processes.at(i)->start();
 }
 
+void Manager::processesCopyData()
+{
+    for (int i=0; i<processes.size(); i++)
+        processes.at(i)->copyData();
+}
+
 bool Manager::isProcessesComplete()
 {
     for (int i=0; i<processes.size(); i++)

@@ -45,9 +45,14 @@ struct SeqArea {
 };
 
 struct ContourPt {
-    ContourPt(int x=0, int y=0) { this->x = x; this->y = y; }
+    ContourPt(int x=0, int y=0) {
+        this->x = x; this->y = y;
+        xReal = 0; yReal = 0;\
+    }
     int x;
     int y;
+    int xReal;
+    int yReal;
 };
 
 typedef vector<Area>        Areas;

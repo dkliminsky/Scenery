@@ -37,6 +37,9 @@ public slots:
     void slotContourParam();
     void slotHoughCircleParam();
 
+    void slotSubtractionHitAdd();
+    void slotSubtractionHitClear();
+
     void slotClusterMode(QString mode);
     void slotClusterSimple();
     void slotClusterTable();

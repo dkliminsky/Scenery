@@ -166,6 +166,11 @@ float Scene::angle(float x1, float y1, float x2, float y2)
     return view->utils()->angle(x1, y1, x2, y2);
 }
 
+float Scene::pi()
+{
+    return view->utils()->pi();
+}
+
 void Scene::button(int id, QString description)
 {
     _actions += new ActionButton(id, description);

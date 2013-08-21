@@ -109,6 +109,13 @@ ProcessWindow::ProcessWindow(Process *process, QString file, QWidget *parent) :
     connect(ui->houghCirclesMaxRadiusSpin, SIGNAL(valueChanged(int)),
             SLOT(slotHoughCircleParam()));
 
+    // Subtraction
+
+    connect(ui->subtractionHitAddButton, SIGNAL(clicked()),
+            SLOT(slotSubtractionHitAdd()));
+    connect(ui->subtractionHitClearButton, SIGNAL(clicked()),
+            SLOT(slotSubtractionHitClear()));
+
     // Clustering
     QStringList clusterModes;
     clusterModes << "None" << "Simple" << "Table";
@@ -219,6 +226,11 @@ void ProcessWindow::loadParam()
             slotHaarParam();
         settings.endGroup();
 
+        settings.beginGroup("/Contour");
+            ui->contourThreshold1Slider->setValue( settings.value("/Threshold1").toInt() );
+            ui->contourThreshold2Slider->setValue( settings.value("/Threshold2").toInt() );
+        settings.endGroup();
+
         settings.beginGroup("/HoughCircles");
             ui->houghCirclesInverceRatioDoubleSpin->setValue( settings.value("/InverceRatio").toDouble() );
             ui->houghCirclesMinDistanceSpin->setValue( settings.value("MinDistance").toInt() );
@@ -320,6 +332,11 @@ void ProcessWindow::saveParam()
             settings.setValue("/MinY", ui->haarMinYSpin->value());
             settings.setValue("/MaxX", ui->haarMaxXSpin->value());
             settings.setValue("/MaxY", ui->haarMaxYSpin->value());
+        settings.endGroup();
+
+        settings.beginGroup("/Contour");
+            settings.setValue("/Threshold1", ui->contourThreshold1Slider->value() );
+            settings.setValue("/Threshold2", ui->contourThreshold2Slider->value() );
         settings.endGroup();
 
         settings.beginGroup("/HoughCircles");
@@ -454,6 +471,16 @@ void ProcessWindow::slotHoughCircleParam()
     param.minRadius = ui->houghCirclesMinRadiusSpin->value();
     param.maxRadius = ui->houghCirclesMaxRadiusSpin->value();
     process->setHoughCircleParam(param);
+}
+
+void ProcessWindow::slotSubtractionHitAdd()
+{
+    process->subtractionHitAdd();
+}
+
+void ProcessWindow::slotSubtractionHitClear()
+{
+    process->subtractionHitClear();
 }
 
 void ProcessWindow::slotClusterMode(QString mode)

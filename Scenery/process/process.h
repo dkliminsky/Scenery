@@ -10,7 +10,7 @@
 #include <QThread>
 #include <QTime>
 
-#include <opencv/cxcore.h>
+#include "opencv2/core/core_c.h"
 #include <opencv/cvaux.h>
 
 #include <string>
@@ -32,6 +32,7 @@ public:
     ~Process();
 
     void step();
+    void copyData();
 
     void setDebug(bool isDebug) { this->isDebug = isDebug; }
     bool getDebug() { return isDebug; }
@@ -154,6 +155,22 @@ public:
     void setHoughCircleParam(HoughCirclesParam param) { houghCirclesParam = param; }
 
     // ====================================================================
+    // Subtraction Parameters
+    // ====================================================================
+
+    struct SubtractionHitParam {
+        bool isSubtraction;
+        int addCount;
+        bool isClear;
+    };
+
+    void setSubtractionHitParam(SubtractionHitParam param) { subtractionHitParam = param; }
+    void subtractionHitAdd() { subtractionHitParam.addCount += 1; }
+    void subtractionHitClear() { subtractionHitParam.isClear = true; }
+
+    IplImage *getHitSubtraction() { return hitSubImage; }
+
+    // ====================================================================
     // Areas & Sequences Parameters
     // ====================================================================
     struct FilterAreaParam {
@@ -238,6 +255,7 @@ private:
     SeqAreasBuffer seqAreasBuffer;
 
     IplImage *hitImage;    // Одноканальное изображение с найденными пикселями
+    IplImage *hitSubImage; // Вычитание найденных пикселей
 
     IplImage *grayImage;
     IplImage *prevImage;
@@ -299,6 +317,13 @@ private:
     void findHoughCircles();
 
     // ====================================================================
+    // Subtraction Parameters
+    // ====================================================================
+
+    SubtractionHitParam subtractionHitParam;
+    void checkSubtraction();
+
+    // ====================================================================
     // Areas & Sequences
     // ====================================================================
 
@@ -311,8 +336,11 @@ private:
     // ====================================================================
 
     Transform2DParam trans2D;
-    void transform2DArea(Area &area);
     void transform2DAreas(Areas &areas);
+    void transform2DArea(Area &area);
+
+    void transform2DContours(Contours &contours);
+    void transform2DContour(Contour &contour);
 
 };
 
