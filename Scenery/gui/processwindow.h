@@ -38,6 +38,7 @@ public slots:
     void slotHoughCircleParam();
 
     void slotSubtractionHitAdd();
+    void slotSubtractionHitAdd5();
     void slotSubtractionHitClear();
 
     void slotClusterMode(QString mode);

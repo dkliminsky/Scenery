@@ -158,15 +158,8 @@ public:
     // Subtraction Parameters
     // ====================================================================
 
-    struct SubtractionHitParam {
-        bool isSubtraction;
-        int addCount;
-        bool isClear;
-    };
-
-    void setSubtractionHitParam(SubtractionHitParam param) { subtractionHitParam = param; }
-    void subtractionHitAdd() { subtractionHitParam.addCount += 1; }
-    void subtractionHitClear() { subtractionHitParam.isClear = true; }
+    void subtractionHitAdd(int n=1) { subtractionHitData.addSeveralLater += n; }
+    void subtractionHitClear() { subtractionHitData.isClearLater = true; }
 
     IplImage *getHitSubtraction() { return hitSubImage; }
 
@@ -300,6 +293,7 @@ private:
     CvSeq* contoursSeq;
     CvSeq* hullsSeq;
 
+    void processContoursHit();
     void findContours();
     //CvSeq *getContours() { return contoursSeq; }
 
@@ -311,7 +305,6 @@ private:
     // ====================================================================
 
     HoughCirclesParam houghCirclesParam;
-
     CvMemStorage* houghCirclesStorage;
 
     void findHoughCircles();
@@ -320,8 +313,13 @@ private:
     // Subtraction Parameters
     // ====================================================================
 
-    SubtractionHitParam subtractionHitParam;
-    void checkSubtraction();
+    struct SubtractionHitData {
+        bool isSubtraction;
+        int addSeveralLater;
+        bool isClearLater;
+    } subtractionHitData;
+
+    void processSubtraction();
 
     // ====================================================================
     // Areas & Sequences

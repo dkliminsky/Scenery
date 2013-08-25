@@ -685,7 +685,7 @@
         <widget class="QWidget" name="subtractionHitWidget" native="true">
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
-           <widget class="QCheckBox" name="subtractionHitCheckBox">
+           <widget class="QLabel" name="label_43">
             <property name="text">
              <string>Subtraction Hit</string>
             </property>
@@ -695,6 +695,13 @@
            <widget class="QPushButton" name="subtractionHitAddButton">
             <property name="text">
              <string>Add</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="subtractionHitAdd5Button">
+            <property name="text">
+             <string>Add x5</string>
             </property>
            </widget>
           </item>

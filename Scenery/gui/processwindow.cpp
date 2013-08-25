@@ -113,6 +113,8 @@ ProcessWindow::ProcessWindow(Process *process, QString file, QWidget *parent) :
 
     connect(ui->subtractionHitAddButton, SIGNAL(clicked()),
             SLOT(slotSubtractionHitAdd()));
+    connect(ui->subtractionHitAdd5Button, SIGNAL(clicked()),
+            SLOT(slotSubtractionHitAdd()));
     connect(ui->subtractionHitClearButton, SIGNAL(clicked()),
             SLOT(slotSubtractionHitClear()));
 
@@ -476,6 +478,11 @@ void ProcessWindow::slotHoughCircleParam()
 void ProcessWindow::slotSubtractionHitAdd()
 {
     process->subtractionHitAdd();
+}
+
+void ProcessWindow::slotSubtractionHitAdd5()
+{
+    process->subtractionHitAdd(5);
 }
 
 void ProcessWindow::slotSubtractionHitClear()

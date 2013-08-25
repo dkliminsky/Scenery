@@ -2,13 +2,19 @@
 
 DanceEffects::DanceEffects()
 {
-    control(&imageFlare, "Flare", "images/flares/", "flare01.png");
-    control(minDistance=50, "Min Distance");
-    control(maxDistance=100, "Max Distance");
+    control(decrease=0.1, "Decrease elements", 0, 1, 2);
+
+    control(&imageFlare, "Flare: Image", "images/flares/", "flare02.png");
+    control(flareColor=Color(1,0,0,1), "Flare: Color");
+    control(flareSize=0, "Flare: Size", 0, 100);
 
     control(nettingLineColor=Color(1,0,0,1), "Netting: Line color");
-    control(nettingDecrease=0.1, "Netting: Decrease", 0, 1, 2);
-    control(nettingLineWidth=3, "Netting: Line width", 1, 10);
+    control(nettingLineWidth=0, "Netting: Line width", 0, 10);
+    control(nettingMinDistance=50, "Netting: Min Distance");
+    control(nettingMaxDistance=100, "Netting: Max Distance");
+
+    control(contourLineColor=Color(1,1,1,1), "Contour: Line color");
+    control(contourLineWidth=0, "Contour: Line width", 0, 10);
 }
 
 void DanceEffects::setup()
@@ -32,52 +38,128 @@ void DanceEffects::paint()
     image(process(0)->image(), width/2, height/2, width, height);
     flush();
 
-    elementsArea.clear();
-    Areas &areas = process(1)->areas();
-    for (unsigned int i=0; i<areas.size(); i++) {
-        Area &area = areas.at(i);
-        ElementArea e;
-        e.x = area.pt[0];
-        e.y = area.pt[1];
-        e.used = false;
-        elementsArea += e;
+    effectFlare();
+    effectContour();
+    effectNetting();
+    drawElements();
+}
 
-        //image(imageFlare, area.pt[0], area.pt[1], 40, 40);
+void DanceEffects::effectFlare()
+{
+    if (flareSize > 0) {
+        Areas &areas = process(1)->areas();
+        //color(flareColor);
+        for (unsigned int i=0; i<areas.size(); i++) {
+            Area &area = areas.at(i);
+            //image(imageFlare, area.pt[0], area.pt[1], flareSize, flareSize);
+
+            ElementDraw e;
+            e.type = 0;
+            e.image = imageFlare;
+            e.width = flareSize;
+            e.color = flareColor;
+            e.x1 = area.pt[0] + random(20) - 20;
+            e.y1 = area.pt[1] + random(20) - 20;;
+            elementsDraw += e;
+
+        }
     }
+}
 
-    for(int i=0; i<elementsArea.size(); i++) {
+void DanceEffects::effectNetting()
+{
+    if (nettingLineWidth > 0) {
 
-        for (int j=0; j<5; j++) {
-            int r = random(elementsArea.size());
-            float d = distance(elementsArea.at(i).x, elementsArea.at(i).y,
-                               elementsArea.at(r).x, elementsArea.at(r).y);
+        nettingsArea.clear();
 
-            if (r!=i && elementsArea.at(r).used==false &&
-                elementsArea.at(i).used==false &&
-                d > minDistance && d < maxDistance) {
-                elementsArea[i].used = true;
-                elementsArea[r].used = true;
+        Areas &areas = process(2)->areas();
+        for (unsigned int i=0; i<areas.size(); i++) {
+            Area &area = areas.at(i);
+            NettingArea e;
+            e.x = area.pt[0];
+            e.y = area.pt[1];
+            e.used = false;
+            nettingsArea += e;
+        }
 
-                float x1 = elementsArea.at(i).x;
-                float y1 = elementsArea.at(i).y;
-                float x2 = elementsArea.at(r).x;
-                float y2 = elementsArea.at(r).y;
+        for(int i=0; i<nettingsArea.size(); i++) {
+            for (int j=0; j<5; j++) {
+                int r = random(nettingsArea.size());
+                float d = distance(nettingsArea.at(i).x, nettingsArea.at(i).y,
+                                   nettingsArea.at(r).x, nettingsArea.at(r).y);
 
-                ElementDraw e;
-                e.type = random(3) + 1;
-                e.color = nettingLineColor;
-                e.x1 = x1;
-                e.y1 = y1;
-                e.x2 = x2;
-                e.y2 = y2;
-                elementsDraw += e;
+                if (r!=i && nettingsArea.at(r).used==false &&
+                    nettingsArea.at(i).used==false &&
+                    d > nettingMinDistance && d < nettingMaxDistance) {
+                    nettingsArea[i].used = true;
+                    nettingsArea[r].used = true;
 
+                    float x1 = nettingsArea.at(i).x;
+                    float y1 = nettingsArea.at(i).y;
+                    float x2 = nettingsArea.at(r).x;
+                    float y2 = nettingsArea.at(r).y;
+
+                    ElementDraw e;
+                    e.type = random(3) + 1;
+                    e.width = nettingLineWidth;
+                    e.color = nettingLineColor;
+                    e.x1 = x1;
+                    e.y1 = y1;
+                    e.x2 = x2;
+                    e.y2 = y2;
+                    elementsDraw += e;
+                }
             }
         }
     }
+}
 
+void DanceEffects::effectContour()
+{
+    if (contourLineWidth > 0) {
+        Contours &contours = process(2)->contours();
+        color(contourLineColor);
+        lineWidth(contourLineWidth);
+        int nContours = 0;
 
-    QMutableVectorIterator<ElementDraw> i(elementsDraw);
+        for (uint i=0; i<contours.size(); ++i) {
+            Contour &contour = contours.at(i);
+            ContourPt pt(0, 0);
+            bool isFirst = true;
+            for (uint j=0; j<contour.size(); ++j )
+            {
+                if (isFirst) {
+                    isFirst = false;
+                }
+                else {
+                    //line(pt.x, pt.y, contour.at(j).x, contour.at(j).y);
+
+                    ElementDraw e;
+                    e.type = 1;
+                    e.width = contourLineWidth;
+                    e.color = contourLineColor;
+                    e.x1 = pt.x;
+                    e.y1 = pt.y;
+                    e.x2 = contour.at(j).x;
+                    e.y2 = contour.at(j).y;
+                    elementsDraw += e;
+
+                }
+                pt.x = contour.at(j).x;
+                pt.y = contour.at(j).y;
+
+                nContours++;
+            }
+        }
+
+        color(1, 1, 1, 1);
+        text(30, 30, QString("Contours: %1").arg(nContours));
+    }
+}
+
+void DanceEffects::drawElements()
+{
+    QMutableListIterator<ElementDraw> i(elementsDraw);
     while (i.hasNext()) {
         ElementDraw &e = i.next();
 
@@ -86,12 +168,16 @@ void DanceEffects::paint()
         float y1 = e.y1;
         float x2 = e.x2;
         float y2 = e.y2;
+        int width = e.width;
         float d = distance(x1, y1, x2, y2);
 
         color(e.color);
 
-        if (type == 1) {
-            lineWidth(nettingLineWidth);
+        if (type == 0) {
+            image(e.image, x1, y1, width, width);
+        }
+        else if (type == 1) {
+            lineWidth(e.width);
             line(x1, y1, x2, y2);
         }
         else if ( type == 2) {
@@ -101,7 +187,7 @@ void DanceEffects::paint()
             float x4 = (x1 + (x2 - x1) / 2) - d/4 * sin(a + pi() / 4);
             float y4 = (y1 + (y2 - y1) / 2) - d/4 * cos(a + pi() / 4);
 
-            lineWidth(nettingLineWidth);
+            lineWidth(e.width);
             line(x1, y1, x3, y3);
             line(x3, y3, x4, y4);
             line(x4, y4, x2, y2);
@@ -113,15 +199,17 @@ void DanceEffects::paint()
             float x4 = (x1 + (x2 - x1) / 2) - d/4 * sin(a + pi() / 4);
             float y4 = (y1 + (y2 - y1) / 2) - d/4 * cos(a + pi() / 4);
 
-            lineWidth(nettingLineWidth);
+            lineWidth(e.width);
             lineParts(10);
             bezier(x1, y1, x3, y3, x4, y4, x2, y2);
         }
 
-
-        e.color.a -= nettingDecrease;
+        e.color.a -= decrease;
         if (e.color.a <= 0) {
             i.remove();
         }
     }
+
+    color(1, 1, 1, 1);
+    text(30, 20, QString("Elements: %1").arg(elementsDraw.size()));
 }

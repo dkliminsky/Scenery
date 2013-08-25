@@ -121,9 +121,9 @@ void Process::setDefaultParam()
     houghCirclesParam.maxRadius = 0;
 
     // Subtraction
-    subtractionHitParam.isSubtraction = false;
-    subtractionHitParam.addCount = 0;
-    subtractionHitParam.isClear = false;
+    subtractionHitData.isSubtraction = false;
+    subtractionHitData.addSeveralLater = 0;
+    subtractionHitData.isClearLater = false;
 
     // Areas & Sequences
     filterAreaParam.isFilterOutframe = false;
@@ -171,6 +171,8 @@ void Process::step()
         break;
 
     case ProcessContour:
+        processContoursHit();
+        processSubtraction();
         findContours();
         transform2DContours(contours);
         findClusters(hitImage, areas);
@@ -656,12 +658,8 @@ void Process::findHaar()
     }
 }
 
-
-void Process::findContours()
+void Process::processContoursHit()
 {
-    cvClearMemStorage(contourStorage);
-    contours.clear();
-
     cvCvtColor(image, grayImage, CV_RGB2GRAY);
 
 //    if (param.contour.smooth) {
@@ -669,12 +667,13 @@ void Process::findContours()
 //    }
 
     cvCanny(grayImage, hitImage, contourParam.threshold1, contourParam.threshold2, 3);
+}
 
-    checkSubtraction();
 
-    //cvSub(hitImage, hitSubImage, hitImage);
-    //cvSubS(hitImage, cvScalar(0), hitImage, hitSubImage);
-    cvSet(hitImage, cvScalar(0), hitSubImage);
+void Process::findContours()
+{
+    cvClearMemStorage(contourStorage);
+    contours.clear();
 
     // находим контуры
     cvFindContours(hitImage, contourStorage, &contoursSeq, sizeof(CvContour),
@@ -781,16 +780,22 @@ void Process::findHoughCircles()
 
 }
 
-void Process::checkSubtraction()
+void Process::processSubtraction()
 {
-    if ( subtractionHitParam.isClear ) {
+    if ( subtractionHitData.isClearLater ) {
         cvSet(hitSubImage, cvScalar(0));
-        subtractionHitParam.isClear = false;
+        subtractionHitData.isClearLater = false;
+        subtractionHitData.isSubtraction = false;
     }
 
-    if ( subtractionHitParam.addCount > 0 ) {
+    if ( subtractionHitData.addSeveralLater > 0 ) {
         cvSet(hitSubImage, cvScalar(1), hitImage);
-        subtractionHitParam.addCount -= 1;
+        subtractionHitData.addSeveralLater -= 1;
+        subtractionHitData.isSubtraction = true;
+    }
+
+    if ( subtractionHitData.isSubtraction ) {
+        cvSet(hitImage, cvScalar(0), hitSubImage);
     }
 }
 
