@@ -11,6 +11,7 @@
 #include <QTime>
 
 #include "opencv2/core/core_c.h"
+#include "opencv2/video/background_segm.hpp"
 #include <opencv/cvaux.h>
 
 #include <string>
@@ -55,24 +56,6 @@ public:
     Mode getMode() { return mode; }
 
     void setImage(IplImage *image);
-    //IplImage *getImage() { return image; }
-
-    // ====================================================================
-    // Output
-    // ====================================================================
-
-//    // Возвращает одноканальную картинку с отмеченными
-//    // точками: 0 - не подходящий пиксель, 1 - подходящий
-//    IplImage *getHitImage() { return hitImage; }
-
-//    // Возвращает структуру с найдеными регионами
-//    Areas &getAreas() { return areas; }
-
-//    // Возвращает структуру с последовательностью регионов
-//    SeqAreas &getSeqAreas() { return *seqAreasResult; }
-
-//    //
-//    Contours &getContours() { return contours; }
 
     // ====================================================================
     // Color Parameters
@@ -158,10 +141,26 @@ public:
     // Subtraction Parameters
     // ====================================================================
 
-    void subtractionHitAdd(int n=1) { subtractionHitData.addSeveralLater += n; }
-    void subtractionHitClear() { subtractionHitData.isClearLater = true; }
+    void subtractionHitAdd(int n=1) { subtractionHitData.commandAddSeveral += n; }
+    void subtractionHitClear() { subtractionHitData.commandClear = true; }
+
+    void subtractionImageAdd(int n=1) { subtractionImageData.commandAddSeveral += n; }
+    void subtractionImageClear() { subtractionImageData.commandClear = true; }
 
     IplImage *getHitSubtraction() { return hitSubImage; }
+    IplImage *getBackMin() { return backMinImage; }
+    IplImage *getBackMax() { return backMaxImage; }
+
+    // ====================================================================
+    // Filters Parameters
+    // ====================================================================
+
+    struct FilterHitParam {
+        int erodeIteration;
+        int dilateIteration;
+    };
+
+    void setFilterHitParam(FilterHitParam param) { filterHitParam = param; }
 
     // ====================================================================
     // Areas & Sequences Parameters
@@ -253,6 +252,9 @@ private:
     IplImage *grayImage;
     IplImage *prevImage;
 
+    IplImage *backMinImage;
+    IplImage *backMaxImage;
+
     // ====================================================================
     // Color
     // ====================================================================
@@ -313,13 +315,27 @@ private:
     // Subtraction Parameters
     // ====================================================================
 
+    struct SubtractionImageData {
+        bool isSubtraction;
+        int commandAddSeveral;
+        bool commandClear;
+    } subtractionImageData;
+
     struct SubtractionHitData {
         bool isSubtraction;
-        int addSeveralLater;
-        bool isClearLater;
+        int commandAddSeveral;
+        bool commandClear;
     } subtractionHitData;
 
-    void processSubtraction();
+    void processSubtractionImage();
+    void processSubtractionHit();
+
+    // ====================================================================
+    // Filters Parameters
+    // ====================================================================
+
+    FilterHitParam filterHitParam;
+    void processFiltersHit();
 
     // ====================================================================
     // Areas & Sequences

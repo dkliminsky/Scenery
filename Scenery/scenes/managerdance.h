@@ -6,6 +6,7 @@
 #include "scenes/Skeleton/skeleton.h"
 #include "scenes/Dance/shift.h"
 #include "scenes/Dance/danceeffects.h"
+#include "scenes/Dance/memorize.h"
 
 #include "process/processdebug.h"
 

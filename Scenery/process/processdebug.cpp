@@ -9,7 +9,7 @@ ProcessDebug::ProcessDebug(QString name, int width, int height)
     debug = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
 
     cvNamedWindow(name.toStdString().c_str(), CV_WINDOW_FREERATIO);
-    //cvNamedWindow("HitSubtraction", CV_WINDOW_FREERATIO);
+    cvNamedWindow("Hit", CV_WINDOW_FREERATIO);
 }
 
 ProcessDebug::~ProcessDebug()
@@ -29,6 +29,7 @@ void ProcessDebug::show(IplImage *image, Process *process)
 
     switch (process->getMode()) {
     case Process::ProcessNone:
+        cvSet(debug, CV_RGB(255,255,255), process->getHit());
         break;
     case Process::ProcessColor:
         cvSet(debug, CV_RGB(255,255,255), process->getHit());
@@ -72,7 +73,9 @@ void ProcessDebug::show(IplImage *image, Process *process)
     drawTransform(debug, process, CV_RGB(255,255,0) );
 
     cvShowImage(name.toStdString().c_str(), debug);
-    //cvShowImage("HitSubtraction", process->getHitSubtraction());
+    cvShowImage("Hit", process->getHit());
+    cvShowImage("Min", process->getBackMin());
+    cvShowImage("MAx", process->getBackMax());
 }
 
 void ProcessDebug::drawAreas(IplImage *image, Areas &areas, CvScalar color, int type)

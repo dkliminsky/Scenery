@@ -2,6 +2,8 @@
 #define SCENE_H
 
 #include <QString>
+#include <QStack>
+#include <QQueue>
 #include <QDebug>
 #include <math.h>
 #include "sscene.h"

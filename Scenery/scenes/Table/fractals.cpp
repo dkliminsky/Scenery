@@ -40,7 +40,7 @@ void Fractals::paint()
     drawFractals(fractals, maxFractal);
 
     lineWidth(1);
-    color(0.5, 0, 0, 1);
+    color(0.3, 0, 0, 1);
     drawLinks(fractals);
 }
 

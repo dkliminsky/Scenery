@@ -110,13 +110,26 @@ ProcessWindow::ProcessWindow(Process *process, QString file, QWidget *parent) :
             SLOT(slotHoughCircleParam()));
 
     // Subtraction
-
+    connect(ui->subtractionImageAddButton, SIGNAL(clicked()),
+            SLOT(slotSubtractionImageAdd()));
+    connect(ui->subtractionImageAdd5Button, SIGNAL(clicked()),
+            SLOT(slotSubtractionImageAdd()));
+    connect(ui->subtractionImageClearButton, SIGNAL(clicked()),
+            SLOT(slotSubtractionImageClear()));
     connect(ui->subtractionHitAddButton, SIGNAL(clicked()),
             SLOT(slotSubtractionHitAdd()));
     connect(ui->subtractionHitAdd5Button, SIGNAL(clicked()),
             SLOT(slotSubtractionHitAdd()));
     connect(ui->subtractionHitClearButton, SIGNAL(clicked()),
             SLOT(slotSubtractionHitClear()));
+
+    // Filters
+
+    connect(ui->filtersHitErodeSpinBox, SIGNAL(valueChanged(int)),
+            SLOT(slotFilterHit()));
+    connect(ui->filtersHitDilateSpinBox, SIGNAL(valueChanged(int)),
+            SLOT(slotFilterHit()));
+
 
     // Clustering
     QStringList clusterModes;
@@ -475,6 +488,21 @@ void ProcessWindow::slotHoughCircleParam()
     process->setHoughCircleParam(param);
 }
 
+void ProcessWindow::slotSubtractionImageAdd()
+{
+    process->subtractionImageAdd();
+}
+
+void ProcessWindow::slotSubtractionImageAdd5()
+{
+    process->subtractionImageAdd(5);
+}
+
+void ProcessWindow::slotSubtractionImageClear()
+{
+    process->subtractionImageClear();
+}
+
 void ProcessWindow::slotSubtractionHitAdd()
 {
     process->subtractionHitAdd();
@@ -488,6 +516,15 @@ void ProcessWindow::slotSubtractionHitAdd5()
 void ProcessWindow::slotSubtractionHitClear()
 {
     process->subtractionHitClear();
+}
+
+
+void ProcessWindow::slotFilterHit()
+{
+    Process::FilterHitParam param;
+    param.erodeIteration = ui->filtersHitErodeSpinBox->value();
+    param.dilateIteration = ui->filtersHitDilateSpinBox->value();
+    process->setFilterHitParam(param);
 }
 
 void ProcessWindow::slotClusterMode(QString mode)

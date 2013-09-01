@@ -25,6 +25,10 @@ Process::Process(QString name, int width, int height) :
     image = 0;
     grayImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
     prevImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
+
+    backMinImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
+    backMaxImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
+
     hitImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
     hitSubImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
 
@@ -73,6 +77,8 @@ Process::~Process()
 
     cvReleaseImage(&hitImage);
     cvReleaseImage(&grayImage);
+    cvReleaseImage(&backMinImage);
+    cvReleaseImage(&backMaxImage);
 
     cvReleaseMemStorage(&haarStorage);
     cvReleaseMemStorage(&contourStorage);
@@ -121,9 +127,18 @@ void Process::setDefaultParam()
     houghCirclesParam.maxRadius = 0;
 
     // Subtraction
+    subtractionImageData.isSubtraction = false;
+    subtractionImageData.commandAddSeveral = 0;
+    subtractionImageData.commandClear = false;
+
     subtractionHitData.isSubtraction = false;
-    subtractionHitData.addSeveralLater = 0;
-    subtractionHitData.isClearLater = false;
+    subtractionHitData.commandAddSeveral = 0;
+    subtractionHitData.commandClear = false;
+
+    // Filters
+
+    filterHitParam.erodeIteration = 0;
+    filterHitParam.dilateIteration = 0;
 
     // Areas & Sequences
     filterAreaParam.isFilterOutframe = false;
@@ -143,10 +158,12 @@ void Process::step()
 
     switch (mode) {
     case ProcessNone:
+        processSubtractionImage();
         break;
 
     case ProcessColor:
         findColor();
+        processFiltersHit();
         findClusters(hitImage, areas);
         transform2DAreas(areas);
         filterAreas(areas);
@@ -156,6 +173,7 @@ void Process::step()
 
     case ProcessMotion:
         findMotion();
+        processFiltersHit();
         findClusters(hitImage, areas);
         transform2DAreas(areas);
         filterAreas(areas);
@@ -172,7 +190,8 @@ void Process::step()
 
     case ProcessContour:
         processContoursHit();
-        processSubtraction();
+        processSubtractionHit();
+        processFiltersHit();
         findContours();
         transform2DContours(contours);
         findClusters(hitImage, areas);
@@ -780,22 +799,104 @@ void Process::findHoughCircles()
 
 }
 
-void Process::processSubtraction()
+void Process::processSubtractionImage()
 {
-    if ( subtractionHitData.isClearLater ) {
+    if ( subtractionImageData.commandClear ) {
+        cvSet(backMinImage, CV_RGB(255,255,255));
+        cvSet(backMaxImage, CV_RGB(0,0,0));
+        cvSet(hitImage, cvScalar(0));
+        subtractionImageData.commandClear = false;
+        subtractionImageData.isSubtraction = false;
+    }
+
+    if ( subtractionImageData.commandAddSeveral > 0 ) {
+        for( int y=0; y<height; y++ ) {
+            uchar*     img_ptr = (uchar*) (       image->imageData + y *        image->widthStep);
+            uchar* bck_min_ptr = (uchar*) (backMinImage->imageData + y * backMinImage->widthStep);
+            uchar* bck_max_ptr = (uchar*) (backMaxImage->imageData + y * backMaxImage->widthStep);
+            for( int x=0; x<width; x++ ) {
+                unsigned char r = img_ptr[3*x+2];
+                unsigned char g = img_ptr[3*x+1];
+                unsigned char b = img_ptr[3*x+0];
+                unsigned char r_min = bck_min_ptr[3*x+2];
+                unsigned char g_min = bck_min_ptr[3*x+1];
+                unsigned char b_min = bck_min_ptr[3*x+0];
+                unsigned char r_max = bck_max_ptr[3*x+2];
+                unsigned char g_max = bck_max_ptr[3*x+1];
+                unsigned char b_max = bck_max_ptr[3*x+0];
+
+                if (r > r_max) bck_max_ptr[3*x+2] = r;
+                if (g > g_max) bck_min_ptr[3*x+1] = g;
+                if (b > b_max) bck_min_ptr[3*x+0] = b;
+                if (r < r_min) bck_max_ptr[3*x+2] = r;
+                if (g < g_min) bck_max_ptr[3*x+1] = g;
+                if (b < b_min) bck_max_ptr[3*x+0] = b;
+            }
+        }
+
+        subtractionImageData.commandAddSeveral -= 1;
+        subtractionImageData.isSubtraction = true;
+    }
+
+    if ( subtractionImageData.isSubtraction ) {
+        for( int y=0; y<height; y++ ) {
+            uchar*     img_ptr = (uchar*) (       image->imageData + y *        image->widthStep);
+            uchar* bck_min_ptr = (uchar*) (backMinImage->imageData + y * backMinImage->widthStep);
+            uchar* bck_max_ptr = (uchar*) (backMaxImage->imageData + y * backMaxImage->widthStep);
+            uchar* hit_ptr = (uchar*) ( hitImage->imageData + y *  hitImage->widthStep);
+            for( int x=0; x<width; x++ ) {
+                unsigned char r = img_ptr[3*x+2];
+                unsigned char g = img_ptr[3*x+1];
+                unsigned char b = img_ptr[3*x+0];
+                unsigned char r_min = bck_min_ptr[3*x+2];
+                unsigned char g_min = bck_min_ptr[3*x+1];
+                unsigned char b_min = bck_min_ptr[3*x+0];
+                unsigned char r_max = bck_max_ptr[3*x+2];
+                unsigned char g_max = bck_max_ptr[3*x+1];
+                unsigned char b_max = bck_max_ptr[3*x+0];
+
+                if (r >= r_min && r <= r_max &&
+                    g >= g_min && g <= g_max &&
+                    b >= b_min && b <= b_max) {
+                    hit_ptr[x] = 0;
+                }
+                else {
+                    hit_ptr[x] = 255;
+                }
+            }
+        }
+    }
+}
+
+void Process::processSubtractionHit()
+{
+    if ( subtractionHitData.commandClear ) {
         cvSet(hitSubImage, cvScalar(0));
-        subtractionHitData.isClearLater = false;
+        subtractionHitData.commandClear = false;
         subtractionHitData.isSubtraction = false;
     }
 
-    if ( subtractionHitData.addSeveralLater > 0 ) {
+    if ( subtractionHitData.commandAddSeveral > 0 ) {
         cvSet(hitSubImage, cvScalar(1), hitImage);
-        subtractionHitData.addSeveralLater -= 1;
+        subtractionHitData.commandAddSeveral -= 1;
         subtractionHitData.isSubtraction = true;
     }
 
     if ( subtractionHitData.isSubtraction ) {
         cvSet(hitImage, cvScalar(0), hitSubImage);
+    }
+}
+
+void Process::processFiltersHit()
+{
+    if (filterHitParam.erodeIteration) {
+        cvErode(hitImage, grayImage, 0, filterHitParam.erodeIteration);
+        cvCopy(grayImage, hitImage);
+    }
+
+    if (filterHitParam.dilateIteration) {
+        cvDilate(hitImage, grayImage, 0, filterHitParam.dilateIteration);
+        cvCopy(grayImage, hitImage);
     }
 }
 

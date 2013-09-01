@@ -36,10 +36,7 @@ Contours &SceneProcess::contours() {
 
 Image *SceneProcess::image() {
     if (view->datas()->size() > n && view->datas()->at(n)->getImage()) {
-        _image.set(view->datas()->at(n)->getImage()->imageData,
-                   view->datas()->at(n)->getImage()->width,
-                   view->datas()->at(n)->getImage()->height,
-                   view->datas()->at(n)->getImage()->nChannels);
+        _image.set(view->datas()->at(n)->getImage());
     }
     return &_image;
 }

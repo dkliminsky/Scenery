@@ -3,58 +3,56 @@
 
 Image::Image()
 {
-    _name = "";
+    _iplImage = 0;
+    isShare = false;
+    create(0, 0, 4);
+    _fileName = "";
+    init();
+}
 
-    _data = 0;
-    _width = 0;
-    _height = 0;
-    _channels = 0;
-
+Image::Image(Image *image)
+{
+    _iplImage = cvCloneImage(image->iplImage());
+    isShare = false;
+    _fileName = "";
     init();
 }
 
 Image::Image(int width, int height, int channels)
 {
-    _name = "";
-
-    _data = new char[width * height * channels];
-    _width = width;
-    _height = height;
-    _channels = channels;
-
+    _iplImage = 0;
+    isShare = false;
+    create(width, height, channels);
+    _fileName = "";
     init();
 }
 
 Image::Image(const QString &fileName)
 {
+    _iplImage = 0;
+    isShare = false;
     load(fileName);
     init();
 }
 
-void Image::set(char *data, int width, int height, int channels)
+Image::~Image()
 {
-    _data = data;
-    _width = width;
-    _height = height;
-    _channels = channels;
-}
-
-void Image::update(char *data)
-{
-    _data = data;
+    if (!isShare) {
+        cvReleaseImage(&_iplImage);
+    }
 }
 
 void Image::bind()
 {
-    if (_width && _height) {
+    if (width() && height()) {
 
         int internalformat;
         int format;
-        if (_channels == 4) {
+        if (channels() == 4) {
             internalformat = GL_RGBA;
             format = GL_BGRA;
         }
-        else if (_channels == 3) {
+        else if (channels() == 3) {
             internalformat = GL_RGB;
             format = GL_BGR;
         }
@@ -63,8 +61,8 @@ void Image::bind()
             return;
         }
 
-        if (!bindId || _width != bindWidth || _height != bindHeight ||
-                    _channels != bindChannels) {
+        if (!bindId || width() != bindWidth || height() != bindHeight ||
+            channels() != bindChannels) {
 
             if (bindId) {
                 glDeleteTextures(1, &bindId);
@@ -74,45 +72,61 @@ void Image::bind()
             GLuint gl_id;
             glGenTextures(1, &gl_id);
             glBindTexture(GL_TEXTURE_2D, gl_id);
-            glTexImage2D(GL_TEXTURE_2D, 0, internalformat, _width, _height,
-                        0, format, GL_UNSIGNED_BYTE, _data);
+            glTexImage2D(GL_TEXTURE_2D, 0, internalformat, width(), height(),
+                         0, format, GL_UNSIGNED_BYTE, data());
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             // задаём линейную фильтрацию вдали:
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glDisable(GL_TEXTURE_2D);
 
             bindId = gl_id;
-            bindWidth = _width;
-            bindHeight = _height;
-            bindChannels = _channels;
+            bindWidth = width();
+            bindHeight = height();
+            bindChannels = channels();
 
             qDebug() << "Bind Image" << gl_id;
         }
         else {
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, bindId);
-            glTexSubImage2D(GL_TEXTURE_2D, 0, 0.0f, 0.0f, _width, _height,
-                            format, GL_UNSIGNED_BYTE, _data);
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0.0f, 0.0f, width(), height(),
+                            format, GL_UNSIGNED_BYTE, data());
             glDisable(GL_TEXTURE_2D);
         }
     }
 }
 
+void Image::set(IplImage *iplImage)
+{
+    if (!isShare) {
+        cvReleaseImage(&this->_iplImage);
+        isShare = true;
+    }
+    this->_iplImage = iplImage;
+}
+
+void Image::create(int width, int height, int channels)
+{
+    if (_iplImage)
+        cvReleaseImage(&_iplImage);
+    _iplImage = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, channels);
+}
+
 void Image::load(const QString &fileName)
 {
     QImage img(fileName);
-    _name = fileName;
-    _width = img.width();
-    _height = img.height();
-    _channels = 4; // !!
-    _data = new char[img.byteCount()];
+    _fileName = fileName;
+    int w = img.width();
+    int h = img.height();
+    int c = 4; // !!
+    create(w, h, c);
 
-    for (int j=0; j<_height; j++) {
-        for (int i=0; i<_width; i++) {
-            _data[j*_width*4+i*4+0] = (char)qBlue(img.pixel(i, j));
-            _data[j*_width*4+i*4+1] = (char)qGreen(img.pixel(i, j));
-            _data[j*_width*4+i*4+2] = (char)qRed(img.pixel(i, j));
-            _data[j*_width*4+i*4+3] = (char)qAlpha(img.pixel(i, j));
+    for (int j=0; j<h; j++) {
+        for (int i=0; i<w; i++) {
+            _iplImage->imageData[j*w*4+i*4+0] = (char)qBlue(img.pixel(i, j));
+            _iplImage->imageData[j*w*4+i*4+1] = (char)qGreen(img.pixel(i, j));
+            _iplImage->imageData[j*w*4+i*4+2] = (char)qRed(img.pixel(i, j));
+            _iplImage->imageData[j*w*4+i*4+3] = (char)qAlpha(img.pixel(i, j));
         }
     }
 }

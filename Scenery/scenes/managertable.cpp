@@ -22,25 +22,16 @@ ManagerTable::ManagerTable()
     QGLFormat format;
     format.setDoubleBuffer(false);
     views += new View(format);
+    views.at(0)->datas()->append(processes.at(0));
+    views.at(0)->datas()->append(processes.at(1));
+    views.at(0)->datas()->append(processes.at(2));
+    views.at(0)->datas()->append(processes.at(3));
+    views.at(0)->datas()->append(processes.at(4));
+    views.at(0)->datas()->append(processes.at(5));
 
     scenes += new Fractals();
 
     views.at(0)->setScene(scenes.at(0));
-
-//    views.at(0)->datas()->resize(6);
-//    views.at(0)->datas()->at(0).width = cameraWidth;
-//    views.at(0)->datas()->at(0).height = cameraHeight;
-//    views.at(0)->datas()->at(1).width = cameraWidth;
-//    views.at(0)->datas()->at(1).height = cameraHeight;
-//    views.at(0)->datas()->at(2).width = cameraWidth;
-//    views.at(0)->datas()->at(2).height = cameraHeight;
-//    views.at(0)->datas()->at(3).width = cameraWidth;
-//    views.at(0)->datas()->at(3).height = cameraHeight;
-//    views.at(0)->datas()->at(4).width = cameraWidth;
-//    views.at(0)->datas()->at(4).height = cameraHeight;
-//    views.at(0)->datas()->at(5).width = cameraWidth;
-//    views.at(0)->datas()->at(5).height = cameraHeight;
-
     startTimer(17);
 }
 
@@ -51,12 +42,7 @@ void ManagerTable::timerEvent(QTimerEvent *)
         // можно сразу использовать
         IplImage *frame = inputs.at(0)->getFrame();
 
-        if ( !processes.at(0)->isRunning() &&
-             !processes.at(1)->isRunning() &&
-             !processes.at(2)->isRunning() &&
-             !processes.at(3)->isRunning() &&
-             !processes.at(4)->isRunning() &&
-             !processes.at(5)->isRunning() ) {
+        if ( isProcessesComplete() ) {
 
             // Debug process
             debug->show(frame, processes.at(0));
@@ -66,7 +52,8 @@ void ManagerTable::timerEvent(QTimerEvent *)
             debug->show(frame, processes.at(4));
             debug->show(frame, processes.at(5));
 
-            //
+            processesCopyData();
+
             processes.at(0)->setImage(frame);
             processes.at(1)->setImage(frame);
             processes.at(2)->setImage(frame);
@@ -74,26 +61,7 @@ void ManagerTable::timerEvent(QTimerEvent *)
             processes.at(4)->setImage(frame);
             processes.at(5)->setImage(frame);
 
-            // set process data in scene
-//            views.at(0)->datas()->at(0).areas = processes.at(0)->getAreas();
-//            views.at(0)->datas()->at(0).seqAreas = processes.at(0)->getSeqAreas();
-//            views.at(0)->datas()->at(1).areas = processes.at(1)->getAreas();
-//            views.at(0)->datas()->at(1).seqAreas = processes.at(1)->getSeqAreas();
-//            views.at(0)->datas()->at(2).areas = processes.at(2)->getAreas();
-//            views.at(0)->datas()->at(2).seqAreas = processes.at(2)->getSeqAreas();
-//            views.at(0)->datas()->at(3).areas = processes.at(3)->getAreas();
-//            views.at(0)->datas()->at(3).seqAreas = processes.at(3)->getSeqAreas();
-//            views.at(0)->datas()->at(4).areas = processes.at(4)->getAreas();
-//            views.at(0)->datas()->at(4).seqAreas = processes.at(4)->getSeqAreas();
-//            views.at(0)->datas()->at(5).areas = processes.at(5)->getAreas();
-//            views.at(0)->datas()->at(5).seqAreas = processes.at(5)->getSeqAreas();
-
-            processes.at(0)->start();
-            processes.at(1)->start();
-            processes.at(2)->start();
-            processes.at(3)->start();
-            processes.at(4)->start();
-            processes.at(5)->start();
+            processesStart();
         }
         inputs[0]->start();
     }
