@@ -9,7 +9,6 @@ ProcessDebug::ProcessDebug(QString name, int width, int height)
     debug = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
 
     cvNamedWindow(name.toStdString().c_str(), CV_WINDOW_FREERATIO);
-    cvNamedWindow("Hit", CV_WINDOW_FREERATIO);
 }
 
 ProcessDebug::~ProcessDebug()
@@ -74,8 +73,7 @@ void ProcessDebug::show(IplImage *image, Process *process)
 
     cvShowImage(name.toStdString().c_str(), debug);
     cvShowImage("Hit", process->getHit());
-    cvShowImage("Min", process->getBackMin());
-    cvShowImage("MAx", process->getBackMax());
+    cvShowImage("Back", process->getBack());
 }
 
 void ProcessDebug::drawAreas(IplImage *image, Areas &areas, CvScalar color, int type)

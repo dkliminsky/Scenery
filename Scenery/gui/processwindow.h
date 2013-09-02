@@ -37,9 +37,8 @@ public slots:
     void slotContourParam();
     void slotHoughCircleParam();
 
-    void slotSubtractionImageAdd();
-    void slotSubtractionImageAdd5();
-    void slotSubtractionImageClear();
+    void slotSubtractionImageStart();
+    void slotSubtractionImageStop();
     void slotSubtractionHitAdd();
     void slotSubtractionHitAdd5();
     void slotSubtractionHitClear();

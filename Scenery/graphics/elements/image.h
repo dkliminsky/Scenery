@@ -18,6 +18,7 @@ public:
     int width() { return _iplImage->width; }
     int height() { return _iplImage->height; }
     int channels() { return _iplImage->nChannels; }
+    int step() { return _iplImage->widthStep; }
     int size() { return width() * height() * channels(); }
     char *data() { return _iplImage->imageData; }
     IplImage *iplImage() { return _iplImage; }

@@ -12,8 +12,17 @@ public:
     void paint();
 
 private:
-    int stackLength;
-    QQueue<Image *> queue;
+    int w;
+    int h;
+
+    int queueManualLength;
+    QQueue<Image *> queueManual;
+
+    void addFrameToQueue(QQueue<Image *>queue, Image *frame);
+    void mergeFrames(Image *frame, Image *alpha);
+    uchar blendValues(uchar c1, uchar c2);
+
+    void stepQueueManual(Image *frame);
 
 };
 

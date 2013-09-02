@@ -2,8 +2,8 @@
 
 ManagerDance::ManagerDance()
 {
-    int cameraWidth = 800;
-    int cameraHeight = 600;
+    int cameraWidth = 640;
+    int cameraHeight = 480;
 
     inputs += new Input(Input::Camera, "",
                         cameraWidth, cameraHeight);
@@ -23,9 +23,9 @@ ManagerDance::ManagerDance()
     views.at(0)->datas()->append(processes.at(1));
     views.at(0)->datas()->append(processes.at(2));
 
+    scenes += new Memorize();
     scenes += new DanceEffects();
     scenes += new Shift();
-    scenes += new Memorize();
     scenes += new Skeleton();
 
     views.at(0)->setScene(scenes.at(0));

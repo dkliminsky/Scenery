@@ -110,12 +110,10 @@ ProcessWindow::ProcessWindow(Process *process, QString file, QWidget *parent) :
             SLOT(slotHoughCircleParam()));
 
     // Subtraction
-    connect(ui->subtractionImageAddButton, SIGNAL(clicked()),
-            SLOT(slotSubtractionImageAdd()));
-    connect(ui->subtractionImageAdd5Button, SIGNAL(clicked()),
-            SLOT(slotSubtractionImageAdd()));
-    connect(ui->subtractionImageClearButton, SIGNAL(clicked()),
-            SLOT(slotSubtractionImageClear()));
+    connect(ui->subtractionImageStartButton, SIGNAL(clicked()),
+            SLOT(slotSubtractionImageStart()));
+    connect(ui->subtractionImageStopButton, SIGNAL(clicked()),
+            SLOT(slotSubtractionImageStop()));
     connect(ui->subtractionHitAddButton, SIGNAL(clicked()),
             SLOT(slotSubtractionHitAdd()));
     connect(ui->subtractionHitAdd5Button, SIGNAL(clicked()),
@@ -124,7 +122,6 @@ ProcessWindow::ProcessWindow(Process *process, QString file, QWidget *parent) :
             SLOT(slotSubtractionHitClear()));
 
     // Filters
-
     connect(ui->filtersHitErodeSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotFilterHit()));
     connect(ui->filtersHitDilateSpinBox, SIGNAL(valueChanged(int)),
@@ -488,19 +485,14 @@ void ProcessWindow::slotHoughCircleParam()
     process->setHoughCircleParam(param);
 }
 
-void ProcessWindow::slotSubtractionImageAdd()
+void ProcessWindow::slotSubtractionImageStart()
 {
-    process->subtractionImageAdd();
+    process->subtractionImageStart();
 }
 
-void ProcessWindow::slotSubtractionImageAdd5()
+void ProcessWindow::slotSubtractionImageStop()
 {
-    process->subtractionImageAdd(5);
-}
-
-void ProcessWindow::slotSubtractionImageClear()
-{
-    process->subtractionImageClear();
+    process->subtractionImageStop();
 }
 
 void ProcessWindow::slotSubtractionHitAdd()

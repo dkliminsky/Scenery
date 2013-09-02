@@ -141,15 +141,21 @@ public:
     // Subtraction Parameters
     // ====================================================================
 
+    struct SubtractionImageParam {
+        int history;
+        float varThreshold;
+        bool bShadowDetection;
+    };
+
+    void setSubtractionImageParam(SubtractionImageParam param) { subtractionImageParam = param; }
+    void subtractionImageStart() { subtractionImageData.commandStart = true; }
+    void subtractionImageStop() { subtractionImageData.commandStop = true; }
+
     void subtractionHitAdd(int n=1) { subtractionHitData.commandAddSeveral += n; }
     void subtractionHitClear() { subtractionHitData.commandClear = true; }
 
-    void subtractionImageAdd(int n=1) { subtractionImageData.commandAddSeveral += n; }
-    void subtractionImageClear() { subtractionImageData.commandClear = true; }
-
     IplImage *getHitSubtraction() { return hitSubImage; }
-    IplImage *getBackMin() { return backMinImage; }
-    IplImage *getBackMax() { return backMaxImage; }
+    IplImage *getBack() { return backImage; }
 
     // ====================================================================
     // Filters Parameters
@@ -252,8 +258,8 @@ private:
     IplImage *grayImage;
     IplImage *prevImage;
 
-    IplImage *backMinImage;
-    IplImage *backMaxImage;
+    IplImage *backImage;
+    IplImage *foreImage;
 
     // ====================================================================
     // Color
@@ -315,10 +321,10 @@ private:
     // Subtraction Parameters
     // ====================================================================
 
-    struct SubtractionImageData {
-        bool isSubtraction;
-        int commandAddSeveral;
-        bool commandClear;
+    struct SubtractionHitImage {
+        bool commandStart;
+        bool commandStop;
+        bool commandChangeParam;
     } subtractionImageData;
 
     struct SubtractionHitData {
@@ -326,6 +332,9 @@ private:
         int commandAddSeveral;
         bool commandClear;
     } subtractionHitData;
+
+    cv::BackgroundSubtractorMOG2 *backSubtractor;
+    SubtractionImageParam subtractionImageParam;
 
     void processSubtractionImage();
     void processSubtractionHit();

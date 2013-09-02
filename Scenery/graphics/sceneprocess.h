@@ -13,6 +13,7 @@ public:
     Areas &areas();
     SeqAreas &seqAreas();
     Contours &contours();
+    Image *hit();
     Image *image();
 
     void _setN(int n) { this->n = n; }
@@ -25,6 +26,7 @@ private:
     Areas _areas;
     SeqAreas _seqArea;
     Contours _contour;
+    Image _hit;
     Image _image;
 };
 

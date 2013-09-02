@@ -34,6 +34,14 @@ Contours &SceneProcess::contours() {
     else return _contour;
 }
 
+Image *SceneProcess::hit()
+{
+    if (view->datas()->size() > n && view->datas()->at(n)->getHit()) {
+        _hit.set(view->datas()->at(n)->getHit());
+    }
+    return &_hit;
+}
+
 Image *SceneProcess::image() {
     if (view->datas()->size() > n && view->datas()->at(n)->getImage()) {
         _image.set(view->datas()->at(n)->getImage());

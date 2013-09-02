@@ -19,6 +19,7 @@ Process::Process(QString name, int width, int height) :
     timeNum = 0;
     timeResult = 0;
 
+    imageResult = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
     hitResult = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
 
     // Common
@@ -26,8 +27,8 @@ Process::Process(QString name, int width, int height) :
     grayImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
     prevImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
 
-    backMinImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
-    backMaxImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
+    backImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
+    foreImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 3 );
 
     hitImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
     hitSubImage = cvCreateImage( cvSize(width, height), IPL_DEPTH_8U, 1 );
@@ -35,32 +36,18 @@ Process::Process(QString name, int width, int height) :
     // Color & Motion
 
     // Haar
-
     haarCascade = 0;
     haarStorage = cvCreateMemStorage(0);
 
     // Contour
-
     contourStorage = cvCreateMemStorage(0);
     hullsStorage = 0;
 
     // HoughCircles
-
     houghCirclesStorage = cvCreateMemStorage(0);
 
-    // Transform
-
-    trans2D.mx = 0;
-    trans2D.my = 0;
-    trans2D.sx = 1;
-    trans2D.sy = 1;
-    trans2D.theta = 0;
-    trans2D.g = 0;
-    trans2D.h = 0;
-
-    trans2D.deepHx = 0;
-    trans2D.deepHy = width/2;
-    trans2D.deepHs = 0.0;
+    // Subtraction
+    backSubtractor = 0;
 
     setDefaultParam();
 
@@ -77,14 +64,17 @@ Process::~Process()
 
     cvReleaseImage(&hitImage);
     cvReleaseImage(&grayImage);
-    cvReleaseImage(&backMinImage);
-    cvReleaseImage(&backMaxImage);
+    cvReleaseImage(&backImage);
+    cvReleaseImage(&foreImage);
 
     cvReleaseMemStorage(&haarStorage);
     cvReleaseMemStorage(&contourStorage);
 
     if (hullsStorage)
         cvReleaseMemStorage(&hullsStorage);
+
+    if (backSubtractor)
+        delete backSubtractor;
 
     qDebug() << "Destructor End: Process";
 }
@@ -127,16 +117,19 @@ void Process::setDefaultParam()
     houghCirclesParam.maxRadius = 0;
 
     // Subtraction
-    subtractionImageData.isSubtraction = false;
-    subtractionImageData.commandAddSeveral = 0;
-    subtractionImageData.commandClear = false;
+    subtractionImageParam.history = 3600;
+    subtractionImageParam.varThreshold = 16;
+    subtractionImageParam.bShadowDetection = false;
+
+    subtractionImageData.commandStart = false;
+    subtractionImageData.commandStop = false;
+    subtractionImageData.commandChangeParam = false;
 
     subtractionHitData.isSubtraction = false;
     subtractionHitData.commandAddSeveral = 0;
     subtractionHitData.commandClear = false;
 
     // Filters
-
     filterHitParam.erodeIteration = 0;
     filterHitParam.dilateIteration = 0;
 
@@ -149,6 +142,19 @@ void Process::setDefaultParam()
     seqAreas.resize(1);
     seqAreas[0].number = 0;
     seqAreasLast = &seqAreas;
+
+    // Transform
+    trans2D.mx = 0;
+    trans2D.my = 0;
+    trans2D.sx = 1;
+    trans2D.sy = 1;
+    trans2D.theta = 0;
+    trans2D.g = 0;
+    trans2D.h = 0;
+
+    trans2D.deepHx = 0;
+    trans2D.deepHy = width/2;
+    trans2D.deepHs = 0.0;
 }
 
 void Process::step()
@@ -159,6 +165,7 @@ void Process::step()
     switch (mode) {
     case ProcessNone:
         processSubtractionImage();
+        processFiltersHit();
         break;
 
     case ProcessColor:
@@ -218,7 +225,9 @@ void Process::step()
 
 void Process::copyData()
 {
-    imageResult = image;
+    //imageResult = image;
+    if (image)
+        cvCopy(image, imageResult);
     cvCopy(hitImage, hitResult);
     areasResult = areas;
     seqAreasResult = *seqAreasLast;
@@ -801,70 +810,28 @@ void Process::findHoughCircles()
 
 void Process::processSubtractionImage()
 {
-    if ( subtractionImageData.commandClear ) {
-        cvSet(backMinImage, CV_RGB(255,255,255));
-        cvSet(backMaxImage, CV_RGB(0,0,0));
-        cvSet(hitImage, cvScalar(0));
-        subtractionImageData.commandClear = false;
-        subtractionImageData.isSubtraction = false;
+    if ( subtractionImageData.commandStop ) {
+        if (backSubtractor)
+            delete backSubtractor;
+        subtractionImageData.commandStop = false;
     }
 
-    if ( subtractionImageData.commandAddSeveral > 0 ) {
-        for( int y=0; y<height; y++ ) {
-            uchar*     img_ptr = (uchar*) (       image->imageData + y *        image->widthStep);
-            uchar* bck_min_ptr = (uchar*) (backMinImage->imageData + y * backMinImage->widthStep);
-            uchar* bck_max_ptr = (uchar*) (backMaxImage->imageData + y * backMaxImage->widthStep);
-            for( int x=0; x<width; x++ ) {
-                unsigned char r = img_ptr[3*x+2];
-                unsigned char g = img_ptr[3*x+1];
-                unsigned char b = img_ptr[3*x+0];
-                unsigned char r_min = bck_min_ptr[3*x+2];
-                unsigned char g_min = bck_min_ptr[3*x+1];
-                unsigned char b_min = bck_min_ptr[3*x+0];
-                unsigned char r_max = bck_max_ptr[3*x+2];
-                unsigned char g_max = bck_max_ptr[3*x+1];
-                unsigned char b_max = bck_max_ptr[3*x+0];
-
-                if (r > r_max) bck_max_ptr[3*x+2] = r;
-                if (g > g_max) bck_min_ptr[3*x+1] = g;
-                if (b > b_max) bck_min_ptr[3*x+0] = b;
-                if (r < r_min) bck_max_ptr[3*x+2] = r;
-                if (g < g_min) bck_max_ptr[3*x+1] = g;
-                if (b < b_min) bck_max_ptr[3*x+0] = b;
-            }
-        }
-
-        subtractionImageData.commandAddSeveral -= 1;
-        subtractionImageData.isSubtraction = true;
+    if ( subtractionImageData.commandStart ) {
+        if (backSubtractor)
+            delete backSubtractor;
+        backSubtractor = new
+                cv::BackgroundSubtractorMOG2(subtractionImageParam.history,
+                                             subtractionImageParam.varThreshold,
+                                             subtractionImageParam.bShadowDetection);
+        subtractionImageData.commandStart = false;
     }
 
-    if ( subtractionImageData.isSubtraction ) {
-        for( int y=0; y<height; y++ ) {
-            uchar*     img_ptr = (uchar*) (       image->imageData + y *        image->widthStep);
-            uchar* bck_min_ptr = (uchar*) (backMinImage->imageData + y * backMinImage->widthStep);
-            uchar* bck_max_ptr = (uchar*) (backMaxImage->imageData + y * backMaxImage->widthStep);
-            uchar* hit_ptr = (uchar*) ( hitImage->imageData + y *  hitImage->widthStep);
-            for( int x=0; x<width; x++ ) {
-                unsigned char r = img_ptr[3*x+2];
-                unsigned char g = img_ptr[3*x+1];
-                unsigned char b = img_ptr[3*x+0];
-                unsigned char r_min = bck_min_ptr[3*x+2];
-                unsigned char g_min = bck_min_ptr[3*x+1];
-                unsigned char b_min = bck_min_ptr[3*x+0];
-                unsigned char r_max = bck_max_ptr[3*x+2];
-                unsigned char g_max = bck_max_ptr[3*x+1];
-                unsigned char b_max = bck_max_ptr[3*x+0];
-
-                if (r >= r_min && r <= r_max &&
-                    g >= g_min && g <= g_max &&
-                    b >= b_min && b <= b_max) {
-                    hit_ptr[x] = 0;
-                }
-                else {
-                    hit_ptr[x] = 255;
-                }
-            }
-        }
+    if (backSubtractor) {
+        cv::Mat frame(image);
+        cv::Mat fore(hitImage);
+        cv::Mat back(backImage);
+        backSubtractor->operator ()(frame, fore);
+        backSubtractor->getBackgroundImage(back);
     }
 }
 
