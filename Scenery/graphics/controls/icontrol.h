@@ -12,16 +12,17 @@ public:
         ControlDouble,
         ControlString,
         ControlImage,
-        ControlColor
+        ControlColor,
+        ControlButton
     };
 
     IControl(Type type, QString name) { _type = type; _name = name; }
-    virtual ~IControl() {};
+    virtual ~IControl() {}
 
     Type type() { return _type; }
     QString &name() { return _name; }
-    virtual void set(QString &data) = 0;
-    virtual QString get() = 0;
+    virtual void set(QString &) {}
+    virtual QString get() { return ""; }
 
 protected:
     Type _type;

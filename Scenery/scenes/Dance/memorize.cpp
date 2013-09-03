@@ -3,6 +3,7 @@
 Memorize::Memorize()
 {
     control(queueManualLength=20, "Queue Length", 0, 999);
+    button("Test Buttons", 5, "b5", 8, "b8");
 }
 
 void Memorize::paint()
@@ -18,6 +19,11 @@ void Memorize::paint()
     color(1,1,1,1);
     image(frame, w/2, h/2, w, h);
     flush();
+}
+
+void Memorize::action(int id)
+{
+    qDebug() << id;
 }
 
 void Memorize::addFrameToQueue(QQueue<Image *> queue, Image *frame)

@@ -10,6 +10,7 @@ public:
     QString name() { return "Memorize"; }
 
     void paint();
+    void action(int id);
 
 private:
     int w;

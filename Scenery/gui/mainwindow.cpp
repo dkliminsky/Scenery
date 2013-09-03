@@ -83,6 +83,9 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
                 break;
             case IControl::ControlImage:
                 break;
+            case IControl::ControlButton:
+                layout->addWidget(new ControlButtonWidget(scenes.at(i),
+                                  static_cast<ControlButton *>(control)));
             }
             n++;
         }

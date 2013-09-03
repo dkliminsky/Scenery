@@ -176,6 +176,70 @@ void Scene::button(int id, QString description)
     _actions += new ActionButton(id, description);
 }
 
+void Scene::button(QString description, int id, QString name)
+{
+    QVector<ControlButton::Button> buttons;
+    ControlButton::Button button;
+    button.id = id;
+    button.name = name;
+    buttons += button;
+    _controls += new ControlButton(description, buttons);
+}
+
+void Scene::button(QString description, int id1, QString name1,
+                                        int id2, QString name2)
+{
+    QVector<ControlButton::Button> buttons;
+    ControlButton::Button button;
+    button.id = id1;
+    button.name = name1;
+    buttons += button;
+    button.id = id2;
+    button.name = name2;
+    buttons += button;
+    _controls += new ControlButton(description, buttons);
+}
+
+void Scene::button(QString description, int id1, QString name1,
+                                        int id2, QString name2,
+                                        int id3, QString name3)
+{
+    QVector<ControlButton::Button> buttons;
+    ControlButton::Button button;
+    button.id = id1;
+    button.name = name1;
+    buttons += button;
+    button.id = id2;
+    button.name = name2;
+    buttons += button;
+    button.id = id3;
+    button.name = name3;
+    buttons += button;
+    _controls += new ControlButton(description, buttons);
+}
+
+void Scene::button(QString description, int id1, QString name1,
+                                        int id2, QString name2,
+                                        int id3, QString name3,
+                                        int id4, QString name4)
+{
+    QVector<ControlButton::Button> buttons;
+    ControlButton::Button button;
+    button.id = id1;
+    button.name = name1;
+    buttons += button;
+    button.id = id2;
+    button.name = name2;
+    buttons += button;
+    button.id = id3;
+    button.name = name3;
+    buttons += button;
+    button.id = id4;
+    button.name = name4;
+    buttons += button;
+    _controls += new ControlButton(description, buttons);
+}
+
 void Scene::control(int &x, QString description, int min, int max, int step)
 {
     _controls += new ControlInt(x, description, min, max, step);
