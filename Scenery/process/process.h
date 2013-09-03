@@ -40,6 +40,8 @@ public:
 
     int getTime() { return timeResult; }
 
+    void setCommand(QString name);
+
     // ====================================================================
     // Input
     // ====================================================================
@@ -364,6 +366,16 @@ private:
 
     void transform2DContours(Contours &contours);
     void transform2DContour(Contour &contour);
+
+    // ====================================================================
+    // Commands
+    // ====================================================================
+
+    struct Command {
+        QString name;
+    };
+    vector<Command> commands;
+    void realizeCommands();
 
 };
 

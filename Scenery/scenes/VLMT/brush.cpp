@@ -2,7 +2,7 @@
 
 Brush::Brush()
 {
-    button(0, "Rand color");
+    button("Colors", 0, "Rand color");
 
     control(mode="None", "Type of brush", QStringList() << "Line" << "Blots");
 

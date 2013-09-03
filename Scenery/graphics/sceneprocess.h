@@ -15,6 +15,7 @@ public:
     Contours &contours();
     Image *hit();
     Image *image();
+    void command(QString name);
 
     void _setN(int n) { this->n = n; }
     void _setView(View *view) { this->view = view; }

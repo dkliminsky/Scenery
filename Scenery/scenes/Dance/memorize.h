@@ -1,7 +1,9 @@
-#ifndef MEMORIZE_H
+﻿#ifndef MEMORIZE_H
 #define MEMORIZE_H
 
 #include "graphics/scene.h"
+
+#define COUNT_RECORDS 5
 
 class Memorize : public Scene
 {
@@ -19,11 +21,20 @@ private:
     int queueManualLength;
     QQueue<Image *> queueManual;
 
-    void addFrameToQueue(QQueue<Image *>queue, Image *frame);
+    struct Record {
+        QQueue<Image *> queue;
+        bool isRecord;
+        int repeats;
+        int playFrame;
+    };
+    QVector<Record> records;
+
+    void addFrameToQueue(QQueue<Image *> *queue, Image *frame);
     void mergeFrames(Image *frame, Image *alpha);
     uchar blendValues(uchar c1, uchar c2);
 
     void stepQueueManual(Image *frame);
+    void stepQueueRecord(Image *frame);
 
 };
 

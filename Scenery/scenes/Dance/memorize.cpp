@@ -3,7 +3,19 @@
 Memorize::Memorize()
 {
     control(queueManualLength=20, "Queue Length", 0, 999);
-    button("Test Buttons", 5, "b5", 8, "b8");
+    button("Common", 1000, "Start Subtraction", 1001, "Stop Subtraction");
+
+    for (int i=0; i<COUNT_RECORDS; i++) {
+        Record record;
+        record.isRecord = false;
+        record.repeats = 0;
+        record.playFrame = 0;
+        records += record;
+        button("Store", i*10 + 0, "Record",
+                        i*10 + 1, "Stop",
+                        i*10 + 2, "Repeat",
+                        i*10 + 3, "Forewer");
+    }
 }
 
 void Memorize::paint()
@@ -14,6 +26,7 @@ void Memorize::paint()
     size(w, h);
 
     stepQueueManual(frame);
+    stepQueueRecord(frame);
 
     frame->bind();
     color(1,1,1,1);
@@ -23,26 +36,60 @@ void Memorize::paint()
 
 void Memorize::action(int id)
 {
-    qDebug() << id;
+    if ( id == 1000 ) {
+        process(0)->command("SubtractionImageStart");
+    }
+    if ( id == 1001 ) {
+        process(0)->command("SubtractionImageStop");
+    }
+    else if (id < 1000) {
+        int command = id % 10;
+        int n = (id - command) / 10;
+        qDebug() << id << n << command;
+        if (command == 0) {
+            while (records.at(n).queue.size()) {
+                delete records[n].queue.dequeue();
+            }
+            records[n].isRecord = true;
+            records[n].playFrame = 0;
+        }
+        else if (command == 1) {
+            records[n].isRecord = false;
+            records[n].playFrame = 0;
+            records[n].repeats = 0;
+        }
+        else if (command == 2) {
+            records[n].isRecord = false;
+            records[n].playFrame = 0;
+            records[n].repeats = 1;
+        }
+        else if (command == 3) {
+            records[n].isRecord = false;
+            records[n].playFrame = 0;
+            records[n].repeats = -1;
+        }
+    }
 }
 
-void Memorize::addFrameToQueue(QQueue<Image *> queue, Image *frame)
+void Memorize::addFrameToQueue(QQueue<Image *> *queue, Image *frame)
 {
     Q_ASSERT(frame->channels() == 3);
     Image *store = new Image(w, h, 4);
+    int cFrame = frame->channels();
+    int cStore = store->channels();
     for( int y=0; y<h; y++ ) {
         uchar*   hit_ptr = (uchar*) (process(0)->hit()->data() + y * process(0)->hit()->step());
         uchar* frame_ptr = (uchar*) (frame->data() + y * frame->step());
         uchar* store_ptr = (uchar*) (store->data() + y * store->step());
         for( int x=0; x<w; x++ ) {
-            store_ptr[store->channels()*x + 0] = frame_ptr[frame->channels()*x + 0];
-            store_ptr[store->channels()*x + 1] = frame_ptr[frame->channels()*x + 1];
-            store_ptr[store->channels()*x + 2] = frame_ptr[frame->channels()*x + 2];
-            store_ptr[store->channels()*x + 3] = hit_ptr[x];
+            store_ptr[cStore*x + 0] = frame_ptr[cFrame*x + 0];
+            store_ptr[cStore*x + 1] = frame_ptr[cFrame*x + 1];
+            store_ptr[cStore*x + 2] = frame_ptr[cFrame*x + 2];
+            store_ptr[cStore*x + 3] = hit_ptr[x];
         }
     }
 
-    queueManual.enqueue(store);
+    queue->enqueue(store);
 }
 
 void Memorize::mergeFrames(Image *frame, Image *alpha)
@@ -58,16 +105,11 @@ void Memorize::mergeFrames(Image *frame, Image *alpha)
         uchar* frame_ptr = (uchar*) (frame->data() + y * frame->step());
         uchar* alpha_ptr = (uchar*) (alpha->data() + y * alpha->step());
         for( int x=0; x<w; x++ ) {
-            if (alpha_ptr[cAlpha*x + 3] && !hit_ptr[x]) {
+            if (alpha_ptr[cAlpha*x + 3]) {
                 if (!hit_ptr[x]) {
                     frame_ptr[cFrame*x + 0] = alpha_ptr[cAlpha*x + 0];
                     frame_ptr[cFrame*x + 1] = alpha_ptr[cAlpha*x + 1];
                     frame_ptr[cFrame*x + 2] = alpha_ptr[cAlpha*x + 2];
-                }
-                else {
-                    frame_ptr[cFrame*x + 0] = blendValues(frame_ptr[cFrame*x + 0], alpha_ptr[cAlpha*x + 0]);
-                    frame_ptr[cFrame*x + 1] = blendValues(frame_ptr[cFrame*x + 1], alpha_ptr[cAlpha*x + 1]);
-                    frame_ptr[cFrame*x + 2] = blendValues(frame_ptr[cFrame*x + 2], alpha_ptr[cAlpha*x + 2]);
                 }
             }
         }
@@ -83,43 +125,39 @@ uchar Memorize::blendValues(uchar c1, uchar c2)
 
 void Memorize::stepQueueManual(Image *frame)
 {
-    addFrameToQueue(queueManual, frame);
+    addFrameToQueue(&queueManual, frame);
     if (queueManual.size() < queueManualLength)
-        addFrameToQueue(queueManual, frame);
+        addFrameToQueue(&queueManual, frame);
 
     if (queueManual.size() > queueManualLength) {
         delete queueManual.dequeue();
     }
-
-    //qDebug() << "!!";
 
     if (queueManual.size()) {
         Image *store = queueManual.dequeue();
         mergeFrames(frame, store);
         delete store;
     }
+}
 
-/*
-    queueManual.enqueue(new Image(frame));
-    if (queueManual.size() < queueManualLength)
-        queueManual.enqueue(new Image(frame));
-
-    if (queueManual.size() > queueManualLength) {
-        delete queueManual.dequeue();
-    }
-*/
-
-/*
-    if (queueManual.size()) {
-        Image *store = queueManual.dequeue();
-        uchar* frame_ptr = (uchar*) (frame->data());
-        uchar* store_ptr = (uchar*) (store->data());
-        for (int i=0; i<frame->size(); i++) {
-            uint i1 = (uint)(frame_ptr[i]);
-            uint i2 = (uint)(store_ptr[i]);
-            frame->data()[i] = (i1 + i2) / 2;
+void Memorize::stepQueueRecord(Image *frame)
+{
+    for (int i=0; i<COUNT_RECORDS; i++) {
+        if (records.at(i).isRecord) {
+            addFrameToQueue(&records[i].queue, frame);
         }
-        delete store;
+        else if (records.at(i).repeats != 0) {
+            int playFrame = records.at(i).playFrame;
+            if (playFrame >= records.at(i).queue.size()) {
+                records[i].playFrame = 0;
+                if (records.at(i).repeats > 0)
+                    records[i].repeats -= 1;
+            }
+            else {
+                Image *store = records.at(i).queue.at(playFrame);
+                mergeFrames(frame, store);
+                records[i].playFrame++;
+            }
+        }
     }
-*/
 }

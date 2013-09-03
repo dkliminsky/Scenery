@@ -18,6 +18,7 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     Processes &processes = manager->getProcesses();
     Scenes &scenes = manager->getScenes();
 
+    // Inputs
     ui->tableInputs->setRowCount(inputs.size());
     for (int i=0; i<inputs.size(); i++) {
         QTableWidgetItem *item = new QTableWidgetItem(tr("Camera %1").arg(i+1));
@@ -25,6 +26,7 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     }
     ui->tableInputs->resizeColumnsToContents();
 
+    // Processes
     ui->tableProcesses->setRowCount(processes.size());
     for (int i=0; i<processes.size(); i++) {
         QTableWidgetItem *item = new QTableWidgetItem(processes.at(i)->getName());
@@ -35,6 +37,7 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     connect(ui->tableProcesses, &QTableWidget::cellDoubleClicked,
             this, &MainWindow::slotEditProcess);
 
+    // Scenes
     ui->tableScenes->setRowCount(scenes.size());
     for (int i=0; i<scenes.size(); i++) {
         QTableWidgetItem *item = new QTableWidgetItem(scenes.at(i)->name());
@@ -45,6 +48,7 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     connect(ui->tableScenes, &QTableWidget::cellDoubleClicked,
             this, &MainWindow::slotChangeScene);
 
+    // Scenes controls
     for(int i=0; i<scenes.size(); i++) {
         Scene *scene = scenes.at(i);
 
@@ -53,41 +57,32 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
         layout->setContentsMargins(0, 0, 0, 0);
         //layout->setSpacing(3);
 
-        int n = 0;
-
-        for (int j=0; j<scene->actions().size(); j++) {
-            ActionButton *action = scene->actions().at(j);
-            layout->addWidget(new QLabel(action->name()), n, 0);
-            layout->addWidget(new ActionButtonWidget(scenes.at(i), action->id()), n, 1);
-            n++;
-        }
-
         for (int j=0; j<scene->controls().size(); j++) {
             IControl *control = scene->controls().at(j);
-            layout->addWidget(new QLabel(control->name()), n, 0);
+            layout->addWidget(new QLabel(control->name()), j, 0);
             switch(control->type()) {
             case IControl::ControlBool:
-                layout->addWidget(new ControlBoolWidget(static_cast<ControlBool *>(control)), n, 1);
+                layout->addWidget(new ControlBoolWidget(static_cast<ControlBool *>(control)), j, 1);
                 break;
             case IControl::ControlInt:
-                layout->addWidget(new ControlIntWidget(static_cast<ControlInt *>(control)), n, 1);
+                layout->addWidget(new ControlIntWidget(static_cast<ControlInt *>(control)), j, 1);
                 break;
             case IControl::ControlDouble:
-                layout->addWidget(new ControlDoubleWidget(static_cast<ControlDouble *>(control)), n, 1);
+                layout->addWidget(new ControlDoubleWidget(static_cast<ControlDouble *>(control)), j, 1);
                 break;
             case IControl::ControlString:
-                layout->addWidget(new ControlStringWidget(static_cast<ControlString *>(control)), n, 1);
+                layout->addWidget(new ControlStringWidget(static_cast<ControlString *>(control)), j, 1);
                 break;
             case IControl::ControlColor:
-                layout->addWidget(new ControlColorWidget(static_cast<ControlColor *>(control)), n, 1);
+                layout->addWidget(new ControlColorWidget(static_cast<ControlColor *>(control)), j, 1);
                 break;
             case IControl::ControlImage:
+                // !!
                 break;
             case IControl::ControlButton:
                 layout->addWidget(new ControlButtonWidget(scenes.at(i),
-                                  static_cast<ControlButton *>(control)));
+                                  static_cast<ControlButton *>(control)), j, 1);
             }
-            n++;
         }
 
         if (layout->count() > 0)
@@ -97,8 +92,6 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
         ui->controlsStackedWidget->addWidget(widget);
     }
 
-//        if (scene->getLayout()->count() > 0)
-//            scene->getLayout()->setRowStretch(scene->getLayout()->count()-1, 1);
 
     connect(ui->actionFullScreen, SIGNAL(toggled(bool)), SLOT(setFullScreen(bool)));
 

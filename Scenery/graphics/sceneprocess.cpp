@@ -48,3 +48,10 @@ Image *SceneProcess::image() {
     }
     return &_image;
 }
+
+void SceneProcess::command(QString name)
+{
+    if (view->datas()->size() > n) {
+        view->datas()->at(n)->setCommand(name);
+    }
+}

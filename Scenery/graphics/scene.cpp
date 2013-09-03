@@ -10,9 +10,6 @@ Scene::~Scene()
     for (int i=0; i<_images.size(); i++)
         delete _images[i];
 
-    for (int i=0; i<_actions.size(); i++)
-        delete _actions[i];
-
     for (int i=0; i<_controls.size(); i++)
         delete _controls[i];
 }
@@ -169,11 +166,6 @@ float Scene::angle(float x1, float y1, float x2, float y2)
 float Scene::pi()
 {
     return view->utils()->pi();
-}
-
-void Scene::button(int id, QString description)
-{
-    _actions += new ActionButton(id, description);
 }
 
 void Scene::button(QString description, int id, QString name)

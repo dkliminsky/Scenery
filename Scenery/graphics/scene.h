@@ -10,8 +10,6 @@
 #include "view.h"
 #include "sceneprocess.h"
 
-#include "actions/actionbutton.h"
-
 #include "controls/controlbool.h"
 #include "controls/controlint.h"
 #include "controls/controldouble.h"
@@ -22,7 +20,6 @@
 
 typedef QVector<Image *> Images;
 typedef QVector<IControl *> Controls;
-typedef QVector<ActionButton *> Actions;
 
 class Scene: public SScene
 {
@@ -84,8 +81,6 @@ public:
 
     // Control function
     void signal(int id);
-    void button(int id, QString description);
-
     void button(QString description, int id, QString name);
     void button(QString description, int id1, QString name1,
                                      int id2, QString name2);
@@ -106,9 +101,8 @@ public:
     // Process function
     SceneProcess *process(int n);
 
-    // Other
+    // Controls
     Controls &controls() { return _controls; }
-    Actions &actions() { return _actions; }
 
 protected:
     void virtual setupEvent(void *view);
@@ -121,7 +115,6 @@ private:
 
     Images _images;
     Controls _controls;
-    Actions _actions;
 
     Images imagesBuffer;
 };

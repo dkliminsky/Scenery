@@ -2,8 +2,8 @@
 
 ManagerDance::ManagerDance()
 {
-    int cameraWidth = 640;
-    int cameraHeight = 480;
+    int cameraWidth = 320;
+    int cameraHeight = 240;
 
     inputs += new Input(Input::Camera, "",
                         cameraWidth, cameraHeight);
@@ -29,7 +29,7 @@ ManagerDance::ManagerDance()
     scenes += new Skeleton();
 
     views.at(0)->setScene(scenes.at(0));
-    startTimer(17);
+    startTimer(28);
 }
 
 void ManagerDance::timerEvent(QTimerEvent *)

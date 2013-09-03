@@ -21,6 +21,8 @@ public:
     SeqAreas &getSeqAreas() { return seqAreasResult; }
     Contours &getContours() { return contoursResult; }
 
+    virtual void setCommand(QString) {}
+
 protected:
     QString name;
 

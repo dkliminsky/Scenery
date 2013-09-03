@@ -252,6 +252,11 @@ void ProcessWindow::loadParam()
             ui->houghCirclesMaxRadiusSpin->setValue( settings.value("MaxRadius").toInt() );
         settings.endGroup();
 
+        settings.beginGroup("/Filters");
+            ui->filtersHitErodeSpinBox->setValue( settings.value("HitErode").toInt() );
+            ui->filtersHitDilateSpinBox->setValue( settings.value("HitDilate").toInt() );
+        settings.endGroup();
+
         settings.beginGroup("/Clustering");
             mode = settings.value("/Mode").toString();
             if ( mode == "None" ) {
@@ -358,6 +363,11 @@ void ProcessWindow::saveParam()
             settings.setValue("Param2", ui->houghCirclesParam2Slider->value());
             settings.setValue("MinRadius", ui->houghCirclesMinRadiusSpin->value());
             settings.setValue("MaxRadius", ui->houghCirclesMaxRadiusSpin->value());
+        settings.endGroup();
+
+        settings.beginGroup("/Filters");
+            settings.setValue("HitErode", ui->filtersHitErodeSpinBox->value());
+            settings.setValue("HitDilate", ui->filtersHitDilateSpinBox->value());
         settings.endGroup();
 
         settings.beginGroup("/Clustering");
@@ -509,7 +519,6 @@ void ProcessWindow::slotSubtractionHitClear()
 {
     process->subtractionHitClear();
 }
-
 
 void ProcessWindow::slotFilterHit()
 {

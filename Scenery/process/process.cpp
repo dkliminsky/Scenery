@@ -162,6 +162,8 @@ void Process::step()
     QTime time;
     time.start();
 
+    realizeCommands();
+
     switch (mode) {
     case ProcessNone:
         processSubtractionImage();
@@ -232,6 +234,27 @@ void Process::copyData()
     areasResult = areas;
     seqAreasResult = *seqAreasLast;
     contoursResult = contours;
+}
+
+void Process::setCommand(QString name)
+{
+    Command command;
+    command.name = name;
+    commands.push_back(command);
+}
+
+void Process::realizeCommands()
+{
+    for (unsigned int i=0; i<commands.size(); i++) {
+        Command &command = commands.at(i);
+        if (command.name == "SubtractionImageStart") {
+            this->subtractionImageStart();
+        }
+        else if (command.name == "SubtractionImageStop") {
+            this->subtractionImageStop();
+        }
+    }
+    commands.clear();
 }
 
 void Process::setImage(IplImage *image)
@@ -811,8 +834,10 @@ void Process::findHoughCircles()
 void Process::processSubtractionImage()
 {
     if ( subtractionImageData.commandStop ) {
-        if (backSubtractor)
+        if (backSubtractor) {
             delete backSubtractor;
+            backSubtractor = 0;
+        }
         subtractionImageData.commandStop = false;
     }
 
