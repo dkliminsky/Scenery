@@ -8,6 +8,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+#include "../threads/saveimage.h"
+
 class Image
 {
 public:
@@ -36,9 +38,12 @@ public:
     void save(const QString &fileName);
 
 private:
+    cv::Mat mat;
     IplImage *_iplImage;
     QString _fileName;
     bool isShare;
+
+    SaveImage saveImageThread;
 
     GLuint bindId;
     int bindWidth;

@@ -21,6 +21,20 @@ private:
 
     int queueManualLength;
     QQueue<Image *> queueManual;
+    QVector<Image *> vectorMulti;
+
+    struct MultiRecord {
+        //QQueue<Image *> queue;
+        bool isRecord;
+        bool isPlay;
+        int count;
+        int record;
+        int play;
+
+        int repeats;
+//        int playFrame;
+//        int saveFrame;
+    } mRecord;
 
     struct Record {
         //QQueue<Image *> queue;
@@ -37,10 +51,12 @@ private:
 
     void mergeFrames(Image *frame, Image *alpha);
     void blendFrames(Image *frame, Image *alpha);
+    void mulHit(Image *hit, Image *alpha);
 
     uchar blendValues(uchar c1, uchar c2);
 
     void stepQueueManual(Image *frame);
+    void stepQueueMultiRecord(Image *frame);
     void stepQueueRecord(Image *frame);
 
 };

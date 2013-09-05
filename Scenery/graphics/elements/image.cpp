@@ -114,30 +114,24 @@ void Image::create(int width, int height, int channels)
 
 void Image::load(const QString &fileName)
 {
-    QImage img(fileName);
-    _fileName = fileName;
-    int w = img.width();
-    int h = img.height();
-    int c = 4; // !!
-    create(w, h, c);
-
-    for (int j=0; j<h; j++) {
-        for (int i=0; i<w; i++) {
-            _iplImage->imageData[j*w*4+i*4+0] = (char)qBlue(img.pixel(i, j));
-            _iplImage->imageData[j*w*4+i*4+1] = (char)qGreen(img.pixel(i, j));
-            _iplImage->imageData[j*w*4+i*4+2] = (char)qRed(img.pixel(i, j));
-            _iplImage->imageData[j*w*4+i*4+3] = (char)qAlpha(img.pixel(i, j));
-        }
-    }
+    mat = cv::imread(fileName.toStdString(), CV_LOAD_IMAGE_UNCHANGED);
+    //IplImage ipl = mat;
+    create(mat.cols, mat.rows, mat.channels());
+    _iplImage->imageData =  reinterpret_cast<char *>(mat.data);
+    //cvCopy(&ipl, _iplImage);
 }
 
 void Image::save(const QString &fileName)
 {
     cv::Mat mat(_iplImage);
+    SaveImage::saveImage(mat, fileName);
+
+    /*
     std::vector<int> compression_params;
     compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
     compression_params.push_back(3);
     cv::imwrite(fileName.toStdString(), mat, compression_params);
+    */
 }
 
 void Image::init()

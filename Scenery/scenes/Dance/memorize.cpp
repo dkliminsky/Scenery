@@ -4,6 +4,14 @@ Memorize::Memorize()
 {
     control(queueManualLength=0, "Queue Length", 0, 500);
     button("Common", 1000, "Start Subtraction", 1001, "Stop Subtraction");
+    button("MultiRecord", 1100, "Record", 1101, "Stop", 1102, "Repeat", 1103, "Forewer");
+
+    mRecord.isRecord = false;
+    mRecord.isPlay = false;
+    mRecord.count = 0;
+    mRecord.play = 0;
+    mRecord.record = 0;
+    mRecord.repeats = 0;
 
     for (int i=0; i<COUNT_RECORDS; i++) {
         Record record;
@@ -27,7 +35,8 @@ void Memorize::paint()
         size(w, h);
 
         stepQueueManual(frame);
-        stepQueueRecord(frame);
+        stepQueueMultiRecord(frame);
+        //stepQueueRecord(frame);
 
         frame->bind();
         color(1,1,1,1);
@@ -41,8 +50,29 @@ void Memorize::action(int id)
     if ( id == 1000 ) {
         process(0)->command("SubtractionImageStart");
     }
-    if ( id == 1001 ) {
+    else if ( id == 1001 ) {
         process(0)->command("SubtractionImageStop");
+    }
+    else if ( id == 1100 ) {
+        mRecord.isRecord = true;
+        mRecord.record = mRecord.play;
+    }
+    else if ( id == 1101 ) {
+        mRecord.isRecord = false;
+        mRecord.isPlay = false;
+        mRecord.play = 0;
+        mRecord.record = 0;
+        mRecord.repeats = 0;
+    }
+    else if ( id == 1102 ) {
+        mRecord.isPlay = true;
+        mRecord.play = 0;
+        mRecord.repeats = 1;
+    }
+    else if ( id == 1103 ) {
+        mRecord.isPlay = true;
+        mRecord.play = 0;
+        mRecord.repeats = -1;
     }
     else if (id < 1000) {
         int command = id % 10;
@@ -111,15 +141,29 @@ void Memorize::saveFrame(int nQueue, int nFrame, Image *frame, Image *hit)
         }
     }
 
-    QString file = QString("g:/memorize/%1/frame-%2.png").arg(nQueue).arg(nFrame);
-    store->save(file);
-    delete store;
+    while (nFrame >= vectorMulti.size()) {
+        vectorMulti.append(0);
+    }
+
+    if (vectorMulti.at(nFrame)) {
+        delete vectorMulti[nFrame];
+    }
+    vectorMulti[nFrame] = new Image(frame);
+
+    //QString file = QString("g:/memorize/%1/frame-%2.png").arg(nQueue).arg(nFrame);
+    //store->save(file);
+    //delete store;
 }
 
 Image *Memorize::loadFrame(int nQueue, int nFrame)
 {
-    QString file = QString("g:/memorize/%1/frame-%2.png").arg(nQueue).arg(nFrame);
-    return new Image(file);
+    Q_ASSERT(nFrame < vectorMulti.size());
+    Q_ASSERT(vectorMulti.at(nFrame));
+
+    return vectorMulti[nFrame];
+
+    //QString file = QString("g:/memorize/%1/frame-%2.png").arg(nQueue).arg(nFrame);
+    //return new Image(file);
 }
 
 void Memorize::mergeFrames(Image *frame, Image *alpha)
@@ -165,6 +209,23 @@ void Memorize::blendFrames(Image *frame, Image *alpha)
     }
 }
 
+void Memorize::mulHit(Image *hit, Image *alpha)
+{
+    Q_ASSERT(alpha->channels() >= 3);
+    Q_ASSERT(hit->channels() == 1);
+
+    int cAlpha = alpha->channels();
+
+    for( int y=0; y<h; y++ ) {
+        uchar*   hit_ptr = (uchar*) (hit->data()   + y *   hit->step());
+        uchar* alpha_ptr = (uchar*) (alpha->data() + y * alpha->step());
+        for( int x=0; x<w; x++ ) {
+            hit_ptr[x] = hit_ptr[x] | alpha_ptr[cAlpha*x + 3];
+
+        }
+    }
+}
+
 uchar Memorize::blendValues(uchar c1, uchar c2)
 {
     uint i1 = (uint)(c1);
@@ -187,6 +248,43 @@ void Memorize::stepQueueManual(Image *frame)
         Image *store = queueManual.dequeue();
         blendFrames(frame, store);
         delete store;
+    }
+}
+
+void Memorize::stepQueueMultiRecord(Image *frame)
+{
+    Image *hit = process(0)->hit();
+
+    if (mRecord.isPlay) {
+        if (mRecord.play >= mRecord.count) {
+            mRecord.play = 0;
+            if (mRecord.repeats > 0) {
+                mRecord.repeats--;
+            }
+            else if (mRecord.repeats == 0) {
+                mRecord.isPlay = false;
+            }
+        }
+    }
+
+    if (mRecord.isPlay) {
+        Image *store = loadFrame(0, mRecord.play);
+        mergeFrames(frame, store);
+
+        if (mRecord.isRecord) {
+            mulHit(hit, store);
+        }
+
+        //delete store;
+        mRecord.play++;
+    }
+
+    if (mRecord.isRecord) {
+        saveFrame(0, mRecord.record, frame, hit);
+        mRecord.record++;
+        if (mRecord.count < mRecord.record) {
+            mRecord.count = mRecord.record;
+        }
     }
 }
 

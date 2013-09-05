@@ -6,8 +6,8 @@ ManagerDance::ManagerDance()
     // 480p 854x480
     // 360p 640x360
 
-    int cameraWidth = 320;
-    int cameraHeight = 240;
+    int cameraWidth = 640;
+    int cameraHeight = 360;
 
     inputs += new Input(Input::Camera, "",
                         cameraWidth, cameraHeight);
@@ -58,5 +58,6 @@ void ManagerDance::timerEvent(QTimerEvent *)
         }
         inputs[0]->start();
     }
+
     views.at(0)->updateGL();
 }
