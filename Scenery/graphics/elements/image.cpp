@@ -131,6 +131,15 @@ void Image::load(const QString &fileName)
     }
 }
 
+void Image::save(const QString &fileName)
+{
+    cv::Mat mat(_iplImage);
+    std::vector<int> compression_params;
+    compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
+    compression_params.push_back(3);
+    cv::imwrite(fileName.toStdString(), mat, compression_params);
+}
+
 void Image::init()
 {
     bindId = 0;

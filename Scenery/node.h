@@ -10,6 +10,8 @@ public:
     Node(QString name);
 
     const QString &getName() { return name; }
+    bool getIsUpdate() { return isUpdate; }
+    void setIsUpdate(bool x) { isUpdate = x; }
 
     int getWidth() { return width; }
     int getHeight() { return height; }
@@ -25,6 +27,7 @@ public:
 
 protected:
     QString name;
+    bool isUpdate;
 
     int width;
     int height;

@@ -2,7 +2,7 @@
 
 Memorize::Memorize()
 {
-    control(queueManualLength=20, "Queue Length", 0, 999);
+    control(queueManualLength=0, "Queue Length", 0, 500);
     button("Common", 1000, "Start Subtraction", 1001, "Stop Subtraction");
 
     for (int i=0; i<COUNT_RECORDS; i++) {
@@ -20,18 +20,20 @@ Memorize::Memorize()
 
 void Memorize::paint()
 {
-    w = process(0)->width();
-    h = process(0)->height();
-    Image *frame = process(0)->image();
-    size(w, h);
+    if (process(0)->isUpdate()) {
+        w = process(0)->width();
+        h = process(0)->height();
+        Image *frame = process(0)->image();
+        size(w, h);
 
-    stepQueueManual(frame);
-    stepQueueRecord(frame);
+        stepQueueManual(frame);
+        stepQueueRecord(frame);
 
-    frame->bind();
-    color(1,1,1,1);
-    image(frame, w/2, h/2, w, h);
-    flush();
+        frame->bind();
+        color(1,1,1,1);
+        image(frame, w/2, h/2, w, h);
+        flush();
+    }
 }
 
 void Memorize::action(int id)
@@ -45,12 +47,9 @@ void Memorize::action(int id)
     else if (id < 1000) {
         int command = id % 10;
         int n = (id - command) / 10;
-        qDebug() << id << n << command;
         if (command == 0) {
-            while (records.at(n).queue.size()) {
-                delete records[n].queue.dequeue();
-            }
             records[n].isRecord = true;
+            records[n].saveFrame = 0;
             records[n].playFrame = 0;
         }
         else if (command == 1) {
@@ -92,6 +91,37 @@ void Memorize::addFrameToQueue(QQueue<Image *> *queue, Image *frame)
     queue->enqueue(store);
 }
 
+void Memorize::saveFrame(int nQueue, int nFrame, Image *frame, Image *hit)
+{
+    Q_ASSERT(frame->channels() == 3);
+    Q_ASSERT(hit->channels() == 1);
+
+    Image *store = new Image(w, h, 4);
+    int cFrame = frame->channels();
+    int cStore = store->channels();
+    for( int y=0; y<h; y++ ) {
+        uchar*   hit_ptr = (uchar*) (hit->data()   + y * hit->step());
+        uchar* frame_ptr = (uchar*) (frame->data() + y * frame->step());
+        uchar* store_ptr = (uchar*) (store->data() + y * store->step());
+        for( int x=0; x<w; x++ ) {
+            store_ptr[cStore*x + 0] = frame_ptr[cFrame*x + 0];
+            store_ptr[cStore*x + 1] = frame_ptr[cFrame*x + 1];
+            store_ptr[cStore*x + 2] = frame_ptr[cFrame*x + 2];
+            store_ptr[cStore*x + 3] = hit_ptr[x];
+        }
+    }
+
+    QString file = QString("g:/memorize/%1/frame-%2.png").arg(nQueue).arg(nFrame);
+    store->save(file);
+    delete store;
+}
+
+Image *Memorize::loadFrame(int nQueue, int nFrame)
+{
+    QString file = QString("g:/memorize/%1/frame-%2.png").arg(nQueue).arg(nFrame);
+    return new Image(file);
+}
+
 void Memorize::mergeFrames(Image *frame, Image *alpha)
 {
     Q_ASSERT(alpha->channels() == 4);
@@ -116,6 +146,25 @@ void Memorize::mergeFrames(Image *frame, Image *alpha)
     }
 }
 
+void Memorize::blendFrames(Image *frame, Image *alpha)
+{
+    Q_ASSERT(alpha->channels() >= 3);
+    Q_ASSERT(frame->channels() >= 3);
+
+    int cFrame = frame->channels();
+    int cAlpha = alpha->channels();
+
+    for( int y=0; y<h; y++ ) {
+        uchar* frame_ptr = (uchar*) (frame->data() + y * frame->step());
+        uchar* alpha_ptr = (uchar*) (alpha->data() + y * alpha->step());
+        for( int x=0; x<w; x++ ) {
+            frame_ptr[cFrame*x + 0] = blendValues(frame_ptr[cFrame*x + 0], alpha_ptr[cAlpha*x + 0]);
+            frame_ptr[cFrame*x + 1] = blendValues(frame_ptr[cFrame*x + 1], alpha_ptr[cAlpha*x + 1]);
+            frame_ptr[cFrame*x + 2] = blendValues(frame_ptr[cFrame*x + 2], alpha_ptr[cAlpha*x + 2]);
+        }
+    }
+}
+
 uchar Memorize::blendValues(uchar c1, uchar c2)
 {
     uint i1 = (uint)(c1);
@@ -126,8 +175,9 @@ uchar Memorize::blendValues(uchar c1, uchar c2)
 void Memorize::stepQueueManual(Image *frame)
 {
     addFrameToQueue(&queueManual, frame);
-    if (queueManual.size() < queueManualLength)
+    if (queueManual.size() < queueManualLength) {
         addFrameToQueue(&queueManual, frame);
+    }
 
     if (queueManual.size() > queueManualLength) {
         delete queueManual.dequeue();
@@ -135,7 +185,7 @@ void Memorize::stepQueueManual(Image *frame)
 
     if (queueManual.size()) {
         Image *store = queueManual.dequeue();
-        mergeFrames(frame, store);
+        blendFrames(frame, store);
         delete store;
     }
 }
@@ -143,19 +193,23 @@ void Memorize::stepQueueManual(Image *frame)
 void Memorize::stepQueueRecord(Image *frame)
 {
     for (int i=0; i<COUNT_RECORDS; i++) {
+        int save = records.at(i).saveFrame;
+        int play = records.at(i).playFrame;
         if (records.at(i).isRecord) {
-            addFrameToQueue(&records[i].queue, frame);
+            //addFrameToQueue(&records[i].queue, frame);
+            saveFrame(i, save, frame, process(0)->hit());
+            records[i].saveFrame += 1;
         }
         else if (records.at(i).repeats != 0) {
-            int playFrame = records.at(i).playFrame;
-            if (playFrame >= records.at(i).queue.size()) {
+            if (play >= save) {
                 records[i].playFrame = 0;
                 if (records.at(i).repeats > 0)
                     records[i].repeats -= 1;
             }
             else {
-                Image *store = records.at(i).queue.at(playFrame);
+                Image *store = loadFrame(i, play);
                 mergeFrames(frame, store);
+                delete store;
                 records[i].playFrame++;
             }
         }

@@ -4,6 +4,13 @@ SceneProcess::SceneProcess()
 {
 }
 
+bool SceneProcess::isUpdate()
+{
+    if (view->datas()->size() > n)
+        return view->datas()->at(n)->getIsUpdate();
+    else return false;
+}
+
 int SceneProcess::width() {
     if (view->datas()->size() > n)
         return view->datas()->at(n)->getWidth();

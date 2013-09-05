@@ -5,6 +5,8 @@
 #include <QImage>
 #include <QString>
 #include "opencv2/core/core_c.h"
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 class Image
 {
@@ -29,7 +31,9 @@ public:
     void bind();
     void set(IplImage *_iplImage);
     void create(int width, int height, int channels);
+
     void load(const QString &fileName);
+    void save(const QString &fileName);
 
 private:
     IplImage *_iplImage;

@@ -147,6 +147,10 @@ public:
         int history;
         float varThreshold;
         bool bShadowDetection;
+
+        int nmixtures;
+        double backgroundRatio;
+        double noiseSigma;
     };
 
     void setSubtractionImageParam(SubtractionImageParam param) { subtractionImageParam = param; }
@@ -335,6 +339,7 @@ private:
         bool commandClear;
     } subtractionHitData;
 
+    //cv::BackgroundSubtractor *backSubtractor;
     cv::BackgroundSubtractorMOG2 *backSubtractor;
     SubtractionImageParam subtractionImageParam;
 

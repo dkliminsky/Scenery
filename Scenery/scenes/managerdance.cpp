@@ -2,6 +2,10 @@
 
 ManagerDance::ManagerDance()
 {
+    // 720p 1280x720
+    // 480p 854x480
+    // 360p 640x360
+
     int cameraWidth = 320;
     int cameraHeight = 240;
 
@@ -29,7 +33,7 @@ ManagerDance::ManagerDance()
     scenes += new Skeleton();
 
     views.at(0)->setScene(scenes.at(0));
-    startTimer(28);
+    startTimer(32);
 }
 
 void ManagerDance::timerEvent(QTimerEvent *)

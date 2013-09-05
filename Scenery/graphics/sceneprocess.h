@@ -8,6 +8,7 @@ class SceneProcess
 public:
     SceneProcess();
 
+    bool isUpdate();
     int width();
     int height();
     Areas &areas();

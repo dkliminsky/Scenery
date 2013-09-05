@@ -117,7 +117,7 @@ void Process::setDefaultParam()
     houghCirclesParam.maxRadius = 0;
 
     // Subtraction
-    subtractionImageParam.history = 3600;
+    subtractionImageParam.history = 15000;
     subtractionImageParam.varThreshold = 16;
     subtractionImageParam.bShadowDetection = false;
 
@@ -227,13 +227,14 @@ void Process::step()
 
 void Process::copyData()
 {
-    //imageResult = image;
     if (image)
         cvCopy(image, imageResult);
     cvCopy(hitImage, hitResult);
     areasResult = areas;
     seqAreasResult = *seqAreasLast;
     contoursResult = contours;
+
+    isUpdate = true;
 }
 
 void Process::setCommand(QString name)
@@ -247,6 +248,7 @@ void Process::realizeCommands()
 {
     for (unsigned int i=0; i<commands.size(); i++) {
         Command &command = commands.at(i);
+        qDebug() << "Execute command:" << command.name;
         if (command.name == "SubtractionImageStart") {
             this->subtractionImageStart();
         }
