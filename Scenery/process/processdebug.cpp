@@ -72,8 +72,8 @@ void ProcessDebug::show(IplImage *image, Process *process)
     drawTransform(debug, process, CV_RGB(255,255,0) );
 
     cvShowImage(name.toStdString().c_str(), debug);
-    cvShowImage("Hit", process->getHit());
-    cvShowImage("Back", process->getBack());
+    //cvShowImage("Hit", process->getHit());
+    //cvShowImage("Back", process->getBack());
 }
 
 void ProcessDebug::drawAreas(IplImage *image, Areas &areas, CvScalar color, int type)

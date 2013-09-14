@@ -3,43 +3,43 @@
 
 Image::Image()
 {
-    _iplImage = 0;
-    isShare = false;
+    initDefault();
     create(0, 0, 4);
-    _fileName = "";
-    init();
 }
 
 Image::Image(Image *image)
 {
-    _iplImage = cvCloneImage(image->iplImage());
-    isShare = false;
-    _fileName = "";
-    init();
+    initDefault();
+    _mat = image->mat().clone();
 }
 
 Image::Image(int width, int height, int channels)
 {
-    _iplImage = 0;
-    isShare = false;
+    initDefault();
     create(width, height, channels);
-    _fileName = "";
-    init();
 }
 
 Image::Image(const QString &fileName)
 {
-    _iplImage = 0;
-    isShare = false;
+    initDefault();
     load(fileName);
-    init();
 }
 
 Image::~Image()
 {
-    if (!isShare) {
-        cvReleaseImage(&_iplImage);
+    if (saveImageThread) {
+        saveImageThread->wait();
     }
+}
+
+void Image::set(IplImage *ipl)
+{
+    // Тормозит!
+    //cv::Mat newMat(ipl);
+    //_mat = newMat.clone();
+
+    create(ipl->width, ipl->height, ipl->nChannels);
+    _mat.data = reinterpret_cast<uchar *>(ipl->imageData);
 }
 
 void Image::bind()
@@ -84,7 +84,7 @@ void Image::bind()
             bindHeight = height();
             bindChannels = channels();
 
-            qDebug() << "Bind Image" << gl_id;
+            qDebug() << "Bind Image" << gl_id << width() << height() << channels();
         }
         else {
             glEnable(GL_TEXTURE_2D);
@@ -96,35 +96,29 @@ void Image::bind()
     }
 }
 
-void Image::set(IplImage *iplImage)
-{
-    if (!isShare) {
-        cvReleaseImage(&this->_iplImage);
-        isShare = true;
-    }
-    this->_iplImage = iplImage;
-}
-
 void Image::create(int width, int height, int channels)
 {
-    if (_iplImage)
-        cvReleaseImage(&_iplImage);
-    _iplImage = cvCreateImage(cvSize(width, height), IPL_DEPTH_8U, channels);
+    _mat.create(height, width, CV_8UC(channels));
 }
 
 void Image::load(const QString &fileName)
 {
-    mat = cv::imread(fileName.toStdString(), CV_LOAD_IMAGE_UNCHANGED);
+    LoadImageThread::loadImage(_mat, fileName);
+
+
+    //_mat = cv::imread(fileName.toStdString(), CV_LOAD_IMAGE_UNCHANGED);
+
+
     //IplImage ipl = mat;
-    create(mat.cols, mat.rows, mat.channels());
-    _iplImage->imageData =  reinterpret_cast<char *>(mat.data);
+    //create(mat.cols, mat.rows, mat.channels());
+    //_iplImage->imageData =  reinterpret_cast<char *>(mat.data);
     //cvCopy(&ipl, _iplImage);
 }
 
 void Image::save(const QString &fileName)
 {
-    cv::Mat mat(_iplImage);
-    SaveImage::saveImage(mat, fileName);
+    //cv::Mat mat(_iplImage);
+    SaveImageThread::saveImage(_mat, fileName);
 
     /*
     std::vector<int> compression_params;
@@ -134,8 +128,28 @@ void Image::save(const QString &fileName)
     */
 }
 
-void Image::init()
+void Image::saveThread(const QString &fileName)
 {
+    if (saveImageThread) {
+        saveImageThread->wait();
+        delete saveImageThread;
+    }
+    saveImageThread = new SaveImageThread(_mat, fileName);
+    saveImageThread->start();
+}
+
+void Image::saveWait()
+{
+    if (saveImageThread) {
+        saveImageThread->wait();
+    }
+}
+
+void Image::initDefault()
+{
+    _fileName = "";
+    saveImageThread = 0;
+
     bindId = 0;
     bindWidth = 0;
     bindHeight = 0;

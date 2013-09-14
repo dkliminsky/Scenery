@@ -232,6 +232,32 @@ void Scene::button(QString description, int id1, QString name1,
     _controls += new ControlButton(description, buttons);
 }
 
+void Scene::button(QString description, int id1, QString name1,
+                                        int id2, QString name2,
+                                        int id3, QString name3,
+                                        int id4, QString name4,
+                                        int id5, QString name5)
+{
+    QVector<ControlButton::Button> buttons;
+    ControlButton::Button button;
+    button.id = id1;
+    button.name = name1;
+    buttons += button;
+    button.id = id2;
+    button.name = name2;
+    buttons += button;
+    button.id = id3;
+    button.name = name3;
+    buttons += button;
+    button.id = id4;
+    button.name = name4;
+    buttons += button;
+    button.id = id5;
+    button.name = name5;
+    buttons += button;
+    _controls += new ControlButton(description, buttons);
+}
+
 void Scene::control(int &x, QString description, int min, int max, int step)
 {
     _controls += new ControlInt(x, description, min, max, step);

@@ -28,6 +28,8 @@ private:
     Areas _areas;
     SeqAreas _seqArea;
     Contours _contour;
+    cv::Mat matImage;
+    cv::Mat matHit;
     Image _hit;
     Image _image;
 };

@@ -97,7 +97,7 @@ void View::paintGL()
 
     // Пометим все данные как не обновленные, на случай того,
     // что до следующего цикла графики они не успеют обновиться
-    for (unsigned int i=0; i<_datas.size(); i++) {
+    for (int i=0; i<_datas.size(); i++) {
         _datas.at(i)->setIsUpdate(false);
     }
 

@@ -23,8 +23,8 @@ void Shift::paint()
     size(width, height);
 
     Image *imageStream = process(0)->image();
-    char *dShift  = imageShift->data();
-    char *dStream = imageStream->data();
+    uchar *dShift  = imageShift->data();
+    uchar *dStream = imageStream->data();
 
     for (int j=0; j<imageShift->height(); j++) {
         for (int i=1; i<imageShift->width(); i++) {

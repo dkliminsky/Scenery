@@ -4,11 +4,11 @@
 #include <QGLFunctions>
 #include <QImage>
 #include <QString>
-#include "opencv2/core/core_c.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "../threads/saveimage.h"
+#include "../threads/saveimagethread.h"
+#include "../threads/loadimagethread.h"
 
 class Image
 {
@@ -19,38 +19,40 @@ public:
     Image(const QString &fileName);
     ~Image();
 
-    int width() { return _iplImage->width; }
-    int height() { return _iplImage->height; }
-    int channels() { return _iplImage->nChannels; }
-    int step() { return _iplImage->widthStep; }
+    int width() { return _mat.cols; }
+    int height() { return _mat.rows; }
+    int channels() { return _mat.channels(); }
+    int step() { return width() * channels(); }
     int size() { return width() * height() * channels(); }
-    char *data() { return _iplImage->imageData; }
-    IplImage *iplImage() { return _iplImage; }
+    uchar *data() { return _mat.data; }
+    cv::Mat &mat() { return _mat; }
 
     QString fileName() { return _fileName; }
     GLuint id() { return bindId; }
 
+    void set(IplImage *ipl);
     void bind();
-    void set(IplImage *_iplImage);
     void create(int width, int height, int channels);
 
     void load(const QString &fileName);
     void save(const QString &fileName);
 
-private:
-    cv::Mat mat;
-    IplImage *_iplImage;
-    QString _fileName;
-    bool isShare;
+    void saveThread(const QString &fileName);
+    void saveWait();
 
-    SaveImage saveImageThread;
+
+private:
+    cv::Mat _mat;
+    QString _fileName;
+
+    SaveImageThread *saveImageThread;
 
     GLuint bindId;
     int bindWidth;
     int bindHeight;
     int bindChannels;
 
-    void init();
+    void initDefault();
 };
 
 #endif // IMAGE_H

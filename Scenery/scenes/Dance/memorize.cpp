@@ -4,7 +4,9 @@ Memorize::Memorize()
 {
     control(queueManualLength=0, "Queue Length", 0, 500);
     button("Common", 1000, "Start Subtraction", 1001, "Stop Subtraction");
-    button("MultiRecord", 1100, "Record", 1101, "Stop", 1102, "Repeat", 1103, "Forewer");
+    button("MultiRecord", 1100, "Record", 1101, "Stop", 1102, "Repeat", 1103, "Forewer", 1104, "Break");
+    control(personDouble="None", "Person Double", QStringList() << "None" << "Left" << "Right");
+    control(displacement=0, "Displacement", 0, 20);
 
     mRecord.isRecord = false;
     mRecord.isPlay = false;
@@ -12,18 +14,7 @@ Memorize::Memorize()
     mRecord.play = 0;
     mRecord.record = 0;
     mRecord.repeats = 0;
-
-    for (int i=0; i<COUNT_RECORDS; i++) {
-        Record record;
-        record.isRecord = false;
-        record.repeats = 0;
-        record.playFrame = 0;
-        records += record;
-        button("Store", i*10 + 0, "Record",
-                        i*10 + 1, "Stop",
-                        i*10 + 2, "Repeat",
-                        i*10 + 3, "Forewer");
-    }
+    storeMulti = 0;
 }
 
 void Memorize::paint()
@@ -32,11 +23,18 @@ void Memorize::paint()
         w = process(0)->width();
         h = process(0)->height();
         Image *frame = process(0)->image();
+        Image *hit = process(0)->hit();
         size(w, h);
 
+        if (storeMulti) {
+            storeMulti->saveWait();
+            delete storeMulti;
+            storeMulti = 0;
+        }
+
         stepQueueManual(frame);
-        stepQueueMultiRecord(frame);
-        //stepQueueRecord(frame);
+        stepQueueMultiRecord(frame, hit);
+        stepPersonDouble(frame, hit);
 
         frame->bind();
         color(1,1,1,1);
@@ -53,50 +51,34 @@ void Memorize::action(int id)
     else if ( id == 1001 ) {
         process(0)->command("SubtractionImageStop");
     }
-    else if ( id == 1100 ) {
+    else if ( id == 1100 ) { // Record
         mRecord.isRecord = true;
         mRecord.record = mRecord.play;
     }
-    else if ( id == 1101 ) {
+    else if ( id == 1101 ) { // Stop
+        mRecord.isRecord = false;
+        mRecord.record = 0;
+    }
+    else if ( id == 1102 ) { // Repeat
+        //mRecord.isRecord = false;
+        mRecord.isPlay = true;
+        mRecord.play = 0;
+        mRecord.repeats = 1;
+        mRecord.countPlay = mRecord.count;
+    }
+    else if ( id == 1103 ) { // Forever
+        //mRecord.isRecord = false;
+        mRecord.isPlay = true;
+        mRecord.play = 0;
+        mRecord.repeats = -1;
+        mRecord.countPlay = mRecord.count;
+    }
+    else if ( id == 1104 ) { // Break
         mRecord.isRecord = false;
         mRecord.isPlay = false;
         mRecord.play = 0;
         mRecord.record = 0;
         mRecord.repeats = 0;
-    }
-    else if ( id == 1102 ) {
-        mRecord.isPlay = true;
-        mRecord.play = 0;
-        mRecord.repeats = 1;
-    }
-    else if ( id == 1103 ) {
-        mRecord.isPlay = true;
-        mRecord.play = 0;
-        mRecord.repeats = -1;
-    }
-    else if (id < 1000) {
-        int command = id % 10;
-        int n = (id - command) / 10;
-        if (command == 0) {
-            records[n].isRecord = true;
-            records[n].saveFrame = 0;
-            records[n].playFrame = 0;
-        }
-        else if (command == 1) {
-            records[n].isRecord = false;
-            records[n].playFrame = 0;
-            records[n].repeats = 0;
-        }
-        else if (command == 2) {
-            records[n].isRecord = false;
-            records[n].playFrame = 0;
-            records[n].repeats = 1;
-        }
-        else if (command == 3) {
-            records[n].isRecord = false;
-            records[n].playFrame = 0;
-            records[n].repeats = -1;
-        }
     }
 }
 
@@ -126,13 +108,13 @@ void Memorize::saveFrame(int nQueue, int nFrame, Image *frame, Image *hit)
     Q_ASSERT(frame->channels() == 3);
     Q_ASSERT(hit->channels() == 1);
 
-    Image *store = new Image(w, h, 4);
+    storeMulti = new Image(w, h, 4);
     int cFrame = frame->channels();
-    int cStore = store->channels();
+    int cStore = storeMulti->channels();
     for( int y=0; y<h; y++ ) {
         uchar*   hit_ptr = (uchar*) (hit->data()   + y * hit->step());
         uchar* frame_ptr = (uchar*) (frame->data() + y * frame->step());
-        uchar* store_ptr = (uchar*) (store->data() + y * store->step());
+        uchar* store_ptr = (uchar*) (storeMulti->data() + y * storeMulti->step());
         for( int x=0; x<w; x++ ) {
             store_ptr[cStore*x + 0] = frame_ptr[cFrame*x + 0];
             store_ptr[cStore*x + 1] = frame_ptr[cFrame*x + 1];
@@ -141,29 +123,14 @@ void Memorize::saveFrame(int nQueue, int nFrame, Image *frame, Image *hit)
         }
     }
 
-    while (nFrame >= vectorMulti.size()) {
-        vectorMulti.append(0);
-    }
-
-    if (vectorMulti.at(nFrame)) {
-        delete vectorMulti[nFrame];
-    }
-    vectorMulti[nFrame] = new Image(frame);
-
-    //QString file = QString("g:/memorize/%1/frame-%2.png").arg(nQueue).arg(nFrame);
-    //store->save(file);
-    //delete store;
+    QString file = QString("d:\\memorize\\%1\\frame-%2.png").arg(nQueue).arg(nFrame);
+    storeMulti->saveThread(file);
 }
 
 Image *Memorize::loadFrame(int nQueue, int nFrame)
 {
-    Q_ASSERT(nFrame < vectorMulti.size());
-    Q_ASSERT(vectorMulti.at(nFrame));
-
-    return vectorMulti[nFrame];
-
-    //QString file = QString("g:/memorize/%1/frame-%2.png").arg(nQueue).arg(nFrame);
-    //return new Image(file);
+    QString file = QString("d:\\memorize\\%1\\frame-%2.png").arg(nQueue).arg(nFrame);
+    return new Image(file);
 }
 
 void Memorize::mergeFrames(Image *frame, Image *alpha)
@@ -192,7 +159,7 @@ void Memorize::mergeFrames(Image *frame, Image *alpha)
 
 void Memorize::blendFrames(Image *frame, Image *alpha)
 {
-    Q_ASSERT(alpha->channels() >= 3);
+    Q_ASSERT(alpha->channels() == 4);
     Q_ASSERT(frame->channels() >= 3);
 
     int cFrame = frame->channels();
@@ -209,9 +176,9 @@ void Memorize::blendFrames(Image *frame, Image *alpha)
     }
 }
 
-void Memorize::mulHit(Image *hit, Image *alpha)
+void Memorize::unionHit(Image *hit, Image *alpha)
 {
-    Q_ASSERT(alpha->channels() >= 3);
+    Q_ASSERT(alpha->channels() == 4);
     Q_ASSERT(hit->channels() == 1);
 
     int cAlpha = alpha->channels();
@@ -221,7 +188,6 @@ void Memorize::mulHit(Image *hit, Image *alpha)
         uchar* alpha_ptr = (uchar*) (alpha->data() + y * alpha->step());
         for( int x=0; x<w; x++ ) {
             hit_ptr[x] = hit_ptr[x] | alpha_ptr[cAlpha*x + 3];
-
         }
     }
 }
@@ -251,17 +217,16 @@ void Memorize::stepQueueManual(Image *frame)
     }
 }
 
-void Memorize::stepQueueMultiRecord(Image *frame)
+void Memorize::stepQueueMultiRecord(Image *frame, Image *hit)
 {
-    Image *hit = process(0)->hit();
-
     if (mRecord.isPlay) {
-        if (mRecord.play >= mRecord.count) {
+        if (mRecord.play >= mRecord.countPlay) {
             mRecord.play = 0;
             if (mRecord.repeats > 0) {
                 mRecord.repeats--;
             }
-            else if (mRecord.repeats == 0) {
+
+            if (mRecord.repeats == 0) {
                 mRecord.isPlay = false;
             }
         }
@@ -272,44 +237,98 @@ void Memorize::stepQueueMultiRecord(Image *frame)
         mergeFrames(frame, store);
 
         if (mRecord.isRecord) {
-            mulHit(hit, store);
+            unionHit(hit, store);
         }
 
-        //delete store;
+        delete store;
+        mRecord.record = mRecord.play;
         mRecord.play++;
     }
 
     if (mRecord.isRecord) {
         saveFrame(0, mRecord.record, frame, hit);
         mRecord.record++;
-        if (mRecord.count < mRecord.record) {
+        if (mRecord.count <= mRecord.record) {
             mRecord.count = mRecord.record;
         }
     }
 }
 
-void Memorize::stepQueueRecord(Image *frame)
+void Memorize::stepPersonDouble(Image *frame, Image *hit)
 {
-    for (int i=0; i<COUNT_RECORDS; i++) {
-        int save = records.at(i).saveFrame;
-        int play = records.at(i).playFrame;
-        if (records.at(i).isRecord) {
-            //addFrameToQueue(&records[i].queue, frame);
-            saveFrame(i, save, frame, process(0)->hit());
-            records[i].saveFrame += 1;
-        }
-        else if (records.at(i).repeats != 0) {
-            if (play >= save) {
-                records[i].playFrame = 0;
-                if (records.at(i).repeats > 0)
-                    records[i].repeats -= 1;
+    if (personDouble == "Left") {
+        int cFrame = frame->channels();
+
+        for( int y=0; y<h; y+=2 ) {
+            uchar*   hit_ptr = (uchar*) (hit->data()   + y * hit->step());
+            uchar* frame_ptr = (uchar*) (frame->data() + y * frame->step());
+            for( int x=0; x<w/2; x++ ) {
+                int x2 = w - x;
+                if (hit_ptr[x]) {
+                    frame_ptr[cFrame*x2 + 0] = frame_ptr[cFrame*x + 0];
+                    frame_ptr[cFrame*x2 + 1] = frame_ptr[cFrame*x + 1];
+                    frame_ptr[cFrame*x2 + 2] = frame_ptr[cFrame*x + 2];
+                }
             }
-            else {
-                Image *store = loadFrame(i, play);
-                mergeFrames(frame, store);
-                delete store;
-                records[i].playFrame++;
+        }
+
+        for( int y=1; y<h; y+=2 ) {
+            uchar*   hit_ptr = (uchar*) (hit->data()   + y * hit->step());
+            uchar* frame_ptr = (uchar*) (frame->data() + y * frame->step());
+            for( int x=0; x<w/2; x++ ) {
+                int x2 = w - x - displacement;
+                if (hit_ptr[x]) {
+                    frame_ptr[cFrame*x2 + 0] = frame_ptr[cFrame*x + 0];
+                    frame_ptr[cFrame*x2 + 1] = frame_ptr[cFrame*x + 1];
+                    frame_ptr[cFrame*x2 + 2] = frame_ptr[cFrame*x + 2];
+                }
+            }
+
+            for( int x=0; x<w/2; x++ ) {
+                if (hit_ptr[x]) {
+                    frame_ptr[cFrame*x + 0] = frame_ptr[cFrame*(x+displacement) + 0];
+                    frame_ptr[cFrame*x + 1] = frame_ptr[cFrame*(x+displacement) + 1];
+                    frame_ptr[cFrame*x + 2] = frame_ptr[cFrame*(x+displacement) + 2];
+                }
+            }
+        }
+    }
+    if (personDouble == "Right") {
+        int cFrame = frame->channels();
+
+        for( int y=0; y<h; y+=2 ) {
+            uchar*   hit_ptr = (uchar*) (hit->data()   + y * hit->step());
+            uchar* frame_ptr = (uchar*) (frame->data() + y * frame->step());
+            for( int x=w/2; x<w; x++ ) {
+                int x2 = w - x;
+                if (hit_ptr[x]) {
+                    frame_ptr[cFrame*x2 + 0] = frame_ptr[cFrame*x + 0];
+                    frame_ptr[cFrame*x2 + 1] = frame_ptr[cFrame*x + 1];
+                    frame_ptr[cFrame*x2 + 2] = frame_ptr[cFrame*x + 2];
+                }
+            }
+        }
+
+        for( int y=1; y<h; y+=2 ) {
+            uchar*   hit_ptr = (uchar*) (hit->data()   + y * hit->step());
+            uchar* frame_ptr = (uchar*) (frame->data() + y * frame->step());
+            for( int x=w/2; x<w; x++ ) {
+                int x2 = w - x + displacement;
+                if (hit_ptr[x]) {
+                    frame_ptr[cFrame*x2 + 0] = frame_ptr[cFrame*x + 0];
+                    frame_ptr[cFrame*x2 + 1] = frame_ptr[cFrame*x + 1];
+                    frame_ptr[cFrame*x2 + 2] = frame_ptr[cFrame*x + 2];
+                }
+            }
+
+            for( int x=w-1; x>=w/2; x-- ) {
+                if (hit_ptr[x]) {
+                    frame_ptr[cFrame*x + 0] = frame_ptr[cFrame*(x-displacement) + 0];
+                    frame_ptr[cFrame*x + 1] = frame_ptr[cFrame*(x-displacement) + 1];
+                    frame_ptr[cFrame*x + 2] = frame_ptr[cFrame*(x-displacement) + 2];
+                }
             }
         }
     }
 }
+
