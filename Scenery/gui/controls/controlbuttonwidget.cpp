@@ -39,6 +39,12 @@ ControlButtonWidget::ControlButtonWidget(Scene *scene, ControlButton *control, Q
         hLayout->addWidget(pushButton);
     }
 
+    if (buttons.size() > 5) {
+        QPushButton *pushButton = new QPushButton(buttons.at(5).name);
+        connect(pushButton, SIGNAL(clicked()), SLOT(button5()));
+        hLayout->addWidget(pushButton);
+    }
+
     this->setLayout(hLayout);
 }
 
@@ -65,4 +71,9 @@ void ControlButtonWidget::button3()
 void ControlButtonWidget::button4()
 {
     scene->action(control->getButtons().at(4).id);
+}
+
+void ControlButtonWidget::button5()
+{
+    scene->action(control->getButtons().at(5).id);
 }

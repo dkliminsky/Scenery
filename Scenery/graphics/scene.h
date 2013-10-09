@@ -96,6 +96,12 @@ public:
                                      int id3, QString name3,
                                      int id4, QString name4,
                                      int id5, QString name5);
+    void button(QString description, int id1, QString name1,
+                                     int id2, QString name2,
+                                     int id3, QString name3,
+                                     int id4, QString name4,
+                                     int id5, QString name5,
+                                     int id6, QString name6);
     void control(int &x, QString description, int min=0, int max=999, int step=1);
     void control(double &x, QString description, double min=0, double max=100, int precision=1);
     void control(bool &x, QString description);

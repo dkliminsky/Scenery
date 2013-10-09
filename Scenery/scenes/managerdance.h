@@ -7,6 +7,7 @@
 #include "scenes/Dance/shift.h"
 #include "scenes/Dance/danceeffects.h"
 #include "scenes/Dance/memorize.h"
+#include "scenes/Dance/dancestrings.h"
 
 #include "process/processdebug.h"
 

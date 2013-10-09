@@ -840,6 +840,7 @@ void Process::processSubtractionImage()
             delete backSubtractor;
             backSubtractor = 0;
         }
+        cvSet(hitImage, cvScalar(0));
         subtractionImageData.commandStop = false;
     }
 

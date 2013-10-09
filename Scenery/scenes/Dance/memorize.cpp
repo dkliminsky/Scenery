@@ -5,6 +5,14 @@ Memorize::Memorize()
     control(queueManualLength=0, "Queue Length", 0, 500);
     button("Common", 1000, "Start Subtraction", 1001, "Stop Subtraction");
     button("MultiRecord", 1100, "Record", 1101, "Stop", 1102, "Repeat", 1103, "Forewer", 1104, "Break");
+    control(&imageExplos, "Image Explosion", "images/brushes/", "blot03.png");
+    button("Explosion", 666, "Bang", 777, "Clear");
+    control(explosionColor=Color(1,1,1,1), "Explosion color");
+    control(explosionCount=200, "Explosion count");
+    control(explosionRepeat=10, "Explosion repeat");
+    control(explosionSize=80, "Explosion size");
+    control(explosionStep=15, "Explosion step");
+    //control(isExplosion=false, "Explosion");
     control(personDouble="None", "Person Double", QStringList() << "None" << "Left" << "Right");
     control(displacement=0, "Displacement", 0, 20);
 
@@ -19,7 +27,7 @@ Memorize::Memorize()
 
 void Memorize::paint()
 {
-    if (process(0)->isUpdate()) {
+    if (process(0)->isUpdate() && !isExplosion) {
         w = process(0)->width();
         h = process(0)->height();
         Image *frame = process(0)->image();
@@ -40,6 +48,9 @@ void Memorize::paint()
         color(1,1,1,1);
         image(frame, w/2, h/2, w, h);
         flush();
+    }
+    if (isExplosion) {
+        stepExplosion();
     }
 }
 
@@ -62,6 +73,7 @@ void Memorize::action(int id)
     else if ( id == 1102 ) { // Repeat
         //mRecord.isRecord = false;
         mRecord.isPlay = true;
+        mRecord.isRecord = false;
         mRecord.play = 0;
         mRecord.repeats = 1;
         mRecord.countPlay = mRecord.count;
@@ -69,6 +81,7 @@ void Memorize::action(int id)
     else if ( id == 1103 ) { // Forever
         //mRecord.isRecord = false;
         mRecord.isPlay = true;
+        mRecord.isRecord = false;
         mRecord.play = 0;
         mRecord.repeats = -1;
         mRecord.countPlay = mRecord.count;
@@ -79,6 +92,21 @@ void Memorize::action(int id)
         mRecord.play = 0;
         mRecord.record = 0;
         mRecord.repeats = 0;
+    }
+    else if ( id == 666 ) { // Bang
+        isExplosion = true;
+        for (int i=0; i<explosionCount; i++) {
+            Explosion exp;
+            exp.x = width()/2;
+            exp.y = height()/2;
+            exp.a = random(360) * pi() / 180;
+            exp.image = imageExplos;
+            explosions += exp;
+        }
+    }
+    else if ( id == 777 ) { // Clear
+        isExplosion = false;
+
     }
 }
 
@@ -123,13 +151,13 @@ void Memorize::saveFrame(int nQueue, int nFrame, Image *frame, Image *hit)
         }
     }
 
-    QString file = QString("d:\\memorize\\%1\\frame-%2.png").arg(nQueue).arg(nFrame);
+    QString file = QString("d:\\memorize\\%1\\frame-%2.bin").arg(nQueue).arg(nFrame);
     storeMulti->saveThread(file);
 }
 
 Image *Memorize::loadFrame(int nQueue, int nFrame)
 {
-    QString file = QString("d:\\memorize\\%1\\frame-%2.png").arg(nQueue).arg(nFrame);
+    QString file = QString("d:\\memorize\\%1\\frame-%2.bin").arg(nQueue).arg(nFrame);
     return new Image(file);
 }
 
@@ -257,6 +285,7 @@ void Memorize::stepQueueMultiRecord(Image *frame, Image *hit)
 void Memorize::stepPersonDouble(Image *frame, Image *hit)
 {
     if (personDouble == "Left") {
+        mRecord.isPlay = false;
         int cFrame = frame->channels();
 
         for( int y=0; y<h; y+=2 ) {
@@ -284,8 +313,12 @@ void Memorize::stepPersonDouble(Image *frame, Image *hit)
                 }
             }
 
-            for( int x=0; x<w/2; x++ ) {
+            for( int x=0; x>w/2; x-- ) {
                 if (hit_ptr[x]) {
+//                    frame_ptr[cFrame*(x+displacement) + 0] = frame_ptr[cFrame*x + 0];
+//                    frame_ptr[cFrame*(x+displacement) + 1] = frame_ptr[cFrame*x + 1];
+//                    frame_ptr[cFrame*(x+displacement) + 2] = frame_ptr[cFrame*x + 2];
+
                     frame_ptr[cFrame*x + 0] = frame_ptr[cFrame*(x+displacement) + 0];
                     frame_ptr[cFrame*x + 1] = frame_ptr[cFrame*(x+displacement) + 1];
                     frame_ptr[cFrame*x + 2] = frame_ptr[cFrame*(x+displacement) + 2];
@@ -294,6 +327,7 @@ void Memorize::stepPersonDouble(Image *frame, Image *hit)
         }
     }
     if (personDouble == "Right") {
+        mRecord.isPlay = false;
         int cFrame = frame->channels();
 
         for( int y=0; y<h; y+=2 ) {
@@ -329,6 +363,29 @@ void Memorize::stepPersonDouble(Image *frame, Image *hit)
                 }
             }
         }
+    }
+}
+
+void Memorize::stepExplosion()
+{
+    for (int t=0; t<explosionRepeat; t++) {
+        QMutableListIterator<Explosion> i(explosions);
+        while (i.hasNext()) {
+            Explosion &exp = i.next();
+            color(explosionColor);
+            image(exp.image, exp.x, exp.y, explosionSize, explosionSize);
+
+            exp.x = exp.x + explosionStep * sin(exp.a);
+            exp.y = exp.y + explosionStep * cos(exp.a);
+
+            if (exp.x < 0 || exp.y < 0 || exp.x >= width() || exp.y >= height()) {
+                i.remove();
+            }
+        }
+    }
+
+    if (explosions.size() == 0) {
+        background(explosionColor);
     }
 }
 

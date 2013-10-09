@@ -20,6 +20,14 @@ private:
     int queueManualLength;
     QQueue<Image *> queueManual;
     QVector<Image *> vectorMulti;
+    Image *imageExplos;
+    bool isExplosion;
+    Color explosionColor;
+    int explosionCount;
+    int explosionRepeat;
+    int explosionSize;
+    int explosionStep;
+
     QString personDouble;
     int displacement;
 
@@ -38,6 +46,15 @@ private:
         int repeats;
     } mRecord;
 
+    struct Explosion {
+        Image *image;
+        float x;
+        float y;
+        float a;
+    };
+
+    QList<Explosion> explosions;
+
     void addFrameToQueue(QQueue<Image *> *queue, Image *frame);
     void saveFrame(int nQueue, int nFrame, Image *frame, Image *hit);
     Image *loadFrame(int nQueue, int nFrame);
@@ -50,6 +67,7 @@ private:
     void stepQueueManual(Image *frame);
     void stepQueueMultiRecord(Image *frame, Image *hit);
     void stepPersonDouble(Image *frame, Image *hit);
+    void stepExplosion();
 
 };
 
