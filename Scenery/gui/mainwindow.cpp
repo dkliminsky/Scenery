@@ -115,8 +115,10 @@ void MainWindow::closeEvent(QCloseEvent *)
 
 void MainWindow::timerEvent(QTimerEvent *)
 {
-    ui->tableScenes->setItem(curScene, 1,
+    if (manager->getViews().size() > 0) {
+        ui->tableScenes->setItem(curScene, 1,
                              new QTableWidgetItem(QString().number(manager->getViews().at(0)->fps())));
+    }
 
     for(int i=0; i<manager->getInputs().size(); i++) {
         ui->tableInputs->setItem(i, 1,
@@ -132,10 +134,12 @@ void MainWindow::timerEvent(QTimerEvent *)
 
 void MainWindow::setFullScreen(bool full)
 {
-    if (full)
-        manager->getViews().at(0)->showFullScreen();
-    else
-        manager->getViews().at(0)->showNormal();
+    if (manager->getViews().size() > 0) {
+        if (full)
+            manager->getViews().at(0)->showFullScreen();
+        else
+            manager->getViews().at(0)->showNormal();
+    }
 }
 
 void MainWindow::slotEditProcess(int row, int column)
