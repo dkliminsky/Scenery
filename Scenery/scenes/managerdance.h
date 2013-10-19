@@ -8,6 +8,9 @@
 #include "scenes/Dance/danceeffects.h"
 #include "scenes/Dance/memorize.h"
 #include "scenes/Dance/dancestrings.h"
+#include "scenes/DK/effect01.h"
+#include "scenes/DK/effect02.h"
+#include "scenes/DK/staticimage.h"
 
 #include "process/processdebug.h"
 

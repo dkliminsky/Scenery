@@ -36,6 +36,14 @@ void Server::wait()
     }
 }
 
+void Server::setAreas(uint n, Areas areas)
+{
+    if (areasArray.size() < n+1)
+        areasArray.resize(n+1);
+
+    areasArray[n] = areas;
+}
+
 void Server::incomingConnection(int socketDescriptor)
 {
     qDebug() << "TCP: New connection";
@@ -57,6 +65,52 @@ void Server::createArray()
     QString string;
     QTextStream out(&string, QIODevice::ReadWrite);
 
+    //createSeqAreas(out);
+    createAreas(out);
+
+    array = string.toUtf8();
+}
+
+void Server::createAreas(QTextStream &out)
+{
+    out << "{" << endl;
+
+    out << jsonObject("data") << " [" << endl;
+    //out << "  data: [" << endl;
+    for (uint i=0; i<areasArray.size(); i++) {
+        Areas &areas = areasArray[i];
+        out << "    {" << endl;
+        out << "    " << jsonObject("device", (int)i) << ", " << endl;
+
+        out << "     " << jsonObject("areas") << " [" << endl;
+        for (uint j=0; j<areas.size(); j++) {
+            Area &area = areas.at(j);
+
+            out << "       {" << endl;
+            out << "        " << jsonObject("x", area.pt[0]) << ", " << endl;
+            out << "        " << jsonObject("y", area.pt[1]) << ", " << endl;
+            out << "        " << jsonObject("width", area.width) << ", " << endl;
+            out << "        " << jsonObject("height", area.height) << endl;
+
+            if ( j == areas.size() - 1  )
+                out << "       } " << endl;
+            else
+                out << "       }, " << endl;
+        }
+        out << "      ]" << endl;
+
+        if ( i == areasArray.size() - 1  )
+            out << "    }" << endl;
+        else
+            out << "    }," << endl;
+    }
+    out << "  ]" << endl;
+
+    out << "}" << endl;
+}
+
+void Server::createSeqAreas(QTextStream &out)
+{
     out << "{" << endl;
     out << jsonObject("device", 0) << ", " << endl;
     out << jsonObject("seqAreas") << endl;
@@ -81,8 +135,6 @@ void Server::createArray()
     out << " ]" << endl;
 
     out << "}" << endl;
-
-    array = string.toUtf8();
 }
 
 QString Server::jsonObject(QString name)

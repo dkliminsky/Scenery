@@ -40,6 +40,4 @@ void ManagerMotion::timerEvent(QTimerEvent *)
         }
         inputs[0]->start();
     }
-
-
 }

@@ -83,7 +83,8 @@ void Input::run()
 void Input::initCamera()
 {
     // получаем любую подключённую камеру
-    capture = cvCreateCameraCapture(CV_CAP_ANY);
+    // capture = cvCreateCameraCapture(CV_CAP_ANY);
+    capture = cvCreateCameraCapture(name.toInt());
     assert( capture );
 
     if ( !(width <= 0 || height <= 0) ) {

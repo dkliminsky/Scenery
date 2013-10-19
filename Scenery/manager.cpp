@@ -56,3 +56,11 @@ bool Manager::isProcessesComplete()
     return true;
 }
 
+bool Manager::isInputsComplete()
+{
+    for (int i=0; i<inputs.size(); i++)
+        if (inputs.at(i)->isRunning())
+            return false;
+    return true;
+}
+

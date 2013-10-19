@@ -149,8 +149,8 @@ void MainWindow::slotEditProcess(int row, int column)
     }
     else if (column == 2) {
         for(int i=0; i<manager->getProcesses().size(); i++) {
-            manager->getProcesses().at(i)->setDebug(false);
-            ui->tableProcesses->setItem(i, 2, new QTableWidgetItem(""));
+            //manager->getProcesses().at(i)->setDebug(false);
+            //ui->tableProcesses->setItem(i, 2, new QTableWidgetItem(""));
         }
         manager->getProcesses().at(row)->setDebug(true);
         ui->tableProcesses->setItem(row, 2, new QTableWidgetItem("x"));

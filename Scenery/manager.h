@@ -29,6 +29,7 @@ public:
     void processesStart();
     void processesCopyData();
     bool isProcessesComplete();
+    bool isInputsComplete();
 
 protected:
     virtual void timerEvent(QTimerEvent *) = 0;
