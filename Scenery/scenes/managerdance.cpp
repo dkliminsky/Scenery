@@ -27,10 +27,10 @@ ManagerDance::ManagerDance()
     views.at(0)->datas()->append(processes.at(1));
     views.at(0)->datas()->append(processes.at(2));
 
-    scenes += new StaticImage();
+    //scenes += new StaticImage();
+    scenes += new Memorize();
     scenes += new Effect01();
     scenes += new Effect02();
-    scenes += new Memorize();
     scenes += new DanceStrings();
     scenes += new DanceEffects();
     scenes += new Shift();

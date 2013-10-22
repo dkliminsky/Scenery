@@ -6,7 +6,8 @@
 #include <QQueue>
 #include <QDebug>
 #include <math.h>
-#include "sscene.h"
+
+#include "iscene.h"
 #include "view.h"
 #include "sceneprocess.h"
 
@@ -21,7 +22,8 @@
 typedef QVector<Image *> Images;
 typedef QVector<IControl *> Controls;
 
-class Scene: public SScene
+
+class Scene  : public IScene
 {
 public:
     Scene();

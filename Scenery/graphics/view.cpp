@@ -1,4 +1,5 @@
 #include "view.h"
+#include "scene.h"
 
 #include <QDebug>
 
@@ -6,8 +7,7 @@ View::View(QGLFormat &format, QWidget *parent)
      : QGLWidget(format, parent)
 {
     setWindowTitle("Scenery View");
-    emptyScene = new EmptyScene();
-    setScene(emptyScene);
+    setScene(&emptyScene);
 
     show();
 
@@ -22,10 +22,10 @@ View::View(QGLFormat &format, QWidget *parent)
 
 View::~View()
 {
-    delete emptyScene;
+
 }
 
-void View::setScene(SScene *scene)
+void View::setScene(IScene *scene)
 {
     this->scene = scene;
     scene->setupEvent(this);
@@ -54,8 +54,6 @@ void View::initializeGL()
     // Задаём фильтрацию вблизи и вдали:
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-    // Задаём фильтрацию вблизи и в дали:
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 

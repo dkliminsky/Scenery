@@ -151,13 +151,13 @@ void Memorize::saveFrame(int nQueue, int nFrame, Image *frame, Image *hit)
         }
     }
 
-    QString file = QString("d:\\memorize\\%1\\frame-%2.bin").arg(nQueue).arg(nFrame);
+    QString file = QString("%1\\frame-%2.bin").arg(nQueue).arg(nFrame);
     storeMulti->saveThread(file);
 }
 
 Image *Memorize::loadFrame(int nQueue, int nFrame)
 {
-    QString file = QString("d:\\memorize\\%1\\frame-%2.bin").arg(nQueue).arg(nFrame);
+    QString file = QString("%1\\frame-%2.bin").arg(nQueue).arg(nFrame);
     return new Image(file);
 }
 
