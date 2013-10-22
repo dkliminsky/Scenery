@@ -40,7 +40,6 @@ public:
     void saveThread(const QString &fileName);
     void saveWait();
 
-
 private:
     cv::Mat _mat;
     QString _fileName;

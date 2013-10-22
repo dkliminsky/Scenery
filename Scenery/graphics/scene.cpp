@@ -1,5 +1,15 @@
 #include "scene.h"
 
+#include "tools.h"
+#include "controls/controlbool.h"
+#include "controls/controlint.h"
+#include "controls/controldouble.h"
+#include "controls/controlstring.h"
+#include "controls/controlcolor.h"
+#include "controls/controlimage.h"
+#include "controls/controlbutton.h"
+
+
 Scene::Scene()
 {
     view = 0;
@@ -140,32 +150,32 @@ int Scene::fps()
 
 int Scene::random(int high)
 {
-    return view->utils()->random(high);
+    return Tools::random(high);
 }
 
 bool Scene::chance(double probability)
 {
-    return view->utils()->chance(probability);
+    return Tools::chance(probability);
 }
 
 float Scene::distance(float x1, float y1, float x2, float y2)
 {
-    return view->utils()->distance(x1, y1, x2, y2);
+    return Tools::distance(x1, y1, x2, y2);
 }
 
 double Scene::distance(double x1, double y1, double x2, double y2)
 {
-    return view->utils()->distance(x1, y1, x2, y2);
+    return Tools::distance(x1, y1, x2, y2);
 }
 
 float Scene::angle(float x1, float y1, float x2, float y2)
 {
-    return view->utils()->angle(x1, y1, x2, y2);
+    return Tools::angle(x1, y1, x2, y2);
 }
 
 float Scene::pi()
 {
-    return view->utils()->pi();
+    return Tools::pi();
 }
 
 void Scene::button(QString description, int id, QString name)

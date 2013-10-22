@@ -3,7 +3,6 @@
 
 #include <QGLFunctions>
 #include <QVector>
-#include "utils.h"
 #include "elements/image.h"
 #include "elements/color.h"
 #include "elements/point.h"
@@ -47,8 +46,6 @@ protected:
     int heightScene;    //
 
 private:
-    Utils utils;
-
     struct ImageBuffer {
         GLuint id;
 

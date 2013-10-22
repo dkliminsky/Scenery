@@ -1,5 +1,6 @@
 #include "graphic.h"
 
+#include "tools.h"
 #include <math.h>
 #include <QDebug>
 
@@ -276,8 +277,8 @@ void Graphic::bezier(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
         double x = pow(1.0-t, 3)*x1 + 3*pow(1.0-t, 2)*t*x2 + 3*(1.0-t)*pow(t, 2)*x3 + pow(t, 3)*x4;
         double y = pow(1.0-t, 3)*y1 + 3*pow(1.0-t, 2)*t*y2 + 3*(1.0-t)*pow(t, 2)*y3 + pow(t, 3)*y4;
         image(img, x+(xPrev-x)/2.0, y+(yPrev-y)/2.0,
-              utils.distance(xPrev, yPrev, x, y), lineWidth_,
-              utils.angle(xPrev, yPrev, x, y));
+              Tools::distance(xPrev, yPrev, x, y), lineWidth_,
+              Tools::angle(xPrev, yPrev, x, y));
         xPrev = x;
         yPrev = y;
     }

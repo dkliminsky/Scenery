@@ -8,16 +8,10 @@
 #include <math.h>
 
 #include "iscene.h"
+#include "controls/icontrol.h"
 #include "view.h"
 #include "sceneprocess.h"
 
-#include "controls/controlbool.h"
-#include "controls/controlint.h"
-#include "controls/controldouble.h"
-#include "controls/controlstring.h"
-#include "controls/controlcolor.h"
-#include "controls/controlimage.h"
-#include "controls/controlbutton.h"
 
 typedef QVector<Image *> Images;
 typedef QVector<IControl *> Controls;
@@ -117,12 +111,11 @@ public:
     // Controls
     Controls &controls() { return _controls; }
 
-protected:
+private:
     void virtual setupEvent(void *view);
     void virtual paintEvent();
     void virtual resizeEvent();
 
-private:
     View *view;
     SceneProcess _process;
 

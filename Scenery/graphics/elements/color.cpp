@@ -34,6 +34,13 @@ void Color::setRGBA(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
     this->a = a;
 }
 
+void Color::setRGB(GLfloat r, GLfloat g, GLfloat b)
+{
+    this->r = r;
+    this->g = g;
+    this->b = b;
+}
+
 void Color::randomRGB()
 {
     r = (GLfloat)rand()/RAND_MAX;

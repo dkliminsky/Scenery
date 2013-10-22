@@ -19,7 +19,6 @@ public:
     ~View();
     void setScene(IScene *scene);
     Datas   *datas()   { return &_datas; }
-    Utils   *utils()   { return &_utils; }
     Graphic *graphic() { return &_graphic; }
 
     int time();
@@ -38,7 +37,6 @@ private:
     IScene emptyScene;
 
     Datas _datas;
-    Utils _utils;
     Graphic _graphic;
 
     int timeLast;

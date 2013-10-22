@@ -11,6 +11,7 @@ public:
 
     Color & operator=(const Color &color);
     void setRGBA(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
+    void setRGB(GLfloat r, GLfloat g, GLfloat b);
 
     void randomRGB();
 
