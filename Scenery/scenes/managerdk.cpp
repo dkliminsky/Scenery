@@ -24,12 +24,12 @@ ManagerDK::ManagerDK()
     views.at(0)->datas()->append(processes.at(2));
     views.at(0)->datas()->append(processes.at(3));
 
+    scenes += new SpeedTest();
+    scenes += new StaticImage();
     scenes += new Effect01();
+    scenes += new Effect02();
+    scenes += new Effect03();
     scenes += new Skeleton();
-    scenes += new Cage();
-    scenes += new Brush();
-    scenes += new Strings();
-    scenes += new Inking();
 
     views.at(0)->setScene(scenes.at(0));
     startTimer(17);

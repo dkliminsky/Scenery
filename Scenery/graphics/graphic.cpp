@@ -1,6 +1,7 @@
 #include "graphic.h"
 
 #include "tools.h"
+#include "elements/rect.h"
 #include <math.h>
 #include <QDebug>
 
@@ -70,7 +71,8 @@ void Graphic::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat hei
 {
     Q_ASSERT(img);
 
-    if (imageBuffers.size() > 0 && imageBuffers.last().id != img->id()){
+    if ((imageBuffers.size() > 0 && imageBuffers.last().id != img->id()) ||
+         imageBuffers.size() >= INT_MAX) {
         flush();
     }
 
@@ -83,14 +85,15 @@ void Graphic::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat hei
     GLfloat x4 = x - width/2.0;
     GLfloat y4 = y + height/2.0;
 
-//    GLfloat x1 = x - width/2.0;
-//    GLfloat y1 = y + height/2.0;
-//    GLfloat x2 = x + width/2.0;
-//    GLfloat y2 = y + height/2.0;
-//    GLfloat x3 = x + width/2.0;
-//    GLfloat y3 = y - height/2.0;
-//    GLfloat x4 = x - width/2.0;
-//    GLfloat y4 = y - height/2.0;
+    RectF texCoords = img->texCoords();
+    GLfloat s1 = texCoords.x1;
+    GLfloat v1 = texCoords.y1;
+    GLfloat s2 = texCoords.x2;
+    GLfloat v2 = texCoords.y1;
+    GLfloat s3 = texCoords.x2;
+    GLfloat v3 = texCoords.y2;
+    GLfloat s4 = texCoords.x1;
+    GLfloat v4 = texCoords.y2;
 
     if (angle != 0) {
         // Повернем углы прямоугольника относительно координаты x и y
@@ -127,6 +130,15 @@ void Graphic::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat hei
     buf.y3 = y3;
     buf.x4 = x4;
     buf.y4 = y4;
+
+    buf.s1 = s1;
+    buf.v1 = v1;
+    buf.s2 = s2;
+    buf.v2 = v2;
+    buf.s3 = s3;
+    buf.v3 = v3;
+    buf.s4 = s4;
+    buf.v4 = v4;
 
     buf.r = curColor.r;
     buf.g = curColor.g;
@@ -221,12 +233,27 @@ void Graphic::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat hei
 
 void Graphic::line(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
 {
-    glColor4f(curColor.r, curColor.g, curColor.b, curColor.a);
-    glLineWidth(lineWidth_);
-    glBegin(GL_LINES);
-        glVertex2f(x1, y1);
-        glVertex2f(x2, y2);
-    glEnd();
+    if (lineBuffers.size() >= INT_MAX || imageBuffers.size() > 0) {
+        flush();
+    }
+
+    LineBuffer buf;
+    buf.x1 = x1;
+    buf.y1 = y1;
+    buf.x2 = x2;
+    buf.y2 = y2;
+    buf.r = curColor.r;
+    buf.g = curColor.g;
+    buf.b = curColor.b;
+    buf.a = curColor.a;
+    lineBuffers += buf;
+
+//    glColor4f(curColor.r, curColor.g, curColor.b, curColor.a);
+//    glLineWidth(lineWidth_);
+//    glBegin(GL_LINES);
+//        glVertex2f(x1, y1);
+//        glVertex2f(x2, y2);
+//    glEnd();
 }
 
 void Graphic::line(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
@@ -286,6 +313,12 @@ void Graphic::bezier(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
 
 void Graphic::flush()
 {
+    flushImage();
+    flushLine();
+}
+
+void Graphic::flushImage()
+{
     int n = imageBuffers.size();
 
     if (n==0)
@@ -324,14 +357,14 @@ void Graphic::flush()
         colors[i*16+14] = buf.b;
         colors[i*16+15] = buf.a;
 
-        coords[i*8+0] = 0.0f;
-        coords[i*8+1] = 0.0f;
-        coords[i*8+2] = 1.0f;
-        coords[i*8+3] = 0.0f;
-        coords[i*8+4] = 1.0f;
-        coords[i*8+5] = 1.0f;
-        coords[i*8+6] = 0.0f;
-        coords[i*8+7] = 1.0f;
+        coords[i*8+0] = buf.s1;
+        coords[i*8+1] = buf.v1;
+        coords[i*8+2] = buf.s2;
+        coords[i*8+3] = buf.v2;
+        coords[i*8+4] = buf.s3;
+        coords[i*8+5] = buf.v3;
+        coords[i*8+6] = buf.s4;
+        coords[i*8+7] = buf.v4;
     }
 
     glBindTexture(GL_TEXTURE_2D, imageBuffers.at(0).id);
@@ -365,5 +398,49 @@ void Graphic::flush()
     delete [] vertexes;
     delete [] colors;
     delete [] coords;
+}
+
+void Graphic::flushLine()
+{
+    int n = lineBuffers.size();
+
+    if (n==0)
+        return;
+
+    GLfloat *vertexes = new GLfloat[2*2*n];
+    GLfloat *colors = new GLfloat[2*4*n];
+
+    for (int i=0; i<n; i++) {
+        const LineBuffer &buf = lineBuffers.at(i);
+
+        vertexes[i*4+0] = buf.x1;
+        vertexes[i*4+1] = buf.y1;
+        vertexes[i*4+2] = buf.x2;
+        vertexes[i*4+3] = buf.y2;
+
+        colors[i*8+0] = buf.r;
+        colors[i*8+1] = buf.g;
+        colors[i*8+2] = buf.b;
+        colors[i*8+3] = buf.a;
+        colors[i*8+4] = buf.r;
+        colors[i*8+5] = buf.g;
+        colors[i*8+6] = buf.b;
+        colors[i*8+7] = buf.a;
+    }
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+
+    glVertexPointer(2, GL_FLOAT, 0, vertexes);
+    glColorPointer(4, GL_FLOAT, 0, colors);
+
+    glDrawArrays(GL_LINES, 0, 2*n);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+
+    lineBuffers.clear();
+    delete [] vertexes;
+    delete [] colors;
 }
 

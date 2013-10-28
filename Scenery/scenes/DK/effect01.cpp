@@ -32,7 +32,7 @@ void Effect01::paint()
     int w = process(0)->width();
     int h = process(0)->height();
 
-    size(process(0)->width(), process(0)->height());
+    size(w, h);
     background(backColor);
 
 //    Image *frame = process(0)->image();
@@ -41,7 +41,7 @@ void Effect01::paint()
 //    image(frame, w/2, h/2, w, h);
 //    flush();
 
-    SeqAreas &seqAreas = process(1)->seqAreas();
+    SeqAreas &seqAreas = process(0)->seqAreas();
     for (unsigned int i=0; i<seqAreas.size(); i++) {
         SeqArea &seqArea = seqAreas.at(i);
         if (seqArea.number > 1 && seqArea.isUsed == false) {

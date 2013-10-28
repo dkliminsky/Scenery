@@ -6,6 +6,7 @@
 #include "elements/image.h"
 #include "elements/color.h"
 #include "elements/point.h"
+#include "elements/rect.h"
 
 class Graphic
 {
@@ -58,6 +59,15 @@ private:
         float x4;
         float y4;
 
+        float s1;
+        float v1;
+        float s2;
+        float v2;
+        float s3;
+        float v3;
+        float s4;
+        float v4;
+
         float r;
         float g;
         float b;
@@ -79,9 +89,13 @@ private:
     };
 
     QVector<ImageBuffer> imageBuffers;
+    QVector<LineBuffer> lineBuffers;
     Color curColor;
     GLfloat lineWidth_;
     GLfloat lineParts_;
+
+    void flushImage();
+    void flushLine();
 };
 
 #endif // GRAPHIC_H

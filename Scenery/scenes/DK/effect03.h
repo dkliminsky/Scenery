@@ -1,14 +1,15 @@
-#ifndef DANCEEFFECTS_H
-#define DANCEEFFECTS_H
+#ifndef EFFECT03_H
+#define EFFECT03_H
+
 
 #include "graphics/scene.h"
 
-class DanceEffects : public Scene
+class Effect03 : public Scene
 {
 public:
-    DanceEffects();
+    Effect03();
 
-    QString name() { return "Dance Effects"; }
+    QString name() { return "Effect 03 Netting"; }
 
     void setup();
     void resize();
@@ -56,4 +57,4 @@ private:
 
 };
 
-#endif // DANCEEFFECTS_H
+#endif // EFFECT03_H

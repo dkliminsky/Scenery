@@ -29,10 +29,10 @@ void Effect02::setup()
 
 void Effect02::paint()
 {
-    size(process(1)->width(), process(1)->height());
+    size(process(0)->width(), process(0)->height());
     background(backColor);
 
-    SeqAreas &seqAreas = process(1)->seqAreas();
+    SeqAreas &seqAreas = process(0)->seqAreas();
     for (unsigned int i=0; i<seqAreas.size(); i++) {
         SeqArea &seqArea = seqAreas.at(i);
         if (seqArea.number > 1 && seqArea.isUsed == false) {

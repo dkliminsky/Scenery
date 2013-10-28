@@ -25,19 +25,31 @@ Image::Image(const QString &fileName)
     load(fileName);
 }
 
-Image::~Image()
+void Image::initDefault()
 {
-    if (saveImageThread) {
-        saveImageThread->wait();
-    }
+    _fileName = "";
+
+    _texCoords.x1 = 0.0f;
+    _texCoords.y1 = 0.0f;
+    _texCoords.x2 = 1.0f;
+    _texCoords.y2 = 1.0f;
+
+    bindId = 0;
+    bindWidth = 0;
+    bindHeight = 0;
+    bindChannels = 0;
+}
+
+void Image::setTexCoords(float x1, float y1, float x2, float y2)
+{
+    _texCoords.x1 = x1;
+    _texCoords.y1 = y1;
+    _texCoords.x2 = x2;
+    _texCoords.y2 = y2;
 }
 
 void Image::set(IplImage *ipl)
 {
-    // Тормозит!
-    //cv::Mat newMat(ipl);
-    //_mat = newMat.clone();
-
     create(ipl->width, ipl->height, ipl->nChannels);
     _mat.data = reinterpret_cast<uchar *>(ipl->imageData);
 }
@@ -103,56 +115,13 @@ void Image::create(int width, int height, int channels)
 
 void Image::load(const QString &fileName)
 {
-    LoadImageThread::loadImage(_mat, fileName);
-
-
-    //_mat = cv::imread(fileName.toStdString(), CV_LOAD_IMAGE_UNCHANGED);
-
-
-    //IplImage ipl = mat;
-    //create(mat.cols, mat.rows, mat.channels());
-    //_iplImage->imageData =  reinterpret_cast<char *>(mat.data);
-    //cvCopy(&ipl, _iplImage);
+    _mat = cv::imread(fileName.toStdString(), CV_LOAD_IMAGE_UNCHANGED);
 }
 
 void Image::save(const QString &fileName)
 {
-    //cv::Mat mat(_iplImage);
-    SaveImageThread::saveImage(_mat, fileName);
-
-    /*
     std::vector<int> compression_params;
     compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
     compression_params.push_back(3);
-    cv::imwrite(fileName.toStdString(), mat, compression_params);
-    */
+    cv::imwrite(fileName.toStdString(), _mat, compression_params);
 }
-
-void Image::saveThread(const QString &fileName)
-{
-    if (saveImageThread) {
-        saveImageThread->wait();
-        delete saveImageThread;
-    }
-    saveImageThread = new SaveImageThread(_mat, fileName);
-    saveImageThread->start();
-}
-
-void Image::saveWait()
-{
-    if (saveImageThread) {
-        saveImageThread->wait();
-    }
-}
-
-void Image::initDefault()
-{
-    _fileName = "";
-    saveImageThread = 0;
-
-    bindId = 0;
-    bindWidth = 0;
-    bindHeight = 0;
-    bindChannels = 0;
-}
-

@@ -7,8 +7,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "../threads/saveimagethread.h"
-#include "../threads/loadimagethread.h"
+#include "rect.h"
 
 class Image
 {
@@ -17,7 +16,6 @@ public:
     Image(Image *image);
     Image(int width, int height, int channels);
     Image(const QString &fileName);
-    ~Image();
 
     int width() { return _mat.cols; }
     int height() { return _mat.rows; }
@@ -29,6 +27,8 @@ public:
 
     QString fileName() { return _fileName; }
     GLuint id() { return bindId; }
+    RectF texCoords() { return _texCoords; }
+    void setTexCoords(float x1, float y1, float x2, float y2);
 
     void set(IplImage *ipl);
     void bind();
@@ -37,16 +37,12 @@ public:
     void load(const QString &fileName);
     void save(const QString &fileName);
 
-    void saveThread(const QString &fileName);
-    void saveWait();
-
 private:
     cv::Mat _mat;
     QString _fileName;
 
-    SaveImageThread *saveImageThread;
-
     GLuint bindId;
+    RectF _texCoords;
     int bindWidth;
     int bindHeight;
     int bindChannels;

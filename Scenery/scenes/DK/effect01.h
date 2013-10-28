@@ -3,10 +3,6 @@
 
 #include "graphics/scene.h"
 
-/*
- *  Need a SeqAreas
- */
-
 class Effect01 : public Scene
 {
 public:

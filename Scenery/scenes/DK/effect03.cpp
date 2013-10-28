@@ -1,6 +1,7 @@
-#include "danceeffects.h"
+#include "effect03.h"
 
-DanceEffects::DanceEffects()
+
+Effect03::Effect03()
 {
     control(decrease=0.1, "Decrease elements", 0, 1, 2);
 
@@ -17,17 +18,17 @@ DanceEffects::DanceEffects()
     control(contourLineWidth=0, "Contour: Line width", 0, 10);
 }
 
-void DanceEffects::setup()
+void Effect03::setup()
 {
 
 }
 
-void DanceEffects::resize()
+void Effect03::resize()
 {
 
 }
 
-void DanceEffects::paint()
+void Effect03::paint()
 {
     int width = process(0)->width();
     int height = process(0)->height();
@@ -44,10 +45,10 @@ void DanceEffects::paint()
     drawElements();
 }
 
-void DanceEffects::effectFlare()
+void Effect03::effectFlare()
 {
     if (flareSize > 0) {
-        Areas &areas = process(1)->areas();
+        Areas &areas = process(0)->areas();
         //color(flareColor);
         for (unsigned int i=0; i<areas.size(); i++) {
             Area &area = areas.at(i);
@@ -66,13 +67,13 @@ void DanceEffects::effectFlare()
     }
 }
 
-void DanceEffects::effectNetting()
+void Effect03::effectNetting()
 {
     if (nettingLineWidth > 0) {
 
         nettingsArea.clear();
 
-        Areas &areas = process(2)->areas();
+        Areas &areas = process(0)->areas();
         for (unsigned int i=0; i<areas.size(); i++) {
             Area &area = areas.at(i);
             NettingArea e;
@@ -114,10 +115,10 @@ void DanceEffects::effectNetting()
     }
 }
 
-void DanceEffects::effectContour()
+void Effect03::effectContour()
 {
     if (contourLineWidth > 0) {
-        Contours &contours = process(2)->contours();
+        Contours &contours = process(0)->contours();
         color(contourLineColor);
         lineWidth(contourLineWidth);
         int nContours = 0;
@@ -157,7 +158,7 @@ void DanceEffects::effectContour()
     }
 }
 
-void DanceEffects::drawElements()
+void Effect03::drawElements()
 {
     QMutableListIterator<ElementDraw> i(elementsDraw);
     while (i.hasNext()) {

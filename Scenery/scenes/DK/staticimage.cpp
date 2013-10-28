@@ -2,8 +2,7 @@
 
 StaticImage::StaticImage()
 {
-    qDebug() << "!!";
-    control(&imageStatic, "Image", "images/DK/", "image.png");
+    control(&imageStatic, "Image", "images/DK/", "static.png");
 }
 
 void StaticImage::setup()

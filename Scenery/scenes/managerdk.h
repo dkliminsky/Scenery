@@ -5,11 +5,11 @@
 #include "process/processdebug.h"
 
 #include "scenes/skeleton/skeleton.h"
-#include "scenes/VLMT/cage.h"
-#include "scenes/VLMT/strings.h"
-#include "scenes/VLMT/brush.h"
-#include "scenes/VLMT/inking.h"
+#include "scenes/DK/staticimage.h"
 #include "scenes/DK/effect01.h"
+#include "scenes/DK/effect02.h"
+#include "scenes/DK/effect03.h"
+#include "scenes/Skeleton/speedtest.h"
 
 class ManagerDK : public Manager
 {

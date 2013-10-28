@@ -5,6 +5,7 @@ class IScene
 {
 public:
     IScene(){}
+    ~IScene(){}
 
     void virtual setupEvent(void *){}
     void virtual paintEvent(){}
