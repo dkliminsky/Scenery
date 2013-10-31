@@ -34,8 +34,8 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
         processWindows += new ProcessWindow(processes.at(i), manager->name() + ".ini");
     }
     ui->tableProcesses->resizeColumnsToContents();
-    connect(ui->tableProcesses, &QTableWidget::cellDoubleClicked,
-            this, &MainWindow::slotEditProcess);
+    connect(ui->tableProcesses, SIGNAL(cellDoubleClicked(int,int)),
+            this, SLOT(slotEditProcess(int,int)));
 
     // Scenes
     ui->tableScenes->setRowCount(scenes.size());
@@ -45,8 +45,8 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
         ui->tableScenes->setItem(i, 1, new QTableWidgetItem("0"));
     }
     ui->tableScenes->resizeColumnsToContents();
-    connect(ui->tableScenes, &QTableWidget::cellDoubleClicked,
-            this, &MainWindow::slotChangeScene);
+    connect(ui->tableScenes, SIGNAL(cellDoubleClicked(int,int)),
+            this, SLOT(slotChangeScene(int,int)));
 
     // Scenes controls
     for(int i=0; i<scenes.size(); i++) {

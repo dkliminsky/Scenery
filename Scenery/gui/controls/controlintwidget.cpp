@@ -20,8 +20,8 @@ ControlIntWidget::ControlIntWidget(ControlInt *control, QWidget *parent) :
     this->setLayout(hLayout);
 
     update();
-    connect(slider, &QSlider::valueChanged,
-              this, &ControlIntWidget::change);
+    connect(slider, SIGNAL(valueChanged(int)),
+            this, SLOT(change()));
 }
 
 void ControlIntWidget::change()
