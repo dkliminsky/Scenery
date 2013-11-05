@@ -21,7 +21,7 @@ class Scene  : public IScene
 {
 public:
     Scene();
-    ~Scene();
+    virtual ~Scene();
 
     // Scene APIs
 

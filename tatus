@@ -1,0 +1,260 @@
+commit 9d584df45e585435fc077a352ad67495a2c83c8f
+Author: Dmitry Briakin <dmitry.briakin@id-east.ru>
+Date:   Thu Oct 31 18:21:03 2013 +0400
+
+    Build for linux and qt 4.8
+
+commit 31bd93de6ad1cbdbd28cca763e28309c243c6775
+Author: turlicht <turlicht@yandex.ru>
+Date:   Mon Oct 28 20:55:59 2013 +0400
+
+    Added line buffers
+
+commit f8b52e8f2e1ea85c8ff35b525cbb9edfdb8a64d0
+Author: turlicht <turlicht@yandex.ru>
+Date:   Tue Oct 22 23:10:27 2013 +0400
+
+    Mini refactoring
+
+commit f85cb4cefca2cd846af14e693bc4fad734fe9de5
+Author: turlicht <turlicht@yandex.ru>
+Date:   Tue Oct 22 22:44:40 2013 +0400
+
+    Build for Memorize effect
+
+commit 53a1fd7392ee1cc4ab695a083560ef3f7d7e98dc
+Author: turlicht <turlicht@yandex.ru>
+Date:   Sat Oct 19 16:59:50 2013 +0400
+
+    effects for DK
+
+commit 22c2767407b23c15bc015da6063a69aca576d569
+Author: turlicht <turlicht@yandex.ru>
+Date:   Thu Oct 10 13:14:26 2013 +0400
+
+    Building for Doomsday project
+
+commit f4b45b87f62282a00b354181ad1fb239b574dff1
+Author: turlicht <turlicht@yandex.ru>
+Date:   Wed Oct 9 22:06:58 2013 +0400
+
+    Dance final
+
+commit a1ed00c739d2680e8db587e074bb8fc03e0f9c51
+Author: turlicht <turlicht@yandex.ru>
+Date:   Sat Sep 14 15:06:25 2013 +0400
+
+    Added double person effect for memorize
+
+commit 1e42678ef669c853a648ca42949da58f8a04e38f
+Author: turlicht <turlicht@yandex.ru>
+Date:   Thu Sep 5 18:59:55 2013 +0400
+
+    Test memorize to write image to memory
+
+commit d912ad46e8f0a79da63b30987e45f8db4ee44036
+Author: turlicht <turlicht@yandex.ru>
+Date:   Thu Sep 5 09:13:50 2013 +0400
+
+    Added saving image
+
+commit 857dff674f44914986a63a747a520f858c04d601
+Author: turlicht <turlicht@yandex.ru>
+Date:   Tue Sep 3 17:45:42 2013 +0400
+
+    Created records for scene memorize
+
+commit da8e3f58934f2269fabc49b070aa4fb7aaede346
+Author: turlicht <turlicht@yandex.ru>
+Date:   Tue Sep 3 10:35:02 2013 +0400
+
+    Created ControlButton
+
+commit fa2e94ea4dc510ad32b89edb332bea6e356332d0
+Author: turlicht <turlicht@yandex.ru>
+Date:   Mon Sep 2 10:00:22 2013 +0400
+
+    Add background subtraction to memorize effect
+
+commit c3583ef9a609248727506ac4886d659d5772b8b6
+Author: turlicht <turlicht@yandex.ru>
+Date:   Sun Sep 1 12:40:39 2013 +0400
+
+    Create my backgrounf subtaction - don't work normaly
+
+commit 0bdf4f6f45760d23961d08651f45cc9523fa1839
+Author: turlicht <turlicht@yandex.ru>
+Date:   Sun Aug 25 16:29:11 2013 +0400
+
+    Create dance effects
+
+commit cec44d1b5155b146bce5a765603988a39e25c2cd
+Author: turlicht <turlicht@yandex.ru>
+Date:   Wed Aug 21 23:56:09 2013 +0400
+
+    Create subtraction hit
+
+commit f9836efe33ddb6ea5167795c9fc6270ebe14b4e0
+Author: turlicht <turlicht@yandex.ru>
+Date:   Sun Aug 18 00:05:00 2013 +0400
+
+    New copy data model
+
+commit 55f7a848046ea4faed57eed52eec2b0680cda2dc
+Author: turlicht <turlicht@yandex.ru>
+Date:   Fri Aug 16 00:06:05 2013 +0400
+
+    First Dance Effect
+
+commit a9906e2ae77f3b87304c9f3b95e5a16f2f042677
+Author: turlicht <turlicht@yandex.ru>
+Date:   Sun Aug 11 21:12:04 2013 +0400
+
+    Create all controls without ControlImage
+
+commit d29cfe06083134a74b07ad7b85c03308514090d8
+Author: turlicht <turlicht@yandex.ru>
+Date:   Thu Aug 8 01:47:37 2013 +0400
+
+    Create control bool
+
+commit a6837f6d5f27f0819c8612bbd9543298ff76dee6
+Author: turlicht <turlicht@yandex.ru>
+Date:   Tue Aug 6 23:42:00 2013 +0400
+
+    Create scene fractals
+
+commit 74db71d382aaa145712c85c35788dd3e17d732a9
+Author: turlicht <turlicht@yandex.ru>
+Date:   Sun Aug 4 20:57:45 2013 +0400
+
+    Add timings
+
+commit 10a003e3c29a65d5859e119bb3e8e7793b986788
+Author: turlicht <turlicht@yandex.ru>
+Date:   Sun Aug 4 17:19:18 2013 +0400
+
+    Create simple main window
+
+commit 6a28e3a466a738b6fae7381146f3691db150fcdf
+Author: turlicht <turlicht@yandex.ru>
+Date:   Sat Aug 3 11:27:04 2013 +0400
+
+    Refactoring continue, run scene Cage without controls
+
+commit 94cd2ddfe250dba35ba7d7d0bab9c1ae86de2ada
+Author: turlicht <turlicht@yandex.ru>
+Date:   Mon Jul 29 21:28:40 2013 +0400
+
+    Refactoring. Split graphics and GUI
+
+commit b12c06b780dfbe69cbd3793ed74d09410ecda551
+Author: turlicht <turlicht@yandex.ru>
+Date:   Fri Apr 19 19:00:40 2013 +0400
+
+    Add save state function
+
+commit 999f4a654816816813edb5df0d1a6c2a0b14e962
+Author: turlicht <turlicht@yandex.ru>
+Date:   Thu Apr 18 19:07:20 2013 +0400
+
+    Upgrade save control states
+
+commit d73722e8bcf2908f1d033f16e622b611bb9707d8
+Author: turlicht <turlicht@yandex.ru>
+Date:   Wed Apr 17 23:31:20 2013 +0400
+
+    Work on Brush effect
+
+commit 53061fe1b4138fd2e78b4cc398ff3617ed7b5a41
+Author: turlicht <turlicht@yandex.ru>
+Date:   Tue Apr 16 19:17:37 2013 +0400
+
+    Created save control param on state 0
+
+commit cd06518040e3298f690c844f9d3485abb76b444a
+Author: turlicht <turlicht@yandex.ru>
+Date:   Mon Apr 15 23:12:10 2013 +0400
+
+    work on MainWindow
+
+commit 2e160650a208f9d52fe128c021a50f59ed3994d4
+Author: turlicht <turlicht@yandex.ru>
+Date:   Sun Apr 14 16:44:09 2013 +0400
+
+    Add button control add change color dialog
+
+commit f8d493a5132d183fd9e17a0ac28ecb428893c24a
+Author: turlicht <turlicht@yandex.ru>
+Date:   Thu Apr 11 17:09:38 2013 +0400
+
+    improved output settings for mainwindow
+
+commit bef5e67c96c19570d77032e75378d6fd7dcbeaf7
+Author: turlicht <turlicht@yandex.ru>
+Date:   Tue Apr 9 23:33:43 2013 +0400
+
+    Create Brush effect
+
+commit dde3f45ab5fb26b3fe3784370e315fd31b11632a
+Author: turlicht <turlicht@yandex.ru>
+Date:   Tue Apr 9 19:02:18 2013 +0400
+
+    start create save control
+
+commit e57de2ea2751065efda7c915efb3974531ebea85
+Merge: 01bd726 712ee46
+Author: turlicht <turlicht@yandex.ru>
+Date:   Tue Apr 9 11:10:16 2013 +0400
+
+    Merge branch 'master' of https://github.com/turlicht/Scenery
+
+commit 712ee469c11ab34419eb3da3954884c24568a54d
+Author: turlicht <turlicht@yandex.ru>
+Date:   Tue Apr 9 09:31:28 2013 +0400
+
+    Add control image
+
+commit 01bd726fbbc146cec42d6be06bdac2ffeff8aee4
+Merge: 9a67e0d 608f1a1
+Author: turlicht <turlicht@yandex.ru>
+Date:   Fri Apr 5 18:48:28 2013 +0400
+
+    Merge branch 'master' of https://github.com/turlicht/Scenery
+
+commit 608f1a1068219ff58a02d49cc3af01fabc536a11
+Author: turlicht <turlicht@yandex.ru>
+Date:   Thu Apr 4 23:25:00 2013 +0400
+
+    Beginning to effect Paint
+
+commit 9a67e0d7c17d0bd54f58e13b9873ee11116f85f5
+Merge: 976f1a4 2e7a600
+Author: turlicht <turlicht@yandex.ru>
+Date:   Wed Apr 3 15:57:31 2013 +0400
+
+    Merge branch 'master' of https://github.com/turlicht/Scenery
+
+commit 976f1a4b3228d2c6b98fc428f0d2c6bc6a47d696
+Author: turlicht <turlicht@yandex.ru>
+Date:   Wed Apr 3 15:56:43 2013 +0400
+
+    test
+
+commit 2e7a600a5fba80493cfca9056772c1b320525e32
+Author: turlicht <turlicht@yandex.ru>
+Date:   Tue Apr 2 22:56:17 2013 +0400
+
+    Update scene Strings
+
+commit d73987805fc02577af83a8ea4deaf8c4d36c9dc6
+Author: turlicht <turlicht@yandex.ru>
+Date:   Tue Apr 2 12:19:04 2013 +0400
+
+    Start git project
+
+commit d4db7ce5ac008b34cad50e3004406fd85ad6da4b
+Author: turlicht <turlicht@yandex.ru>
+Date:   Tue Apr 2 00:58:24 2013 -0700
+
+    Initial commit

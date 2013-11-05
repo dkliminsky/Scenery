@@ -9,7 +9,7 @@ Skeleton::Skeleton()
 void Skeleton::setup()
 {
     imageShip = new Image();
-    imageShip->load("ship_512.png");
+    imageShip->load("images/ship_512.png");
     imageShip->bind();
 }
 
