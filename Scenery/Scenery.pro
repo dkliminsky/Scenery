@@ -3,7 +3,10 @@ QT += gui opengl network
 TARGET = Scenery
 TEMPLATE = app
 
-LIBS += \
+win32:INCLUDEPATH += c:/opencv/include
+win32:LIBS += c:/opencv/lib/*.a
+
+unix:LIBS += \
     /usr/local/lib/libopencv_calib3d.so \
     /usr/local/lib/libopencv_contrib.so \
     /usr/local/lib/libopencv_core.so \
