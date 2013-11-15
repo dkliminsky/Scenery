@@ -302,6 +302,7 @@ private:
     ContourParam contourParam;
 
     CvMemStorage* contourStorage;
+    CvMemStorage* approxStorage;
     CvMemStorage* hullsStorage;
 
     CvSeq* contoursSeq;

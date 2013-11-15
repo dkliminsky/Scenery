@@ -63,7 +63,8 @@ HEADERS += \
     scenes/managerdk.h \
     scenes/manager2cameras.h \
     server/socket.h \
-    server/server.h
+    server/server.h \
+    scenes/VLMT/stars.h
 
 SOURCES += \
     node.cpp \
@@ -118,7 +119,8 @@ SOURCES += \
     scenes/managerdk.cpp \
     scenes/manager2cameras.cpp \
     server/socket.cpp \
-    server/server.cpp
+    server/server.cpp \
+    scenes/VLMT/stars.cpp
 
 RESOURCES += \
     icons.qrc

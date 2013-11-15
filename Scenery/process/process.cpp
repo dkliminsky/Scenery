@@ -41,6 +41,7 @@ Process::Process(QString name, int width, int height) :
 
     // Contour
     contourStorage = cvCreateMemStorage(0);
+    approxStorage = cvCreateMemStorage(0);
     hullsStorage = 0;
 
     // HoughCircles
@@ -69,6 +70,7 @@ Process::~Process()
 
     cvReleaseMemStorage(&haarStorage);
     cvReleaseMemStorage(&contourStorage);
+    cvReleaseMemStorage(&approxStorage);
 
     if (hullsStorage)
         cvReleaseMemStorage(&hullsStorage);
@@ -733,6 +735,8 @@ void Process::findContours()
                    CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0));
 
     for(CvSeq* seq = contoursSeq; seq != 0; seq = seq->h_next) {
+        //CvSeq* approxSeq = cvApproxChains(seq, approxStorage, CV_CHAIN_APPROX_SIMPLE);
+
         Contour contour;
         for( int i=0; i<seq->total; ++i ) {
             CvPoint* cvP = (CvPoint*)cvGetSeqElem(seq, i);
@@ -742,7 +746,7 @@ void Process::findContours()
             contour.push_back(pt);
             //qDebug() << cvP->x << cvP->y;
         }
-        contours.push_back(contour);
+        contours.push_back(contour);        
     }
 
     // пример работы с контуром
