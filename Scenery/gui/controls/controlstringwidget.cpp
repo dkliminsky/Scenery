@@ -1,35 +1,42 @@
 #include "controlstringwidget.h"
+#include <QHBoxLayout>
 
-ControlStringWidget::ControlStringWidget(ControlString *control,
-                                         QWidget *parent) :
-    QComboBox(parent)
+
+ControlStringWidget::ControlStringWidget(ControlString *control)
 {
     this->control = control;
 
+    comboBox = new QComboBox();
+
     if (control->list().contains(control->value()))
-        this->addItems(control->list());
+        comboBox->addItems(control->list());
     else {
-        this->addItem(control->value());
-        this->addItems(control->list());
+        comboBox->addItem(control->value());
+        comboBox->addItems(control->list());
     }
+
+    QHBoxLayout *layout = new QHBoxLayout();
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(comboBox);
+    this->setLayout(layout);
 
 //    connect(this, &QComboBox::currentIndexChanged,
 //            this, &ControlStringWidget::change);
-    connect(this, SIGNAL(currentIndexChanged(int)), SLOT(change()));
+    connect(comboBox, SIGNAL(currentIndexChanged(int)), SLOT(slotChange()));
 }
 
-void ControlStringWidget::change()
+void ControlStringWidget::slotChange()
 {
-    control->value() = this->currentText();
+    control->value() = comboBox->currentText();
 }
 
 void ControlStringWidget::update()
 {
-    int i = this->findText(control->value());
+    int i = comboBox->findText(control->value());
     if (i >= 0)
-        this->setCurrentIndex(i);
+        comboBox->setCurrentIndex(i);
     else {
-        this->addItem(control->value());
-        this->setCurrentIndex(this->count());
+        comboBox->addItem(control->value());
+        comboBox->setCurrentIndex(comboBox->count());
     }
 }

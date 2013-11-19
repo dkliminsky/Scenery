@@ -2,23 +2,24 @@
 #define CONTROLDOUBLEWIDGET_H
 
 #include <QDoubleSpinBox>
+#include "icontrolwidget.h"
 #include "graphics/controls/controldouble.h"
 
-class ControlDoubleWidget : public QDoubleSpinBox
+class ControlDoubleWidget : public IControlWidget
 {
     Q_OBJECT
 public:
-    explicit ControlDoubleWidget(ControlDouble *control,
-                                 QWidget *parent = 0);
+    explicit ControlDoubleWidget(ControlDouble *control);
+    void update();
     
 private:
     ControlDouble *control;
+    QDoubleSpinBox *doubleSpinBox;
 
 signals:
     
-public slots:
-    void change();
-    void update();
+private slots:
+    void slotChange();
 
 };
 

@@ -7,6 +7,7 @@
 #include "manager.h"
 #include "processwindow.h"
 
+#include "controls/icontrolwidget.h"
 #include "controls/controlboolwidget.h"
 #include "controls/controlintwidget.h"
 #include "controls/controldoublewidget.h"
@@ -15,7 +16,8 @@
 #include "controls/controlbuttonwidget.h"
 
 typedef QVector<ProcessWindow *> ProcessWindows;
-typedef QVector<QWidget *> ControlWidgets;
+typedef QVector<IControlWidget *> ControlWidgets;
+typedef QVector<ControlWidgets> ControlWidgetsScenes;
 
 namespace Ui {
 class MainWindow;
@@ -37,14 +39,19 @@ private:
     Ui::MainWindow *ui;
     Manager *manager;
     ProcessWindows processWindows;
-    ControlWidgets controlWidgets;
+    ControlWidgetsScenes controlWidgetsScenes;
     int curScene;
+
+    void loadControls(int numScene);
 
 public slots:
     void setFullScreen(bool full);
 
     void slotEditProcess(int row, int colomn);
     void slotChangeScene(int row, int colomn);
+
+    void slotSaveControls();
+    void slotLoadControls();
 
 };
 

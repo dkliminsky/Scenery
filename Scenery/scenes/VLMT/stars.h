@@ -13,10 +13,14 @@ public:
     void paint();
 
 private:
+    Color backColor;
+    Color starColor;
+
     double inkingLengthLimit;
     double starProb;
     int starTTL;
     double starSize;
+    double starSizeDeviation;
     double starSpeed;
     double starAcceleration;
 

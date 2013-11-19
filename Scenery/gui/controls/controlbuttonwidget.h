@@ -5,14 +5,15 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QHBoxLayout>
+#include "icontrolwidget.h"
 #include "graphics/controls/controlbutton.h"
 #include "graphics/scene.h"
 
-class ControlButtonWidget : public QWidget
+class ControlButtonWidget : public IControlWidget
 {
     Q_OBJECT
 public:
-    explicit ControlButtonWidget(Scene *scene, ControlButton *control, QWidget *parent = 0);
+    explicit ControlButtonWidget(Scene *scene, ControlButton *control);
 
 private:
     Scene *scene;
@@ -21,7 +22,7 @@ private:
 
 signals:
 
-public slots:
+private slots:
     void button0();
     void button1();
     void button2();

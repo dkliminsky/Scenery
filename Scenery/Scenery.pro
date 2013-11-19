@@ -64,7 +64,8 @@ HEADERS += \
     scenes/manager2cameras.h \
     server/socket.h \
     server/server.h \
-    scenes/VLMT/stars.h
+    scenes/VLMT/stars.h \
+    gui/controls/icontrolwidget.h
 
 SOURCES += \
     node.cpp \

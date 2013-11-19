@@ -1,7 +1,6 @@
 #include "controlbuttonwidget.h"
 
-ControlButtonWidget::ControlButtonWidget(Scene *scene, ControlButton *control, QWidget *parent) :
-    QWidget(parent)
+ControlButtonWidget::ControlButtonWidget(Scene *scene, ControlButton *control)
 {
     this->scene = scene;
     this->control = control;

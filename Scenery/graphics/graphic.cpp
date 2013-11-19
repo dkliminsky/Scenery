@@ -369,7 +369,7 @@ void Graphic::flushImage()
 
     glBindTexture(GL_TEXTURE_2D, imageBuffers.at(0).id);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-//    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     //GLfloat envColor[4] = {1, 1, 1, 0};
     //glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, envColor);
 

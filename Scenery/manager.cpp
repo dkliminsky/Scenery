@@ -33,7 +33,7 @@ Manager::~Manager()
         delete scenes[i];
     }
 
-    qDebug() << "Manager: Destructor begin";
+    qDebug() << "Manager: Destructor end";
 }
 
 void Manager::processesStart()

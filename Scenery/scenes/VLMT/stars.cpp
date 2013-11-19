@@ -2,13 +2,17 @@
 
 Stars::Stars()
 {
-    control(inkingLengthLimit=2, "Inking Lenght Limit", 0, 100);
-    control(&imageStar, "Star Image", "images/flares/", "flare01.png");
+    control(backColor=Color(0,0,0,1), "Background");
+    control(starColor=Color(1,1,1,1), "StarColor");
+
+    control(inkingLengthLimit=2, "InkingLenghtLimit", 0, 100);
+    control(&imageStar, "Star Image", "images/stars/", "star_00.png");
     control(starProb=0.001, "starProb", 0, 1, 4);
     control(starTTL=1000, "starTTL", 0, 10000);
     control(starSize=5, "starSize", 0, 100);
+    control(starSizeDeviation=5, "starSizeDeviation", 0, 100);
     control(starSpeed=1, "starSpeed", -10, 10);
-    control(starAcceleration=0.2, "starAcceleration", 0, 10, 3);
+    control(starAcceleration=1.002, "starAcceleration", 1, 10, 4);
 }
 
 void Stars::setup()
@@ -23,9 +27,9 @@ void Stars::paint()
     Contours &contours = process(2)->contours();
 
     size(width, height);
-    background(0.0f, 0.0f, 0.0f, 1.0f);
+    background(backColor);
 
-    color(1, 1, 1);
+    color(starColor);
 
     int num = 0;
     for (uint i=0; i<contours.size(); ++i) {
@@ -66,7 +70,7 @@ void Stars::paint()
     }
 
 
-    text(30, 30, QString().number(num),  QFont("Times", 10));
+    //text(30, 30, QString().number(num),  QFont("Times", 10));
 }
 
 void Stars::createStar(float x, float y)
@@ -75,8 +79,8 @@ void Stars::createStar(float x, float y)
         Star star;
         star.x = x;
         star.y = y;
-        star.size = starSize;
-        star.speed = starSpeed;
+        star.size = starSize + starSizeDeviation / (random(100) + 1);
+        star.speed = starSpeed * star.size / (starSize + starSizeDeviation);
         star.ttl = starTTL;
         stars.append(star);
     }

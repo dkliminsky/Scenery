@@ -5,26 +5,26 @@
 #include <QSlider>
 #include <QLabel>
 #include <QHBoxLayout>
+#include "icontrolwidget.h"
 #include "graphics/controls/controlint.h"
 
-class ControlIntWidget : public QWidget
+class ControlIntWidget : public IControlWidget
 {
     Q_OBJECT
 public:
-    explicit ControlIntWidget(ControlInt *control, QWidget *parent = 0);
-    
+    explicit ControlIntWidget(ControlInt *control);
+    void update();
+
 private:
     ControlInt *control;
     QSlider *slider;
     QLabel *label;
     QHBoxLayout *hLayout;
 
-
 signals:
     
-public slots:
-    void change();
-    void update();
+private slots:
+    void slotChange();
 
 };
 

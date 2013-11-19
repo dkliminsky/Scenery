@@ -1,7 +1,7 @@
 #include "controlintwidget.h"
+#include <QHBoxLayout>
 
-ControlIntWidget::ControlIntWidget(ControlInt *control, QWidget *parent) :
-    QWidget(parent)
+ControlIntWidget::ControlIntWidget(ControlInt *control)
 {
     this->control = control;
 
@@ -21,10 +21,10 @@ ControlIntWidget::ControlIntWidget(ControlInt *control, QWidget *parent) :
 
     update();
     connect(slider, SIGNAL(valueChanged(int)),
-            this, SLOT(change()));
+            this, SLOT(slotChange()));
 }
 
-void ControlIntWidget::change()
+void ControlIntWidget::slotChange()
 {
     control->value() = slider->value();
     label->setNum(control->value());
