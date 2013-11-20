@@ -80,8 +80,7 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
                 controlWidget = new ControlColorWidget(static_cast<ControlColor *>(control));
                 break;
             case IControl::ControlImage:
-                // !!
-                controlWidget = new IControlWidget();
+                controlWidget = new ControlImageWidget(static_cast<ControlImage *>(control));
                 break;
             case IControl::ControlButton:
                 controlWidget = new ControlButtonWidget(scenes.at(i),

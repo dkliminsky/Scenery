@@ -14,6 +14,7 @@
 #include "controls/controlstringwidget.h"
 #include "controls/controlcolorwidget.h"
 #include "controls/controlbuttonwidget.h"
+#include "controls/controlimagewidget.h"
 
 typedef QVector<ProcessWindow *> ProcessWindows;
 typedef QVector<IControlWidget *> ControlWidgets;

@@ -65,7 +65,8 @@ HEADERS += \
     server/socket.h \
     server/server.h \
     scenes/VLMT/stars.h \
-    gui/controls/icontrolwidget.h
+    gui/controls/icontrolwidget.h \
+    gui/controls/controlimagewidget.h
 
 SOURCES += \
     node.cpp \
@@ -121,7 +122,8 @@ SOURCES += \
     scenes/manager2cameras.cpp \
     server/socket.cpp \
     server/server.cpp \
-    scenes/VLMT/stars.cpp
+    scenes/VLMT/stars.cpp \
+    gui/controls/controlimagewidget.cpp
 
 RESOURCES += \
     icons.qrc
