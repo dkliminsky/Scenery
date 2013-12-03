@@ -17,7 +17,6 @@
 
 # Qt project files:
 *.pro.user
-*.pro
 
 # Build catalog
 build*/
