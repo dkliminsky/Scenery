@@ -9,6 +9,8 @@
 #include "controls/controlimage.h"
 #include "controls/controlbutton.h"
 
+#include <QDir>
+
 
 Scene::Scene()
 {
@@ -325,7 +327,29 @@ void Scene::control(Color &color, QString description)
 
 void Scene::control(Image **image, QString description, QString path, QString file)
 {
-    *image = loadImage(path + file);
+    QDir dir(path);
+    Q_ASSERT(dir.exists());
+
+    QStringList filters;
+    filters << "*.png" << "*.jpg" << "*.jpeg";
+    QStringList list = dir.entryList(filters);
+
+    Q_ASSERT(list.size());
+
+    QVector<Image *> images;
+    int index = 0;
+    for (int i = 0; i < list.size(); i++) {
+        QString name = list.at(i);
+        Image *imageDir = loadImage(path + name);
+        images.append(imageDir);
+
+        if (name == file) {
+            index = i;
+        }
+    }
+
+    *image = images.at(index);
+    _controls += new ControlImage(image, description, images);
 }
 
 void Scene::signal(int id)

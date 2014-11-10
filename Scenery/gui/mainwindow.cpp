@@ -49,6 +49,7 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
             this, SLOT(slotChangeScene(int,int)));
 
     // Scenes controls
+    controlWidgetsScenes.resize(scenes.size());
     for(int i=0; i<scenes.size(); i++) {
         Scene *scene = scenes.at(i);
 
@@ -60,29 +61,37 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
         for (int j=0; j<scene->controls().size(); j++) {
             IControl *control = scene->controls().at(j);
             layout->addWidget(new QLabel(control->name()), j, 0);
+            IControlWidget *controlWidget = 0;
+
             switch(control->type()) {
             case IControl::ControlBool:
-                layout->addWidget(new ControlBoolWidget(static_cast<ControlBool *>(control)), j, 1);
+                controlWidget = new ControlBoolWidget(static_cast<ControlBool *>(control));
                 break;
             case IControl::ControlInt:
-                layout->addWidget(new ControlIntWidget(static_cast<ControlInt *>(control)), j, 1);
+                controlWidget = new ControlIntWidget(static_cast<ControlInt *>(control));
                 break;
             case IControl::ControlDouble:
-                layout->addWidget(new ControlDoubleWidget(static_cast<ControlDouble *>(control)), j, 1);
+                controlWidget = new ControlDoubleWidget(static_cast<ControlDouble *>(control));
                 break;
             case IControl::ControlString:
-                layout->addWidget(new ControlStringWidget(static_cast<ControlString *>(control)), j, 1);
+                controlWidget = new ControlStringWidget(static_cast<ControlString *>(control));
                 break;
             case IControl::ControlColor:
-                layout->addWidget(new ControlColorWidget(static_cast<ControlColor *>(control)), j, 1);
+                controlWidget = new ControlColorWidget(static_cast<ControlColor *>(control));
                 break;
             case IControl::ControlImage:
-                // !!
+                controlWidget = new ControlImageWidget(static_cast<ControlImage *>(control));
                 break;
             case IControl::ControlButton:
-                layout->addWidget(new ControlButtonWidget(scenes.at(i),
-                                  static_cast<ControlButton *>(control)), j, 1);
+                controlWidget = new ControlButtonWidget(scenes.at(i),
+                                                 static_cast<ControlButton *>(control));
+                break;
+            default:
+                controlWidget = new IControlWidget();
             }
+
+            layout->addWidget(controlWidget, j, 1);
+            controlWidgetsScenes[i].append(controlWidget);
         }
 
         if (layout->count() > 0)
@@ -90,10 +99,12 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
 
         widget->setLayout(layout);
         ui->controlsStackedWidget->addWidget(widget);
+        loadControls(i);
     }
 
-
     connect(ui->actionFullScreen, SIGNAL(toggled(bool)), SLOT(setFullScreen(bool)));
+    connect(ui->controlsSaveButton, SIGNAL(clicked()), SLOT(slotSaveControls()));
+    connect(ui->controlsLoadButton, SIGNAL(clicked()), SLOT(slotLoadControls()));
 
     startTimer(500);
 
@@ -132,6 +143,27 @@ void MainWindow::timerEvent(QTimerEvent *)
 
 }
 
+void MainWindow::loadControls(int numScene)
+{
+    Scene *scene = manager->getScenes().at(numScene);
+
+    QSettings settings("controls.ini", QSettings::IniFormat);
+
+    settings.beginGroup(scene->name());
+
+    for(int i=0; i<scene->controls().size(); i++) {
+        IControl *control = scene->controls().at(i);
+        if (settings.contains(control->name())) {
+            IControlWidget *controlWidget = controlWidgetsScenes.at(numScene).at(i);
+            QString s = settings.value(control->name()).toString();
+            control->set(s);
+            controlWidget->update();
+        }
+    }
+
+    settings.endGroup();
+}
+
 void MainWindow::setFullScreen(bool full)
 {
     if (manager->getViews().size() > 0) {
@@ -164,4 +196,25 @@ void MainWindow::slotChangeScene(int row, int column)
         curScene = row;
         ui->controlsStackedWidget->setCurrentIndex(row);
     }
+}
+
+void MainWindow::slotSaveControls()
+{
+    Scene *scene = manager->getScenes().at(curScene);
+
+    QSettings settings("controls.ini", QSettings::IniFormat);
+
+    settings.beginGroup(scene->name());
+
+    for(int i=0; i<scene->controls().size(); i++) {
+        IControl *control = scene->controls().at(i);
+        settings.setValue(control->name(), control->get());
+    }
+
+    settings.endGroup();
+}
+
+void MainWindow::slotLoadControls()
+{
+    loadControls(curScene);
 }

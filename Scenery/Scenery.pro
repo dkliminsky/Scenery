@@ -6,25 +6,7 @@ TEMPLATE = app
 win32:INCLUDEPATH += c:/opencv/include
 win32:LIBS += c:/opencv/lib/*.a
 
-unix:LIBS += \
-    /usr/local/lib/libopencv_calib3d.so \
-    /usr/local/lib/libopencv_contrib.so \
-    /usr/local/lib/libopencv_core.so \
-    /usr/local/lib/libopencv_features2d.so \
-    /usr/local/lib/libopencv_flann.so \
-    /usr/local/lib/libopencv_gpu.so \
-    /usr/local/lib/libopencv_highgui.so \
-    /usr/local/lib/libopencv_imgproc.so \
-    /usr/local/lib/libopencv_legacy.so \
-    /usr/local/lib/libopencv_ml.so \
-    /usr/local/lib/libopencv_nonfree.so \
-    /usr/local/lib/libopencv_objdetect.so \
-    /usr/local/lib/libopencv_photo.so \
-    /usr/local/lib/libopencv_stitching.so \
-    /usr/local/lib/libopencv_superres.so \
-    /usr/local/lib/libopencv_ts.so \
-    /usr/local/lib/libopencv_video.so \
-    /usr/local/lib/libopencv_videostab.so
+unix:LIBS += /usr/local/lib/libopencv_*.so
 
 HEADERS += \
     node.h \
@@ -81,7 +63,10 @@ HEADERS += \
     scenes/managerdk.h \
     scenes/manager2cameras.h \
     server/socket.h \
-    server/server.h
+    server/server.h \
+    scenes/VLMT/stars.h \
+    gui/controls/icontrolwidget.h \
+    gui/controls/controlimagewidget.h
 
 SOURCES += \
     node.cpp \
@@ -136,7 +121,9 @@ SOURCES += \
     scenes/managerdk.cpp \
     scenes/manager2cameras.cpp \
     server/socket.cpp \
-    server/server.cpp
+    server/server.cpp \
+    scenes/VLMT/stars.cpp \
+    gui/controls/controlimagewidget.cpp
 
 RESOURCES += \
     icons.qrc

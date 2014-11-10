@@ -6,14 +6,16 @@
 #include <QDoubleSpinBox>
 #include <QPushButton>
 #include <QColorDialog>
+#include "icontrolwidget.h"
 #include "graphics/controls/controlcolor.h"
 
-class ControlColorWidget : public QWidget
+class ControlColorWidget : public IControlWidget
 {
     Q_OBJECT
 public:
-    explicit ControlColorWidget(ControlColor *control,
-                                QWidget *parent = 0);
+    explicit ControlColorWidget(ControlColor *control);
+    void update();
+
 private:
     ControlColor *control;
     QHBoxLayout *hLayout;
@@ -27,10 +29,8 @@ private:
 
 signals:
     
-public slots:
-    void change();
-    void update();
-
+private slots:
+    void slotChange();
     void showColorDialog();
     void changeColor(QColor c);
 };

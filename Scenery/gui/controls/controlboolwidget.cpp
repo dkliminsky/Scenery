@@ -1,19 +1,26 @@
 #include "controlboolwidget.h"
+#include <QHBoxLayout>
 
-ControlBoolWidget::ControlBoolWidget(ControlBool *controlBool, QWidget *parent) :
-    QCheckBox(parent)
+ControlBoolWidget::ControlBoolWidget(ControlBool *controlBool)
 {
     this->control = controlBool;
+
+    checkBox = new QCheckBox();
+    QHBoxLayout *layout = new QHBoxLayout();
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(checkBox);
+    this->setLayout(layout);
+
     update();
-    connect(this, SIGNAL(clicked()), this, SLOT(change()));
+    connect(checkBox, SIGNAL(clicked()), this, SLOT(slotChange()));
 }
 
-void ControlBoolWidget::change()
+void ControlBoolWidget::slotChange()
 {
-    control->value() = this->isChecked();
+    control->value() = checkBox->isChecked();
 }
 
 void ControlBoolWidget::update()
 {
-    this->setChecked(control->value());
+    checkBox->setChecked(control->value());
 }

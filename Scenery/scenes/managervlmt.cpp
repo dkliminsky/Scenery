@@ -26,6 +26,7 @@ ManagerVLMT::ManagerVLMT()
     scenes += new Cage();
     scenes += new Brush();
     scenes += new Strings();
+    scenes += new Stars();
     scenes += new Inking();
 
     views.at(0)->setScene(scenes.at(0));

@@ -11,8 +11,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    //ManagerVLMT manager;
-    ManagerDK manager;
+    ManagerVLMT manager;
+    //ManagerDK manager;
     //ManagerTable manager;
     //ManagerMotion manager;
     //Manager2Cameras manager;

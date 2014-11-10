@@ -3,23 +3,24 @@
 
 #include <QComboBox>
 #include <QStringList>
+#include "icontrolwidget.h"
 #include "graphics/controls/controlstring.h"
 
-class ControlStringWidget : public QComboBox
+class ControlStringWidget : public IControlWidget
 {
     Q_OBJECT
 public:
-    explicit ControlStringWidget(ControlString *control,
-                                 QWidget *parent = 0);
+    explicit ControlStringWidget(ControlString *control);
+    void update();
 
 private:
     ControlString *control;
+    QComboBox *comboBox;
 
 signals:
     
-public slots:
-    void change();
-    void update();
+private slots:
+    void slotChange();
 
 };
 

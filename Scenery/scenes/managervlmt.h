@@ -7,6 +7,7 @@
 #include "scenes/VLMT/cage.h"
 #include "scenes/VLMT/strings.h"
 #include "scenes/VLMT/brush.h"
+#include "scenes/VLMT/stars.h"
 #include "scenes/VLMT/inking.h"
 
 #include "process/processdebug.h"

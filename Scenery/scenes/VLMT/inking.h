@@ -13,6 +13,10 @@ public:
     void setup();
     void paint();
 
+private:
+    double inkingWingth;
+    double inkingLengthLimit;
+
 
 };
 

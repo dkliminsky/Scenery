@@ -1,9 +1,6 @@
 #include "controlcolorwidget.h"
 
-ControlColorWidget::ControlColorWidget(ControlColor *control,
-                                       QWidget *parent) :
-    QWidget(parent)
-{
+ControlColorWidget::ControlColorWidget(ControlColor *control){
     this->control = control;
 
     spinR = new QDoubleSpinBox();
@@ -40,10 +37,10 @@ ControlColorWidget::ControlColorWidget(ControlColor *control,
 
     this->setLayout(hLayout);
 
-    connect(spinR, SIGNAL(valueChanged(double)),  SLOT(change()));
-    connect(spinG, SIGNAL(valueChanged(double)),  SLOT(change()));
-    connect(spinB, SIGNAL(valueChanged(double)),  SLOT(change()));
-    connect(spinA, SIGNAL(valueChanged(double)),  SLOT(change()));
+    connect(spinR, SIGNAL(valueChanged(double)),  SLOT(slotChange()));
+    connect(spinG, SIGNAL(valueChanged(double)),  SLOT(slotChange()));
+    connect(spinB, SIGNAL(valueChanged(double)),  SLOT(slotChange()));
+    connect(spinA, SIGNAL(valueChanged(double)),  SLOT(slotChange()));
     connect(button, SIGNAL(clicked()), SLOT(showColorDialog()));
     connect(colorDialog, SIGNAL(currentColorChanged(QColor)),
             SLOT(changeColor(QColor)));
@@ -51,7 +48,7 @@ ControlColorWidget::ControlColorWidget(ControlColor *control,
     update();
 }
 
-void ControlColorWidget::change()
+void ControlColorWidget::slotChange()
 {
     if (isSlotChangeOn) {
         control->value().r = spinR->value();
