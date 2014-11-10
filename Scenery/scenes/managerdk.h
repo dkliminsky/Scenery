@@ -4,7 +4,7 @@
 #include "manager.h"
 #include "process/processdebug.h"
 
-#include "scenes/skeleton/skeleton.h"
+#include "scenes/Skeleton/skeleton.h"
 #include "scenes/VLMT/cage.h"
 #include "scenes/VLMT/strings.h"
 #include "scenes/VLMT/brush.h"

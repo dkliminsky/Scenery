@@ -4,7 +4,7 @@
 #include "manager.h"
 #include "process/processdebug.h"
 
-#include "table/fractals.h"
+#include "Table/fractals.h"
 
 class ManagerTable : public Manager
 {

@@ -1,4 +1,4 @@
-QT += gui opengl network
+QT += widgets opengl network
 
 TARGET = Scenery
 TEMPLATE = app
@@ -6,7 +6,7 @@ TEMPLATE = app
 win32:INCLUDEPATH += c:/opencv/include
 win32:LIBS += c:/opencv/lib/*.a
 
-unix:LIBS += /usr/local/lib/libopencv_*.so
+unix:LIBS += /usr/lib/x86_64-linux-gnu/libopencv_*.so
 
 HEADERS += \
     graphics/controls/icontrol.h \
