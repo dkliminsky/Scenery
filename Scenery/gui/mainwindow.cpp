@@ -1,7 +1,6 @@
 #include <QtWidgets>
 
 #include "mainwindow.h"
-#include "process/node.h"
 
 
 MainWindow::MainWindow(Manager *manager, QWidget *parent) :

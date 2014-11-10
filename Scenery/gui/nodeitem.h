@@ -9,7 +9,7 @@
 class NodeItem : public QGraphicsItem
 {
 public:
-    NodeItem(Node *node);
+    NodeItem(Node *_node);
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

@@ -4,7 +4,7 @@
 #include <typeinfo>
 
 Process::Process(QString name, int width, int height) :
-    Node(name)
+    NodeTemp(name)
 {
     qDebug() << "Constructor Begin: Process";
 

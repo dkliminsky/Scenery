@@ -4,7 +4,7 @@
 #include <QMainWindow>
 
 #include "manager.h"
-#include "nodeitem.h"
+#include "process/node.h"
 
 #include "controls/controlboolwidget.h"
 #include "controls/controlintwidget.h"
@@ -18,6 +18,7 @@ class QAction;
 class QMenu;
 class QGraphicsView;
 class QGraphicsScene;
+class Node;
 QT_END_NAMESPACE
 
 

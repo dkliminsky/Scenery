@@ -3,8 +3,8 @@
 #include "nodeitem.h"
 
 
-NodeItem::NodeItem(Node *node) :
-    node(node)
+NodeItem::NodeItem(Node *_node) :
+    node(_node)
 {
     setToolTip("Node");
     setCursor(Qt::OpenHandCursor);
