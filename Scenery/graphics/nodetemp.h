@@ -4,10 +4,10 @@
 #include <QString>
 #include "process/processdata.h"
 
-class Node
+class NodeTemp
 {
 public:
-    Node(QString name);
+    NodeTemp(QString name);
 
     const QString &getName() { return name; }
     bool getIsUpdate() { return isUpdate; }

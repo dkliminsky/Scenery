@@ -8,6 +8,8 @@ win32:LIBS += c:/opencv/lib/*.a
 
 unix:LIBS += /usr/lib/x86_64-linux-gnu/libopencv_*.so
 
+CONFIG += c++11
+
 HEADERS += \
     graphics/controls/icontrol.h \
     graphics/controls/controlstring.h \
@@ -45,7 +47,6 @@ HEADERS += \
     process/clustering.h \
     server/socket.h \
     server/server.h \
-    node.h \
     manager.h \
     scenes/Dance/shift.h \
     scenes/Dance/memorize.h \
@@ -66,7 +67,10 @@ HEADERS += \
     scenes/managermotion.h \
     scenes/managerdk.h \
     scenes/managerdance.h \
-    scenes/manager2cameras.h
+    scenes/manager2cameras.h \
+    gui/nodeitem.h \
+    graphics/nodetemp.h \
+    process/node.h
 
 SOURCES += \
     graphics/controls/controlstring.cpp \
@@ -102,7 +106,6 @@ SOURCES += \
     process/clustering.cpp \
     server/socket.cpp \
     server/server.cpp \
-    node.cpp \
     manager.cpp \
     main.cpp \
     scenes/Dance/shift.cpp \
@@ -124,7 +127,10 @@ SOURCES += \
     scenes/managermotion.cpp \
     scenes/managerdk.cpp \
     scenes/managerdance.cpp \
-    scenes/manager2cameras.cpp
+    scenes/manager2cameras.cpp \
+    gui/nodeitem.cpp \
+    process/node.cpp \
+    graphics/nodetemp.cpp
 
 RESOURCES += \
 icons.qrc

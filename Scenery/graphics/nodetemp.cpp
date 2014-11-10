@@ -1,6 +1,6 @@
-#include "node.h"
+#include "nodetemp.h"
 
-Node::Node(QString name)
+NodeTemp::NodeTemp(QString name)
 {
     this->name = name;
 
@@ -10,3 +10,4 @@ Node::Node(QString name)
     imageResult = 0;
     hitResult = 0;
 }
+

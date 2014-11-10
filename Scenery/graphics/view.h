@@ -7,9 +7,9 @@
 
 #include "iscene.h"
 #include "graphic.h"
-#include "node.h"
+#include "nodetemp.h"
 
-typedef QVector<Node *> Datas;
+typedef QVector<NodeTemp *> Datas;
 
 
 class View : public QGLWidget, protected QGLFunctions

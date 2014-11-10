@@ -1,7 +1,7 @@
 ﻿#ifndef PROCESS_H
 #define PROCESS_H
 
-#include "node.h"
+#include "graphics/nodetemp.h"
 #include "clustering.h"
 #include "processdata.h"
 #include "processfilters.h"
@@ -26,7 +26,7 @@ using std::deque;
 typedef deque<SeqAreas> SeqAreasBuffer;
 
 
-class Process : public Node, public ProcessTools, public QThread, public Clustering
+class Process : public NodeTemp, public ProcessTools, public QThread, public Clustering
 {
 public:
     Process(QString getName, int width, int height);

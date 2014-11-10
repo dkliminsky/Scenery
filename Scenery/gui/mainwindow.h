@@ -2,10 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QLabel>
 
 #include "manager.h"
-#include "processwindow.h"
+#include "nodeitem.h"
 
 #include "controls/controlboolwidget.h"
 #include "controls/controlintwidget.h"
@@ -14,12 +13,13 @@
 #include "controls/controlcolorwidget.h"
 #include "controls/controlbuttonwidget.h"
 
-typedef QVector<ProcessWindow *> ProcessWindows;
-typedef QVector<QWidget *> ControlWidgets;
+QT_BEGIN_NAMESPACE
+class QAction;
+class QMenu;
+class QGraphicsView;
+class QGraphicsScene;
+QT_END_NAMESPACE
 
-namespace Ui {
-class MainWindow;
-}
 
 class MainWindow : public QMainWindow
 {
@@ -29,22 +29,33 @@ public:
     explicit MainWindow(Manager *manager, QWidget *parent = 0);
     ~MainWindow();
 
+    void addNode(Node *node);
+
 protected:
     void closeEvent(QCloseEvent *);
     void timerEvent(QTimerEvent *);
 
 private:
-    Ui::MainWindow *ui;
     Manager *manager;
-    ProcessWindows processWindows;
-    ControlWidgets controlWidgets;
-    int curScene;
+    QGraphicsScene *scene;
+    QGraphicsView *graphics;
+
+    QAction *exitAct;
+    QAction *aboutAct;
+    QAction *aboutQtAct;
+    QMenu *fileMenu;
+    QMenu *helpMenu;
+
+    void readSettings();
+    void createActions();
+    void createMenus();
+    void createScene();
+
+private slots:
+    void about();
 
 public slots:
     void setFullScreen(bool full);
-
-    void slotEditProcess(int row, int colomn);
-    void slotChangeScene(int row, int colomn);
 
 };
 
