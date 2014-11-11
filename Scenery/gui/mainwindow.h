@@ -4,21 +4,20 @@
 #include <QMainWindow>
 
 #include "manager.h"
-#include "process/node.h"
+#include "nodeitem.h"
 
-#include "controls/controlboolwidget.h"
-#include "controls/controlintwidget.h"
-#include "controls/controldoublewidget.h"
-#include "controls/controlstringwidget.h"
-#include "controls/controlcolorwidget.h"
-#include "controls/controlbuttonwidget.h"
+//#include "controls/controlboolwidget.h"
+//#include "controls/controlintwidget.h"
+//#include "controls/controldoublewidget.h"
+//#include "controls/controlstringwidget.h"
+//#include "controls/controlcolorwidget.h"
+//#include "controls/controlbuttonwidget.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
 class QGraphicsView;
 class QGraphicsScene;
-class Node;
 QT_END_NAMESPACE
 
 
@@ -29,8 +28,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(Manager *manager, QWidget *parent = 0);
     ~MainWindow();
-
-    void addNode(Node *node);
 
 protected:
     void closeEvent(QCloseEvent *);

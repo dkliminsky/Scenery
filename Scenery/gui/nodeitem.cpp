@@ -3,11 +3,15 @@
 #include "nodeitem.h"
 
 
-NodeItem::NodeItem(Node *_node) :
-    node(_node)
+NodeItem::NodeItem(Node *node) :
+    node(node)
 {
+    qDebug() << "Constructor Begin: NodeItem";
+
     setToolTip("Node");
     setCursor(Qt::OpenHandCursor);
+
+    qDebug() << "Constructor End: NodeItem";
 }
 
 QRectF NodeItem::boundingRect() const

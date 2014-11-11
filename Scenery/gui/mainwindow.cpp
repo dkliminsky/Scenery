@@ -1,19 +1,23 @@
 #include <QtWidgets>
 
 #include "mainwindow.h"
+#include "process/node.h"
 
 
 MainWindow::MainWindow(Manager *manager, QWidget *parent) :
-    QMainWindow(parent)
+    QMainWindow(parent),
+    manager(manager)
 {
     qDebug() << "Constructor Begin: MainWindow";
+
     createActions();
     createMenus();
     createScene();
     readSettings();
 
     Node *node = new Node();
-    addNode(node);
+    NodeItem *nodeItem = new NodeItem(node);
+    scene->addItem(nodeItem);
 
     startTimer(500);
     qDebug() << "Constructor End: MainWindow";
@@ -22,12 +26,6 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
 MainWindow::~MainWindow()
 {
 
-}
-
-void MainWindow::addNode(Node *node)
-{
-    NodeItem *nodeItem = new NodeItem(node);
-    scene->addItem(nodeItem);
 }
 
 void MainWindow::closeEvent(QCloseEvent *)

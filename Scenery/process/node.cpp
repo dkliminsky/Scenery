@@ -1,10 +1,5 @@
-#include "process/node.h"
+#include "node.h"
 
-Node::Node() :
-    name("Noname"),
-    tooltip("Node"),
-    posX(0),
-    posY(0)
+Node::Node()
 {
-
 }
