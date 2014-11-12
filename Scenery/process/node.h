@@ -2,27 +2,38 @@
 #define NODE_H
 
 #include <QString>
+#include <QThread>
 
 
 class Node
 {
 public:
-    Node(int _posX=0, int _posY=0);
+    Node();
+    virtual ~Node() {}
 
-    const QString &name() { return _name; }
-    const QString &tooltip() { return _tooltip; }
+    virtual const QString name() { return QString("Noname"); }
+    virtual const QString tooltip() { return "Node"; }
 
     int posX() { return _posX; }
     int posY() { return _posY; }
-    int setPos(int x, int y) { _posX = x; _posY = y; }
+    void setPos(int x, int y) { _posX = x; _posY = y; }
+
+    virtual void process() { run(); }
 
 protected:
-    QString _name;
-    QString _tooltip;
-
     int _posX;
     int _posY;
 
+    virtual void run() {}
+};
+
+
+class ThreadNode: public Node, public QThread
+{
+public:
+    ThreadNode() {}
+    virtual ~ThreadNode() {}
+    virtual void process() { start(); }
 };
 
 #endif // NODE_H

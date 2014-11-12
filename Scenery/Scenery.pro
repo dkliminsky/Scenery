@@ -20,7 +20,9 @@ HEADERS += \
     gui/mainwindow.h \
     gui/nodeitem.h \
     process/node.h \
-    manager.h
+    manager.h \
+    process/opencv/cameranode.h \
+    process/process.h
 
 SOURCES += \
 #    gui/controls/controlstringwidget.cpp \
@@ -33,7 +35,8 @@ SOURCES += \
     gui/nodeitem.cpp \
     process/node.cpp \
     manager.cpp \
-    main.cpp
+    main.cpp \
+    process/opencv/cameranode.cpp
 
 RESOURCES += \
 icons.qrc

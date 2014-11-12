@@ -8,11 +8,26 @@ Manager::Manager(QObject *parent) :
 
 //    ProcessTools::initRGB2HSV();
 
-    sources.append(new Node(0, 0));
-    sources.append(new Node(100, 0));
-    sources.append(new Node(100, 50));
+    Node *node = new CameraNode();
 
+    sources.append(node);
+    sources.append(new Node());
+    sources.append(new Node());
+
+    startTimer(17);
     qDebug() << "Manager: Constructor end";
+}
+
+Manager::~Manager()
+{
+    foreach (Node *node, sources) {
+        delete node;
+    }
+}
+
+void Manager::timerEvent(QTimerEvent *)
+{
+
 }
 
 //Manager::~Manager()

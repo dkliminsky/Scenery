@@ -20,7 +20,7 @@ NodeItem::NodeItem(Node *node) :
 
 QRectF NodeItem::boundingRect() const
 {
-    return QRectF(0, 0, width + 2, height + 2);
+    return QRectF(0, 0, width, height);
 }
 
 void NodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -30,11 +30,11 @@ void NodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
     painter->setPen(Qt::NoPen);
     painter->setBrush(Qt::darkGray);
-    painter->drawRect(2, 2, width + 2, height + 2);
+    painter->drawRect(2, 2, width, height);
 
     painter->setPen(QPen(Qt::black, 1));
-    painter->setBrush(QBrush(Qt::gray));
-    painter->drawRect(0, 0, width, height);
+    painter->setBrush(QBrush(Qt::white));
+    painter->drawRect(0, 0, width - 2, height - 2);
 
     painter->drawText(QPoint(3, 15), node->name());
 }
@@ -57,7 +57,7 @@ void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     setPos(node->posX(), node->posY());
 }
 
-void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *)
 {
     setCursor(Qt::OpenHandCursor);
 }

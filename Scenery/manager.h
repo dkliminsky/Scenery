@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "process/node.h"
+#include "process/process.h"
 
 
 //#include "process/process.h"
@@ -23,8 +24,13 @@ class Manager : public QObject
     Q_OBJECT
 public:
     explicit Manager(QObject *parent = 0);
+    ~Manager();
 
     Nodes sources;
+
+protected:
+    void timerEvent(QTimerEvent *);
+
 
 //    ~Manager();
 
