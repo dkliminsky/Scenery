@@ -15,9 +15,10 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     createScene();
     readSettings();
 
-    Node *node = new Node();
-    NodeItem *nodeItem = new NodeItem(node);
-    scene->addItem(nodeItem);
+    foreach (Node *node, manager->sources) {
+        NodeItem *nodeItem = new NodeItem(node);
+        scene->addItem(nodeItem);
+    }
 
     startTimer(500);
     qDebug() << "Constructor End: MainWindow";
@@ -62,7 +63,7 @@ void MainWindow::createActions() {
     connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
     aboutAct = new QAction(tr("&About"), this);
-    aboutAct->setStatusTip(tr("Show the application's About box"));
+    aboutAct->setStatusTip(tr("Show the Scenery About box"));
     connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 
     aboutQtAct = new QAction(tr("About &Qt"), this);

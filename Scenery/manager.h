@@ -2,6 +2,10 @@
 #define MANAGER_H
 
 #include <QObject>
+
+#include "process/node.h"
+
+
 //#include "process/process.h"
 //#include "process/input.h"
 //#include "graphics/view.h"
@@ -12,11 +16,16 @@
 //typedef QVector<View *>    Views;
 //typedef QVector<Scene *>   Scenes;
 
+typedef QList<Node *> Nodes;
+
 class Manager : public QObject
 {
     Q_OBJECT
 public:
     explicit Manager(QObject *parent = 0);
+
+    Nodes sources;
+
 //    ~Manager();
 
 //    virtual QString name() = 0;
