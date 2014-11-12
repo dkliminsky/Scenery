@@ -23,6 +23,9 @@ protected:
 private:
     Node *node;
 
+    int width;
+    int height;
+
 };
 
 #endif // NODEITEM_H

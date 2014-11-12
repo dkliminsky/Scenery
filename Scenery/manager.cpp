@@ -8,6 +8,10 @@ Manager::Manager(QObject *parent) :
 
 //    ProcessTools::initRGB2HSV();
 
+    sources.append(new Node(0, 0));
+    sources.append(new Node(100, 0));
+    sources.append(new Node(100, 50));
+
     qDebug() << "Manager: Constructor end";
 }
 

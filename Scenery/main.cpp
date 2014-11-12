@@ -10,7 +10,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("turlicht.tk");
     QCoreApplication::setApplicationName("Scenery");
 
-    MainWindow mainWindow(nullptr);
+    Manager manager;
+    MainWindow mainWindow(&manager);
     mainWindow.show();
     return a.exec();
 }
