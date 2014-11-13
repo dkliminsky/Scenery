@@ -8,7 +8,7 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     QMainWindow(parent),
     manager(manager)
 {
-    qDebug() << "Constructor Begin: MainWindow";
+    qDebug() << "MainWindow: Constructor Begin";
 
     createActions();
     createMenus();
@@ -21,7 +21,7 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     }
 
     startTimer(500);
-    qDebug() << "Constructor End: MainWindow";
+    qDebug() << "MainWindow: Constructor End";
 }
 
 MainWindow::~MainWindow()

@@ -4,8 +4,6 @@
 #include <QObject>
 
 #include "process/node.h"
-#include "process/process.h"
-
 
 //#include "process/process.h"
 //#include "process/input.h"
@@ -16,8 +14,6 @@
 //typedef QVector<Input *>   Inputs;
 //typedef QVector<View *>    Views;
 //typedef QVector<Scene *>   Scenes;
-
-typedef QList<Node *> Nodes;
 
 class Manager : public QObject
 {
@@ -30,6 +26,9 @@ public:
 
 protected:
     void timerEvent(QTimerEvent *);
+
+private:
+    void processNode(Node *node);
 
 
 //    ~Manager();

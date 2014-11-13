@@ -1,4 +1,5 @@
 #include "manager.h"
+#include "process/process.h"
 #include <QDebug>
 
 Manager::Manager(QObject *parent) :
@@ -8,11 +9,13 @@ Manager::Manager(QObject *parent) :
 
 //    ProcessTools::initRGB2HSV();
 
-    Node *node = new CameraNode();
+    Node *cameraNode = new CameraNode();
+    sources.append(cameraNode);
 
-    sources.append(node);
-    sources.append(new Node());
-    sources.append(new Node());
+    Node *bebugNode = new DebugNode();
+    sources.append(bebugNode);
+
+    cameraNode->out.at(0)->node = bebugNode;
 
     startTimer(17);
     qDebug() << "Manager: Constructor end";
@@ -20,14 +23,34 @@ Manager::Manager(QObject *parent) :
 
 Manager::~Manager()
 {
+    qDebug() << "Manager: Destructor begin";
+
     foreach (Node *node, sources) {
+        node->process_wait();
         delete node;
     }
+
+    qDebug() << "Manager: Destructor end";
 }
 
 void Manager::timerEvent(QTimerEvent *)
 {
+    foreach (Node *node, sources) {
+        processNode(node);
+    }
+}
 
+void Manager::processNode(Node *node)
+{
+    if (!node->isProcessing()) {
+        foreach (Link *link, node->out) {
+            if (link->node && !link->node->isProcessing()) {
+                link->node->in.at(0)->mat = link->mat.clone();
+                processNode(link->node);
+            }
+        }
+        node->process();
+    }
 }
 
 //Manager::~Manager()

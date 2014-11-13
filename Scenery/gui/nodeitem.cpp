@@ -6,7 +6,7 @@
 NodeItem::NodeItem(Node *node) :
     node(node)
 {
-    qDebug() << "Constructor Begin: NodeItem";
+    qDebug() << "NodeItem: Constructor Begin";
 
     setToolTip("Node");
     setCursor(Qt::OpenHandCursor);
@@ -15,7 +15,7 @@ NodeItem::NodeItem(Node *node) :
     height = 30;
     setPos(node->posX(), node->posY());
 
-    qDebug() << "Constructor End: NodeItem";
+    qDebug() << "NodeItem: Constructor End";
 }
 
 QRectF NodeItem::boundingRect() const

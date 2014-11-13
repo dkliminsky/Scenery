@@ -4,23 +4,24 @@
 CameraNode::CameraNode(int device) :
     device(device)
 {
-    qDebug() << "Constructor Begin: CameraNode";
+    qDebug() << "CameraNode: Constructor Begin";
 
+    out.append(new Link(LinkType::Mat));
     openCamera(device);
 
-    qDebug() << "Constructor End: CameraNode";
+    qDebug() << "CameraNode: Constructor End";
 }
 
 CameraNode::~CameraNode()
 {
-    qDebug() << "Destructor Begin: CameraNode";
-    qDebug() << "Destructor End: CameraNode";
+    qDebug() << "CameraNode: Destructor Begin";
+    qDebug() << "CameraNode: Destructor End";
 }
 
 void CameraNode::run()
 {
     if (capture.isOpened())
-        capture >> frame;
+        capture >> out.at(0)->mat;
 }
 
 void CameraNode::openCamera(int device)
