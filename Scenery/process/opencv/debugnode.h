@@ -7,7 +7,7 @@
 using namespace cv;
 
 
-class DebugNode : public ThreadNode
+class DebugNode : public Node
 {
 public:
     DebugNode();

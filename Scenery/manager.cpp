@@ -37,11 +37,16 @@ void Manager::timerEvent(QTimerEvent *)
 void Manager::initScene()
 {
     Node *cameraNode = new CameraNode();
+    cameraNode->setPos(0, 0);
     sources.append(cameraNode);
     nodes.append(cameraNode);
 
+    Node *colorNode = new ColorNode();
+    colorNode->setPos(200, 0);
+    nodes.append(colorNode);
+
     Node *debugNode1 = new DebugNode();
-    debugNode1->setPos(200, 0);
+    debugNode1->setPos(400, 0);
     nodes.append(debugNode1);
 
     Node *debugNode2 = new DebugNode();
@@ -49,59 +54,8 @@ void Manager::initScene()
     nodes.append(debugNode2);
 
     cameraNode->out.at(0)->links.append(new Link(debugNode1, 0));
-    cameraNode->out.at(0)->links.append(new Link(debugNode2, 0));
+    cameraNode->out.at(0)->links.append(new Link(colorNode, 0));
+
+    colorNode->out.at(0)->links.append(new Link(debugNode2, 0));
+
 }
-
-//Manager::~Manager()
-//{
-//    qDebug() << "Manager: Destructor begin";
-
-//    for ( int i=0; i<processes.size(); i++){
-//        processes[i]->wait();
-//        delete processes[i];
-//    }
-
-//    for ( int i=0; i<inputs.size(); i++){
-//        inputs[i]->wait();
-//        delete inputs[i];
-//    }
-
-//    for ( int i=0; i<views.size(); i++){
-//        delete views[i];
-//    }
-
-//    for ( int i=0; i<scenes.size(); i++){
-//        delete scenes[i];
-//    }
-
-//    qDebug() << "Manager: Destructor begin";
-//}
-
-//void Manager::processesStart()
-//{
-//    for (int i=0; i<processes.size(); i++)
-//        processes.at(i)->start();
-//}
-
-//void Manager::processesCopyData()
-//{
-//    for (int i=0; i<processes.size(); i++)
-//        processes.at(i)->copyData();
-//}
-
-//bool Manager::isProcessesComplete()
-//{
-//    for (int i=0; i<processes.size(); i++)
-//        if (processes.at(i)->isRunning())
-//            return false;
-//    return true;
-//}
-
-//bool Manager::isInputsComplete()
-//{
-//    for (int i=0; i<inputs.size(); i++)
-//        if (inputs.at(i)->isRunning())
-//            return false;
-//    return true;
-//}
-

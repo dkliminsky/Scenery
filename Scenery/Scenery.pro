@@ -24,7 +24,8 @@ HEADERS += \
     process/opencv/cameranode.h \
     process/process.h \
     process/opencv/debugnode.h \
-    debug.h
+    debug.h \
+    process/opencv/colornode.h
 
 SOURCES += \
 #    gui/controls/controlstringwidget.cpp \
@@ -39,7 +40,8 @@ SOURCES += \
     manager.cpp \
     main.cpp \
     process/opencv/cameranode.cpp \
-    process/opencv/debugnode.cpp
+    process/opencv/debugnode.cpp \
+    process/opencv/colornode.cpp
 
 RESOURCES += \
 icons.qrc

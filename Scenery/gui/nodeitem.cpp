@@ -28,13 +28,15 @@ void NodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-//    foreach (Link *link, node->out) {
-//        if (link->node) {
-//            painter->drawLine(node->posX(), node->posY(),
-//                              link->node->posX(), link->node->posY());
-//            qDebug() << node->posX() << node->posY() << link->node->posX() << link->node->posY();
-//        }
-//    }
+    foreach (Port *port, node->out) {
+        foreach (Link *link, port->links) {
+            Node *next = link->node;
+
+            painter->drawLine(node->posX(), node->posY(),
+                              next->posX(), next->posY());
+            qDebug() << node->posX() << node->posY() << next->posX() << next->posY();
+        }
+    }
 
     painter->setPen(Qt::NoPen);
     painter->setBrush(Qt::darkGray);

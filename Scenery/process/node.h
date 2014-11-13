@@ -5,6 +5,8 @@
 #include <QTime>
 #include <QThread>
 #include <opencv2/opencv.hpp>
+#include "debug.h"
+
 
 using namespace cv;
 

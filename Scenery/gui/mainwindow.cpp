@@ -17,8 +17,7 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     readSettings();
 
     foreach (Node *node, manager->sources) {
-        NodeItem *nodeItem = new NodeItem(node);
-        scene->addItem(nodeItem);
+        addNode(node);
     }
 
     startTimer(500);
@@ -87,6 +86,19 @@ void MainWindow::createScene()
     scene = new QGraphicsScene();
     graphics = new QGraphicsView(scene);
     setCentralWidget(graphics);
+}
+
+void MainWindow::addNode(Node *node)
+{
+    NodeItem *nodeItem = new NodeItem(node);
+    scene->addItem(nodeItem);
+
+    foreach (Port *port, node->out) {
+        foreach (Link *link, port->links) {
+            Node *next = link->node;
+            addNode(next);
+        }
+    }
 }
 
 void MainWindow::about()

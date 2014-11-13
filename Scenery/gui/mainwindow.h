@@ -49,6 +49,8 @@ private:
     void createMenus();
     void createScene();
 
+    void addNode(Node *node);
+
 private slots:
     void about();
 

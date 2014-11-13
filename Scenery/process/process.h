@@ -3,5 +3,6 @@
 
 #include "opencv/cameranode.h"
 #include "opencv/debugnode.h"
+#include "opencv/colornode.h"
 
 #endif // PROCESS_H

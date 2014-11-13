@@ -3,7 +3,6 @@
 
 #include <opencv2/opencv.hpp>
 #include "process/node.h"
-
 using namespace cv;
 
 
