@@ -7,7 +7,7 @@
 using namespace cv;
 
 
-class DebugNode : public Node
+class DebugNode : public ThreadNode
 {
 public:
     DebugNode();
@@ -19,6 +19,7 @@ protected:
     void run();
 
 private:
+    int num;
 
 };
 

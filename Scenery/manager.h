@@ -23,12 +23,13 @@ public:
     ~Manager();
 
     Nodes sources;
+    Nodes nodes;
 
 protected:
     void timerEvent(QTimerEvent *);
 
 private:
-    void processNode(Node *node);
+    void initScene();
 
 
 //    ~Manager();

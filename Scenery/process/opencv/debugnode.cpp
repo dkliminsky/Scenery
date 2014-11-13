@@ -1,19 +1,20 @@
 #include "debugnode.h"
-#include <QDebug>
+#include "debug.h"
 
 
 DebugNode::DebugNode()
 {
-    qDebug() << "CameraNode: Constructor Begin";
+    METHOD_BEGIN
 
-    in.append(new Link(LinkType::Mat));
+    num = qrand();
+    in.append(new Port(PortType::Mat));
 
-    qDebug() << "CameraNode: Constructor End";
+    METHOD_END
 }
 
 void DebugNode::run()
 {
     Mat &frame = in.at(0)->mat;
     if (frame.rows > 0 && frame.cols > 0)
-        imshow("Debug", frame);
+        imshow(QString("Debug %1").arg(num).toStdString(), frame);
 }

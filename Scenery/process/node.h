@@ -2,37 +2,47 @@
 #define NODE_H
 
 #include <QString>
+#include <QTime>
 #include <QThread>
 #include <opencv2/opencv.hpp>
 
 using namespace cv;
 
 class Node;
+class Port;
+class Link;
 
-enum class LinkType { Mat, Human };
+typedef QList<Link *> Links;
+typedef QList<Port *> Ports;
+typedef QList<Node *> Nodes;
+
+enum class PortType { Mat, Human };
 
 
 class Link
 {
 public:
-    Link(LinkType type) : type(type), node(nullptr) {}
-
-    LinkType type;
+    Link(Node *node, int port_id) : node(node), port_id(port_id)  {}
     Node *node;
-    int in;
-    int out;
-
-    Mat mat;
+    int port_id;
 };
 
-typedef QList<Node *> Nodes;
-typedef QList<Link *> Links;
+class Port
+{
+public:
+    Port(PortType type) : type(type) {}
+    PortType type;
+    Links links;
 
+    // Data
+    Mat mat;
+    // ...
+};
 
 class Node
 {
 public:
-    Node() : _posX(0), _posY(0) {}
+    Node();
     virtual ~Node() {}
 
     virtual const QString name() { return QString("Noname"); }
@@ -42,18 +52,32 @@ public:
     int posY() { return _posY; }
     void setPos(int x, int y) { _posX = x; _posY = y; }
 
-    virtual void process() { run(); }
+    int timing() { return timeResult; }
+
+    virtual void process();
     virtual void process_wait() {}
     virtual bool isProcessing() { return false; }
 
-    Links in;
-    Links out;
+    Ports in;
+    Ports out;
 
 protected:
     int _posX;
     int _posY;
 
     virtual void run() {}
+    virtual void _process() { run(); }
+
+    void processNext();
+    void timing_start();
+    void timing_finish();
+
+private:
+    QTime time;
+    int timeMean;
+    int timeNum;
+    int timeResult;
+
 };
 
 
@@ -63,9 +87,12 @@ public:
     ThreadNode() {}
     virtual ~ThreadNode() {}
 
-    virtual void process() override final { start(); }
     virtual void process_wait() override final { wait(); }
     virtual bool isProcessing() override final { return isRunning(); }
+
+protected:
+    virtual void _process() override final { start(); }
+
 };
 
 #endif // NODE_H

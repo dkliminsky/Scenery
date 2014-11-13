@@ -1,56 +1,55 @@
+#include "debug.h"
 #include "manager.h"
 #include "process/process.h"
-#include <QDebug>
+
 
 Manager::Manager(QObject *parent) :
     QObject(parent)
 {
-    qDebug() << "Manager: Constructor begin";
+    METHOD_BEGIN
 
 //    ProcessTools::initRGB2HSV();
-
-    Node *cameraNode = new CameraNode();
-    sources.append(cameraNode);
-
-    Node *bebugNode = new DebugNode();
-    sources.append(bebugNode);
-
-    cameraNode->out.at(0)->node = bebugNode;
-
+    initScene();
     startTimer(17);
-    qDebug() << "Manager: Constructor end";
+
+    METHOD_END
 }
 
 Manager::~Manager()
 {
-    qDebug() << "Manager: Destructor begin";
+    METHOD_BEGIN
 
-    foreach (Node *node, sources) {
+    foreach (Node *node, nodes) {
         node->process_wait();
         delete node;
     }
 
-    qDebug() << "Manager: Destructor end";
+    METHOD_END
 }
 
 void Manager::timerEvent(QTimerEvent *)
 {
     foreach (Node *node, sources) {
-        processNode(node);
+        node->process();
     }
 }
 
-void Manager::processNode(Node *node)
+void Manager::initScene()
 {
-    if (!node->isProcessing()) {
-        foreach (Link *link, node->out) {
-            if (link->node && !link->node->isProcessing()) {
-                link->node->in.at(0)->mat = link->mat.clone();
-                processNode(link->node);
-            }
-        }
-        node->process();
-    }
+    Node *cameraNode = new CameraNode();
+    sources.append(cameraNode);
+    nodes.append(cameraNode);
+
+    Node *debugNode1 = new DebugNode();
+    debugNode1->setPos(200, 0);
+    nodes.append(debugNode1);
+
+    Node *debugNode2 = new DebugNode();
+    debugNode2->setPos(200, 50);
+    nodes.append(debugNode2);
+
+    cameraNode->out.at(0)->links.append(new Link(debugNode1, 0));
+    cameraNode->out.at(0)->links.append(new Link(debugNode2, 0));
 }
 
 //Manager::~Manager()

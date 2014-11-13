@@ -23,7 +23,8 @@ HEADERS += \
     manager.h \
     process/opencv/cameranode.h \
     process/process.h \
-    process/opencv/debugnode.h
+    process/opencv/debugnode.h \
+    debug.h
 
 SOURCES += \
 #    gui/controls/controlstringwidget.cpp \

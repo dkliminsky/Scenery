@@ -7,12 +7,10 @@
 using namespace cv;
 
 
-class CameraNode : public ThreadNode
+class CameraNode : public Node
 {
 public:
     CameraNode(int device=0);
-    ~CameraNode();
-
     virtual const QString name() { return "Camera"; }
     virtual const QString tooltip() { return "Camera capture"; }
 

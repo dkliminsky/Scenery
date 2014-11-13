@@ -2,13 +2,14 @@
 
 #include "mainwindow.h"
 #include "process/node.h"
+#include "debug.h"
 
 
 MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     QMainWindow(parent),
     manager(manager)
 {
-    qDebug() << "MainWindow: Constructor Begin";
+    METHOD_BEGIN
 
     createActions();
     createMenus();
@@ -21,7 +22,8 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     }
 
     startTimer(500);
-    qDebug() << "MainWindow: Constructor End";
+
+    METHOD_END
 }
 
 MainWindow::~MainWindow()

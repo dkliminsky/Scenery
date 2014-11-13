@@ -1,27 +1,26 @@
-#include <QDebug>
+#include "debug.h"
 #include "cameranode.h"
+
 
 CameraNode::CameraNode(int device) :
     device(device)
 {
-    qDebug() << "CameraNode: Constructor Begin";
+    METHOD_BEGIN
 
-    out.append(new Link(LinkType::Mat));
+    out.append(new Port(PortType::Mat));
     openCamera(device);
 
-    qDebug() << "CameraNode: Constructor End";
-}
-
-CameraNode::~CameraNode()
-{
-    qDebug() << "CameraNode: Destructor Begin";
-    qDebug() << "CameraNode: Destructor End";
+    METHOD_END
 }
 
 void CameraNode::run()
 {
+    //METHOD_BEGIN
+
     if (capture.isOpened())
         capture >> out.at(0)->mat;
+
+    //METHOD_END
 }
 
 void CameraNode::openCamera(int device)

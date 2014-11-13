@@ -1,12 +1,12 @@
 #include <QtWidgets>
-
+#include "debug.h"
 #include "nodeitem.h"
 
 
 NodeItem::NodeItem(Node *node) :
     node(node)
 {
-    qDebug() << "NodeItem: Constructor Begin";
+    METHOD_BEGIN
 
     setToolTip("Node");
     setCursor(Qt::OpenHandCursor);
@@ -15,7 +15,7 @@ NodeItem::NodeItem(Node *node) :
     height = 30;
     setPos(node->posX(), node->posY());
 
-    qDebug() << "NodeItem: Constructor End";
+    METHOD_END
 }
 
 QRectF NodeItem::boundingRect() const
@@ -27,6 +27,14 @@ void NodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
+
+//    foreach (Link *link, node->out) {
+//        if (link->node) {
+//            painter->drawLine(node->posX(), node->posY(),
+//                              link->node->posX(), link->node->posY());
+//            qDebug() << node->posX() << node->posY() << link->node->posX() << link->node->posY();
+//        }
+//    }
 
     painter->setPen(Qt::NoPen);
     painter->setBrush(Qt::darkGray);
