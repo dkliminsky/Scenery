@@ -24,8 +24,8 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
-    
+	Q_OBJECT
+
 public:
     explicit MainWindow(Manager *manager, QWidget *parent = 0);
     ~MainWindow();

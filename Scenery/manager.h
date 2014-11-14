@@ -17,7 +17,8 @@
 
 class Manager : public QObject
 {
-    Q_OBJECT
+	Q_OBJECT
+
 public:
     explicit Manager(QObject *parent = 0);
     ~Manager();

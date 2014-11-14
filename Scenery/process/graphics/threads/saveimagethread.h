@@ -8,7 +8,7 @@
 
 class SaveImageThread : public QThread
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
     explicit SaveImageThread(cv::Mat &mat, QString fileName);
     void run();

@@ -8,7 +8,7 @@
 
 class LoadImageThread : public QThread
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
     explicit LoadImageThread(cv::Mat &mat, QString fileName);
     void run();

@@ -115,7 +115,7 @@ Image *Scene::createImage(int width, int height, int channels)
 
 Image *Scene::copyImage(Image *img)
 {
-
+	return nullptr;
 }
 
 void Scene::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle)
