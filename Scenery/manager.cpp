@@ -1,6 +1,7 @@
 #include "debug.h"
 #include "manager.h"
 #include "process/process.h"
+#include "scenes/defaultscene.h"
 
 
 Manager::Manager(QObject *parent) :
@@ -55,7 +56,15 @@ void Manager::initScene()
 
     cameraNode->out.at(0)->links.append(new Link(debugNode1, 0));
     cameraNode->out.at(0)->links.append(new Link(colorNode, 0));
-
     colorNode->out.at(0)->links.append(new Link(debugNode2, 0));
 
+    QGLFormat format;
+    format.setDoubleBuffer(false);
+    ViewNode *viewNode = new ViewNode(format);
+    viewNode->in.append(new Port(PortType::Mat));
+    viewNode->setPos(200, 100);
+    viewNode->setScene(new DefaultScene);
+    nodes.append(viewNode);
+
+    cameraNode->out.at(0)->links.append(new Link(viewNode, 0));
 }

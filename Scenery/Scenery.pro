@@ -26,7 +26,26 @@ HEADERS += \
     process/opencv/debugnode.h \
     debug.h \
     process/opencv/colornode.h \
-    gui/linkitem.h
+    gui/linkitem.h \
+    process/graphics/iscene.h \
+    process/graphics/graphic.h \
+    process/graphics/scene.h \
+    process/graphics/tools.h \
+    process/graphics/elements/color.h \
+    process/graphics/elements/image.h \
+    process/graphics/elements/point.h \
+    process/graphics/threads/loadimagethread.h \
+    process/graphics/threads/saveimagethread.h \
+    process/graphics/controls/controlbool.h \
+    process/graphics/controls/controlbutton.h \
+    process/graphics/controls/controlcolor.h \
+    process/graphics/controls/controldouble.h \
+    process/graphics/controls/controlimage.h \
+    process/graphics/controls/controlint.h \
+    process/graphics/controls/controlstring.h \
+    process/graphics/controls/icontrol.h \
+    process/graphics/viewnode.h \
+    scenes/defaultscene.h
 
 SOURCES += \
 #    gui/controls/controlstringwidget.cpp \
@@ -43,7 +62,24 @@ SOURCES += \
     process/opencv/cameranode.cpp \
     process/opencv/debugnode.cpp \
     process/opencv/colornode.cpp \
-    gui/linkitem.cpp
+    gui/linkitem.cpp \
+    process/graphics/graphic.cpp \
+    process/graphics/scene.cpp \
+    process/graphics/tools.cpp \
+    process/graphics/elements/color.cpp \
+    process/graphics/elements/image.cpp \
+    process/graphics/elements/point.cpp \
+    process/graphics/threads/loadimagethread.cpp \
+    process/graphics/threads/saveimagethread.cpp \
+    process/graphics/controls/controlbool.cpp \
+    process/graphics/controls/controlbutton.cpp \
+    process/graphics/controls/controlcolor.cpp \
+    process/graphics/controls/controldouble.cpp \
+    process/graphics/controls/controlimage.cpp \
+    process/graphics/controls/controlint.cpp \
+    process/graphics/controls/controlstring.cpp \
+    process/graphics/viewnode.cpp \
+    scenes/defaultscene.cpp
 
 RESOURCES += \
 icons.qrc

@@ -5,4 +5,6 @@
 #include "opencv/debugnode.h"
 #include "opencv/colornode.h"
 
+#include "graphics/viewnode.h"
+
 #endif // PROCESS_H
