@@ -5,6 +5,7 @@
 
 #include "manager.h"
 #include "nodeitem.h"
+#include "linkitem.h"
 
 //#include "controls/controlboolwidget.h"
 //#include "controls/controlintwidget.h"
@@ -48,8 +49,7 @@ private:
     void createActions();
     void createMenus();
     void createScene();
-
-    void addNode(Node *node);
+    void createNodes();
 
 private slots:
     void about();

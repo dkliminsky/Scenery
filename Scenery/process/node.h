@@ -38,6 +38,7 @@ public:
 
     // Data
     Mat mat;
+    vector<Rect> rects;
     // ...
 };
 

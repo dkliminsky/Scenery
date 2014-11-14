@@ -54,6 +54,6 @@ void Node::timing_finish()
         timeMean = 0;
         timeNum = 0;
 
-        qDebug() << name() << timeResult;
+        //qDebug() << name() << timeResult;
     }
 }

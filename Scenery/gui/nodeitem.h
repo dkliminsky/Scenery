@@ -2,8 +2,8 @@
 #define NODEITEM_H
 
 #include <QGraphicsItem>
-
 #include "process/node.h"
+#include "linkitem.h"
 
 
 class NodeItem : public QGraphicsItem
@@ -14,6 +14,8 @@ public:
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+    LinkItems links_out;
+    LinkItems links_in;
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

@@ -46,11 +46,11 @@ void Manager::initScene()
     nodes.append(colorNode);
 
     Node *debugNode1 = new DebugNode();
-    debugNode1->setPos(400, 0);
+    debugNode1->setPos(200, 50);
     nodes.append(debugNode1);
 
     Node *debugNode2 = new DebugNode();
-    debugNode2->setPos(200, 50);
+    debugNode2->setPos(400, 0);
     nodes.append(debugNode2);
 
     cameraNode->out.at(0)->links.append(new Link(debugNode1, 0));

@@ -15,10 +15,7 @@ MainWindow::MainWindow(Manager *manager, QWidget *parent) :
     createMenus();
     createScene();
     readSettings();
-
-    foreach (Node *node, manager->sources) {
-        addNode(node);
-    }
+    createNodes();
 
     startTimer(500);
 
@@ -42,7 +39,6 @@ void MainWindow::closeEvent(QCloseEvent *)
 
 void MainWindow::timerEvent(QTimerEvent *)
 {
-
 }
 
 void MainWindow::setFullScreen(bool full)
@@ -88,15 +84,19 @@ void MainWindow::createScene()
     setCentralWidget(graphics);
 }
 
-void MainWindow::addNode(Node *node)
+void MainWindow::createNodes()
 {
-    NodeItem *nodeItem = new NodeItem(node);
-    scene->addItem(nodeItem);
+    foreach (Node *node, manager->nodes) {
+        NodeItem *nodeItem = new NodeItem(node);
+        scene->addItem(nodeItem);
 
-    foreach (Port *port, node->out) {
-        foreach (Link *link, port->links) {
-            Node *next = link->node;
-            addNode(next);
+        foreach (Port *port, node->out) {
+            foreach (Link *link, port->links) {
+                Node *next = link->node;
+                LinkItem *linkItem = new LinkItem(node, next);
+                scene->addItem(linkItem);
+                nodeItem->links_out.append(linkItem);
+            }
         }
     }
 }

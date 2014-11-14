@@ -14,6 +14,7 @@ NodeItem::NodeItem(Node *node) :
     width = 80;
     height = 30;
     setPos(node->posX(), node->posY());
+    setZValue(1);
 
     METHOD_END
 }
@@ -27,16 +28,6 @@ void NodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-
-    foreach (Port *port, node->out) {
-        foreach (Link *link, port->links) {
-            Node *next = link->node;
-
-            painter->drawLine(node->posX(), node->posY(),
-                              next->posX(), next->posY());
-            qDebug() << node->posX() << node->posY() << next->posX() << next->posY();
-        }
-    }
 
     painter->setPen(Qt::NoPen);
     painter->setBrush(Qt::darkGray);
@@ -65,6 +56,9 @@ void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     node->setPos(event->scenePos().x() - event->buttonDownPos(Qt::LeftButton).x(),
                  event->scenePos().y() - event->buttonDownPos(Qt::LeftButton).y());
     setPos(node->posX(), node->posY());
+    foreach (LinkItem *linkItem, links_out) {
+        linkItem->repaint();
+    }
 }
 
 void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *)
