@@ -7,4 +7,6 @@
 
 #include "graphics/viewnode.h"
 
+#include "kinect/kinectnode.h"
+
 #endif // PROCESS_H
