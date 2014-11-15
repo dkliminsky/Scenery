@@ -1,0 +1,9 @@
+﻿
+Visual Studio:
+
+Linker->Input->Additional Dependencies:
+Kinect10.lib
+comctl32.lib
+
+Configuration Properties->VC++ Directories->Library Directories:
+$(KINECTSDK10_DIR)\lib\amd64
