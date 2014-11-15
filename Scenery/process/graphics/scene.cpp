@@ -1,13 +1,13 @@
 #include "scene.h"
 
 #include "tools.h"
-#include "controls/controlbool.h"
-#include "controls/controlint.h"
-#include "controls/controldouble.h"
-#include "controls/controlstring.h"
-#include "controls/controlcolor.h"
-#include "controls/controlimage.h"
-#include "controls/controlbutton.h"
+#include "process/controls/controlbool.h"
+#include "process/controls/controlint.h"
+#include "process/controls/controldouble.h"
+#include "process/controls/controlstring.h"
+#include "process/controls/controlcolor.h"
+#include "process/controls/controlimage.h"
+#include "process/controls/controlbutton.h"
 
 
 Scene::Scene()

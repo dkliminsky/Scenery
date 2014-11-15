@@ -25,11 +25,6 @@ void ViewNode::setScene(IScene *scene)
     scene->resizeEvent();
 }
 
-void ViewNode::run()
-{
-    updateGL();
-}
-
 void ViewNode::initializeGL()
 {
     initializeGLFunctions();

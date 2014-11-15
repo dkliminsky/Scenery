@@ -2,7 +2,7 @@
 #define CONTROLCOLOR_H
 
 #include "icontrol.h"
-#include "../elements/color.h"
+#include "process/graphics/elements/color.h"
 
 class ControlColor : public IControl
 {

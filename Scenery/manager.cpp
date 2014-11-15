@@ -33,6 +33,8 @@ void Manager::timerEvent(QTimerEvent *)
     foreach (Node *node, sources) {
         node->process();
     }
+
+    viewNode->updateGL();
 }
 
 void Manager::initScene()
@@ -60,7 +62,7 @@ void Manager::initScene()
 
     QGLFormat format;
     format.setDoubleBuffer(false);
-    ViewNode *viewNode = new ViewNode(format);
+    viewNode = new ViewNode(format);
     viewNode->in.append(new Port(PortType::Mat));
     viewNode->setPos(200, 100);
     viewNode->setScene(new DefaultScene);

@@ -11,12 +11,6 @@ unix:LIBS += /usr/lib/x86_64-linux-gnu/libopencv_*.so
 CONFIG += c++11
 
 HEADERS += \
-#    gui/controls/controlstringwidget.h \
-#    gui/controls/controlintwidget.h \
-#    gui/controls/controldoublewidget.h \
-#    gui/controls/controlcolorwidget.h \
-#    gui/controls/controlbuttonwidget.h \
-#    gui/controls/controlboolwidget.h \
     gui/mainwindow.h \
     gui/nodeitem.h \
     process/node.h \
@@ -36,24 +30,18 @@ HEADERS += \
     process/graphics/elements/point.h \
     process/graphics/threads/loadimagethread.h \
     process/graphics/threads/saveimagethread.h \
-    process/graphics/controls/controlbool.h \
-    process/graphics/controls/controlbutton.h \
-    process/graphics/controls/controlcolor.h \
-    process/graphics/controls/controldouble.h \
-    process/graphics/controls/controlimage.h \
-    process/graphics/controls/controlint.h \
-    process/graphics/controls/controlstring.h \
-    process/graphics/controls/icontrol.h \
     process/graphics/viewnode.h \
-    scenes/defaultscene.h
+    scenes/defaultscene.h \
+    process/controls/controlbool.h \
+    process/controls/controlbutton.h \
+    process/controls/controlcolor.h \
+    process/controls/controldouble.h \
+    process/controls/controlimage.h \
+    process/controls/controlint.h \
+    process/controls/controlstring.h \
+    process/controls/icontrol.h
 
 SOURCES += \
-#    gui/controls/controlstringwidget.cpp \
-#    gui/controls/controlintwidget.cpp \
-#    gui/controls/controldoublewidget.cpp \
-#    gui/controls/controlcolorwidget.cpp \
-#    gui/controls/controlbuttonwidget.cpp \
-#    gui/controls/controlboolwidget.cpp \
     gui/mainwindow.cpp \
     gui/nodeitem.cpp \
     process/node.cpp \
@@ -71,15 +59,15 @@ SOURCES += \
     process/graphics/elements/point.cpp \
     process/graphics/threads/loadimagethread.cpp \
     process/graphics/threads/saveimagethread.cpp \
-    process/graphics/controls/controlbool.cpp \
-    process/graphics/controls/controlbutton.cpp \
-    process/graphics/controls/controlcolor.cpp \
-    process/graphics/controls/controldouble.cpp \
-    process/graphics/controls/controlimage.cpp \
-    process/graphics/controls/controlint.cpp \
-    process/graphics/controls/controlstring.cpp \
     process/graphics/viewnode.cpp \
-    scenes/defaultscene.cpp
+    scenes/defaultscene.cpp \
+    process/controls/controlbool.cpp \
+    process/controls/controlbutton.cpp \
+    process/controls/controlcolor.cpp \
+    process/controls/controldouble.cpp \
+    process/controls/controlimage.cpp \
+    process/controls/controlint.cpp \
+    process/controls/controlstring.cpp
 
 RESOURCES += \
 icons.qrc

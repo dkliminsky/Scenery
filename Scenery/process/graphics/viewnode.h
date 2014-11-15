@@ -22,8 +22,6 @@ public:
     Graphic *graphic() { return &_graphic; }
 
 protected:
-    void run();
-
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
