@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include "manager.h"
+#include "../nodes/manager.h"
 #include "nodeitem.h"
 #include "linkitem.h"
 

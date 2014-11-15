@@ -1,43 +1,7 @@
-#include "debug.h"
-#include "manager.h"
-#include "process/process.h"
-#include "scenes/defaultscene.h"
+#include "examplemanager.h"
 
 
-Manager::Manager(QObject *parent) :
-    QObject(parent)
-{
-    METHOD_BEGIN
-
-//    ProcessTools::initRGB2HSV();
-    initScene();
-    startTimer(17);
-
-    METHOD_END
-}
-
-Manager::~Manager()
-{
-    METHOD_BEGIN
-
-    foreach (Node *node, nodes) {
-        node->process_wait();
-        delete node;
-    }
-
-    METHOD_END
-}
-
-void Manager::timerEvent(QTimerEvent *)
-{
-    foreach (Node *node, sources) {
-        node->process();
-    }
-
-    viewNode->updateGL();
-}
-
-void Manager::initScene()
+void ExampleManager::initScene()
 {
     Node *cameraNode = new CameraNode();
     cameraNode->setPos(0, 0);

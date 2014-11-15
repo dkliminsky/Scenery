@@ -2,7 +2,7 @@
 #define LINKITEM_H
 
 #include <QGraphicsItem>
-#include "process/node.h"
+#include "nodes/node.h"
 
 class LinkItem;
 typedef QList<LinkItem *> LinkItems;

@@ -2,8 +2,7 @@
 #define MANAGER_H
 
 #include <QObject>
-#include "process/node.h"
-#include "process/graphics/viewnode.h"
+#include "nodes/node.h"
 
 
 class Manager : public QObject
@@ -19,10 +18,7 @@ public:
 
 protected:
     void timerEvent(QTimerEvent *);
-
-private:
-    void initScene();
-    ViewNode *viewNode;
+    virtual void initScene() = 0;
     
 };
 

@@ -2,7 +2,7 @@
 #define NODEITEM_H
 
 #include <QGraphicsItem>
-#include "process/node.h"
+#include "nodes/node.h"
 #include "linkitem.h"
 
 

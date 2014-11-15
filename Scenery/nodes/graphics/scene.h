@@ -8,7 +8,7 @@
 #include <math.h>
 
 #include "iscene.h"
-#include "process/controls/icontrol.h"
+#include "nodes/controls/icontrol.h"
 #include "viewnode.h"
 
 

@@ -2,7 +2,7 @@
 #define CONTROLIMAGE_H
 
 #include "icontrol.h"
-#include "process/graphics/elements/image.h"
+#include "nodes/graphics/elements/image.h"
 
 class ControlImage : public IControl
 {

@@ -1,7 +1,7 @@
 #ifndef DEFAULTSCENE_H
 #define DEFAULTSCENE_H
 
-#include "process/graphics/scene.h"
+#include "nodes/graphics/scene.h"
 
 
 class DefaultScene : public Scene

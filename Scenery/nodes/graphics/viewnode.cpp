@@ -10,6 +10,8 @@ ViewNode::ViewNode(QGLFormat &format, QWidget *parent)
     setScene(&emptyScene);
     show();
 
+    startTimer(17);
+
     METHOD_END
 }
 
@@ -23,6 +25,11 @@ void ViewNode::setScene(IScene *scene)
     this->scene = scene;
     scene->setupEvent(this);
     scene->resizeEvent();
+}
+
+void ViewNode::timerEvent(QTimerEvent *)
+{
+    updateGL();
 }
 
 void ViewNode::initializeGL()

@@ -5,7 +5,7 @@
 #include <QGLFunctions>
 #include <QTime>
 
-#include "process/node.h"
+#include "nodes/node.h"
 #include "iscene.h"
 #include "graphic.h"
 
@@ -22,6 +22,8 @@ public:
     Graphic *graphic() { return &_graphic; }
 
 protected:
+    void timerEvent(QTimerEvent *);
+
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();

@@ -1,7 +1,7 @@
 #include <QtWidgets>
 
 #include "mainwindow.h"
-#include "process/node.h"
+#include "nodes/node.h"
 #include "debug.h"
 
 

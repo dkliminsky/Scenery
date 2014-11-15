@@ -2,7 +2,7 @@
 #define CAMERANODE_H
 
 #include <opencv2/opencv.hpp>
-#include "process/node.h"
+#include "nodes/node.h"
 using namespace cv;
 
 
