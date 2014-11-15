@@ -20,9 +20,12 @@ void KinectNode::run()
 
 void KinectNode::openKinect(int device)
 {
+	qDebug() << "Kinect: initializating...";
+
 	// If Kinect is already initialized, return
 	if (m_frameHelper.IsInitialized())
 	{
+		qDebug() << "Kinect: already init";
 		return;
 	}
 
@@ -33,12 +36,14 @@ void KinectNode::openKinect(int device)
 	hr = NuiGetSensorCount(&sensorCount);
 	if (FAILED(hr))
 	{
+		qDebug() << "Kinect: failed get sensor count";
 		return;
 	}
 
 	// If no sensors, update status bar to report failure and return
 	if (sensorCount == 0)
 	{
+		qDebug() << "Kinect: sensor not found";
 		return;
 	}
 
@@ -52,16 +57,16 @@ void KinectNode::openKinect(int device)
 			hr = m_frameHelper.Initialize(sensor);
 			if (SUCCEEDED(hr))
 			{
-				// Report success
+				qDebug() << "Kinect: success connected";
 				return;
 			}
 			else
 			{
-				// Uninitialize KinectHelper to show that Kinect is not ready
+				qDebug() << "Kinect: not ready";
 				m_frameHelper.UnInitialize();
 			}
 		}
 	}
 
-	// Report failure
+	qDebug() << "Kinect: failure init";
 }

@@ -1,7 +1,10 @@
 #include <QApplication>
 
 #include "gui/mainwindow.h"
+
 #include "scenes/examplemanager.h"
+#include "scenes/examplekinectmanager.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -10,8 +13,11 @@ int main(int argc, char *argv[])
 	QCoreApplication::setOrganizationDomain("turlicht.tk");
 	QCoreApplication::setApplicationName("Scenery");
 
-    ExampleManager manager;
-    manager.initScene();
+    //ExampleManager manager;
+	ExampleKinectManager manager;
+	
+	
+	manager.initScene();
     MainWindow mainWindow(&manager);
     mainWindow.show();
     return a.exec();

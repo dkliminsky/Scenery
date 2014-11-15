@@ -174,7 +174,6 @@
     <ClCompile Include="gui\linkitem.cpp" />
     <ClCompile Include="gui\mainwindow.cpp" />
     <ClCompile Include="gui\nodeitem.cpp" />
-    <ClCompile Include="kinectnode.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="nodes\controls\controlbool.cpp" />
     <ClCompile Include="nodes\controls\controlbutton.cpp" />
@@ -192,6 +191,7 @@
     <ClCompile Include="nodes\graphics\threads\saveimagethread.cpp" />
     <ClCompile Include="nodes\graphics\tools.cpp" />
     <ClCompile Include="nodes\graphics\viewnode.cpp" />
+    <ClCompile Include="nodes\kinect\kinectnode.cpp" />
     <ClCompile Include="nodes\kinect\OpenCVFrameHelper.cpp" />
     <ClCompile Include="nodes\manager.cpp" />
     <ClCompile Include="nodes\node.cpp" />
@@ -199,6 +199,7 @@
     <ClCompile Include="nodes\opencv\colornode.cpp" />
     <ClCompile Include="nodes\opencv\debugnode.cpp" />
     <ClCompile Include="scenes\defaultscene.cpp" />
+    <ClCompile Include="scenes\examplekinectmanager.cpp" />
     <ClCompile Include="scenes\examplemanager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -346,7 +347,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="kinectnode.h" />
     <ClInclude Include="nodes\controls\controlbool.h" />
     <ClInclude Include="nodes\controls\controlbutton.h" />
     <ClInclude Include="nodes\controls\controlcolor.h" />
@@ -361,7 +361,10 @@
     <ClInclude Include="nodes\graphics\graphic.h" />
     <ClInclude Include="nodes\graphics\iscene.h" />
     <ClInclude Include="nodes\graphics\scene.h" />
+    <ClInclude Include="nodes\kinect\kinectnode.h" />
     <ClInclude Include="nodes\kinect\OpenCVFrameHelper.h" />
+    <ClInclude Include="scenes\examplekinectmanager.h" />
+    <ClInclude Include="scenes\examplemanager.h" />
     <CustomBuild Include="nodes\manager.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing manager.h...</Message>
