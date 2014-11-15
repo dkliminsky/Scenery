@@ -15,7 +15,33 @@ KinectNode::KinectNode(int device) :
 
 void KinectNode::run()
 {
+	if (m_frameHelper.IsInitialized())
+	{
+		if (SUCCEEDED(m_frameHelper.UpdateColorFrame()))
+		{
+			Mat &colorMat = out.at(0)->mat;
+			HRESULT hr = m_frameHelper.GetColorImage(&colorMat);
+			if (FAILED(hr))	{
+				return;
+			}
 
+			//imshow("Kinect color", m_colorMat);
+		}
+		else {
+			//qDebug() << "Kinect: error update color frame";
+		}
+
+		if (SUCCEEDED(m_frameHelper.UpdateDepthFrame()))
+		{
+			Mat &depthMat = out.at(1)->mat;
+			HRESULT hr = m_frameHelper.GetDepthImageAsArgb(&depthMat);
+			if (FAILED(hr)) {
+				return;
+			}
+
+			//imshow("Kinect depth", m_depthMat);
+		}
+	}
 }
 
 void KinectNode::openKinect(int device)
@@ -58,6 +84,16 @@ void KinectNode::openKinect(int device)
 			if (SUCCEEDED(hr))
 			{
 				qDebug() << "Kinect: success connected";
+
+				Mat &colorMat = out.at(0)->mat;
+				DWORD width, height;
+				m_frameHelper.GetColorFrameSize(&width, &height);
+				colorMat.create(Size(width, height), m_frameHelper.COLOR_TYPE);
+
+				Mat &depthMat = out.at(1)->mat;
+				m_frameHelper.GetDepthFrameSize(&width, &height);
+				depthMat.create(Size(width, height), m_frameHelper.DEPTH_RGB_TYPE);
+
 				return;
 			}
 			else

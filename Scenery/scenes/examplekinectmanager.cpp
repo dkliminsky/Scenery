@@ -8,10 +8,14 @@ void ExampleKinectManager::initScene()
 	sources.append(kinectNode);
 	nodes.append(kinectNode);
 
-	Node *debugNode1 = new DebugNode();
-	debugNode1->setPos(200, 0);
-	nodes.append(debugNode1);
+	Node *debugColorNode = new DebugNode();
+	debugColorNode->setPos(200, 0);
+	nodes.append(debugColorNode);
 
-	kinectNode->out.at(0)->links.append(new Link(debugNode1, 0));
+	Node *debugDepthNode = new DebugNode();
+	debugDepthNode->setPos(200, 50);
+	nodes.append(debugDepthNode);
 
+	kinectNode->out.at(0)->links.append(new Link(debugColorNode, 0));
+	kinectNode->out.at(1)->links.append(new Link(debugDepthNode, 0));
 }
