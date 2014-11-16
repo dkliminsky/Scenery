@@ -7,6 +7,10 @@
 
 #include "graphics/viewnode.h"
 
+#ifdef NOKINECT
+#include "kinect/kinectfakenode.h"
+#else
 #include "kinect/kinectnode.h"
+#endif
 
 #endif // PROCESS_H

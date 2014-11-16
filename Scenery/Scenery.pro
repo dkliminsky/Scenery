@@ -8,6 +8,8 @@ win32:LIBS += c:/opencv/lib/*.a
 
 unix:LIBS += /usr/lib/x86_64-linux-gnu/libopencv_*.so
 
+DEFINES += NOKINECT
+
 CONFIG += c++11
 
 HEADERS += \
@@ -40,7 +42,9 @@ HEADERS += \
     nodes/controls/controlstring.h \
     nodes/controls/icontrol.h \
     nodes/nodes.h \
-    scenes/examplemanager.h
+    scenes/examplemanager.h \
+    scenes/examplekinectmanager.h \
+    nodes/kinect/kinectfakenode.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -69,7 +73,9 @@ SOURCES += \
     nodes/controls/controlimage.cpp \
     nodes/controls/controlint.cpp \
     nodes/controls/controlstring.cpp \
-    scenes/examplemanager.cpp
+    scenes/examplemanager.cpp \
+    scenes/examplekinectmanager.cpp \
+    nodes/kinect/kinectfakenode.cpp
 
 RESOURCES += \
 icons.qrc

@@ -1,4 +1,4 @@
-#include "scenes\examplekinectmanager.h"
+#include "examplekinectmanager.h"
 
 
 void ExampleKinectManager::initScene()
