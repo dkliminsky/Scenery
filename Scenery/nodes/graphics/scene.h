@@ -13,7 +13,6 @@
 
 
 typedef QVector<Image *> Images;
-typedef QVector<IControl *> Controls;
 
 
 class Scene  : public IScene

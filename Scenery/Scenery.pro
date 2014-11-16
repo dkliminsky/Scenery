@@ -54,7 +54,9 @@ HEADERS += \
     scenes/examplekinectmanager.h \
     nodes/kinect/KinectHelper.h \
     nodes/kinect/kinectnode.h \
-    nodes/kinect/OpenCVFrameHelper.h
+    nodes/kinect/OpenCVFrameHelper.h \
+    nodes/controls/controls.h \
+    nodes/opencv/erodenode.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -86,7 +88,8 @@ SOURCES += \
     scenes/examplemanager.cpp \
     scenes/examplekinectmanager.cpp \
     nodes/kinect/kinectnode.cpp \
-    nodes/kinect/OpenCVFrameHelper.cpp
+    nodes/kinect/OpenCVFrameHelper.cpp \
+    nodes/opencv/erodenode.cpp
 
 RESOURCES += \
 icons.qrc

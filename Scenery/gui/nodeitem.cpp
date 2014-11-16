@@ -65,3 +65,8 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *)
 {
     setCursor(Qt::OpenHandCursor);
 }
+
+void NodeItem::createWidget()
+{
+
+}

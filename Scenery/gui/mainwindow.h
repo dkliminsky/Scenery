@@ -54,9 +54,6 @@ private:
 private slots:
     void about();
 
-public slots:
-    void setFullScreen(bool full);
-
 };
 
 #endif // MAINWINDOW_H

@@ -4,10 +4,9 @@
 #include <QString>
 #include <QTime>
 #include <QThread>
-#include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
 #include "debug.h"
-
-
+#include "controls/controls.h"
 using namespace cv;
 
 class Node;
@@ -18,7 +17,7 @@ typedef QList<Link *> Links;
 typedef QList<Port *> Ports;
 typedef QList<Node *> Nodes;
 
-enum class PortType { Mat, Human };
+enum class PortType { Mat, Human, Rects };
 
 
 class Link
@@ -63,6 +62,7 @@ public:
 
     Ports in;
     Ports out;
+    Controls controls;
 
 protected:
     int _posX;

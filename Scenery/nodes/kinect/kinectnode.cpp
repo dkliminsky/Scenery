@@ -44,7 +44,7 @@ void KinectNode::run()
 	}
 }
 
-void KinectNode::openKinect(int device)
+void KinectNode::openKinect(int)
 {
 	qDebug() << "Kinect: initializating...";
 

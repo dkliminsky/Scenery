@@ -24,9 +24,12 @@ protected:
 
 private:
     Node *node;
+    QWidget widget;
 
     int width;
     int height;
+
+    void createWidget();
 
 };
 

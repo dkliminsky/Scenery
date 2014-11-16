@@ -41,11 +41,6 @@ void MainWindow::timerEvent(QTimerEvent *)
 {
 }
 
-void MainWindow::setFullScreen(bool full)
-{
-
-}
-
 void MainWindow::readSettings()
 {
     QSettings settings;

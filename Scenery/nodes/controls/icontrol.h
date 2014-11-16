@@ -3,6 +3,9 @@
 
 #include <QString>
 
+class IControl;
+typedef QVector<IControl *> Controls;
+
 class IControl
 {
 public:

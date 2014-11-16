@@ -12,17 +12,22 @@ void ExampleManager::initScene()
     colorNode->setPos(200, 0);
     nodes.append(colorNode);
 
+    Node *erodeNode = new ErodeNode();
+    erodeNode->setPos(400, 0);
+    nodes.append(erodeNode);
+
     Node *debugNode1 = new DebugNode();
     debugNode1->setPos(200, 50);
     nodes.append(debugNode1);
 
     Node *debugNode2 = new DebugNode();
-    debugNode2->setPos(400, 0);
+    debugNode2->setPos(600, 0);
     nodes.append(debugNode2);
 
     cameraNode->out.at(0)->links.append(new Link(debugNode1, 0));
     cameraNode->out.at(0)->links.append(new Link(colorNode, 0));
-    colorNode->out.at(0)->links.append(new Link(debugNode2, 0));
+    colorNode->out.at(0)->links.append(new Link(erodeNode, 0));
+    erodeNode->out.at(0)->links.append(new Link(debugNode2, 0));
 
     QGLFormat format;
     format.setDoubleBuffer(false);

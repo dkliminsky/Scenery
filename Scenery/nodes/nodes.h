@@ -4,6 +4,7 @@
 #include "opencv/cameranode.h"
 #include "opencv/debugnode.h"
 #include "opencv/colornode.h"
+#include "opencv/erodenode.h"
 
 #include "graphics/viewnode.h"
 
