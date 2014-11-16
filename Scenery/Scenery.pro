@@ -3,12 +3,20 @@ QT += widgets opengl network
 TARGET = Scenery
 TEMPLATE = app
 
-win32:INCLUDEPATH += c:/opencv/include
-win32:LIBS += c:/opencv/lib/*.a
+win32 {
+    INCLUDEPATH += . \
+        c:/opencv/opencv-2.4.10_vs12x64/include/ \
+        "c:/Program Files/Microsoft SDKs/Kinect/v1.8/inc"
 
-unix:LIBS += /usr/lib/x86_64-linux-gnu/libopencv_*.so
+    LIBS += c:/opencv/opencv-2.4.10_vs12x64/lib/*d.lib \
+        "c:/Program Files/Microsoft SDKs/Kinect/v1.8/lib/amd64/Kinect10.lib"
 
-DEFINES += NOKINECT
+}
+
+unix {
+    LIBS += /usr/lib/x86_64-linux-gnu/libopencv_*.so
+    DEFINES += NOKINECT
+}
 
 CONFIG += c++11
 
@@ -44,7 +52,9 @@ HEADERS += \
     nodes/nodes.h \
     scenes/examplemanager.h \
     scenes/examplekinectmanager.h \
-    nodes/kinect/kinectfakenode.h
+    nodes/kinect/KinectHelper.h \
+    nodes/kinect/kinectnode.h \
+    nodes/kinect/OpenCVFrameHelper.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -75,7 +85,8 @@ SOURCES += \
     nodes/controls/controlstring.cpp \
     scenes/examplemanager.cpp \
     scenes/examplekinectmanager.cpp \
-    nodes/kinect/kinectfakenode.cpp
+    nodes/kinect/kinectnode.cpp \
+    nodes/kinect/OpenCVFrameHelper.cpp
 
 RESOURCES += \
 icons.qrc

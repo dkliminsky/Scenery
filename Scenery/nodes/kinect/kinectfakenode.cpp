@@ -14,5 +14,7 @@ KinectNode::KinectNode(int device)
     out.at(0)->mat.create(Size(640, 480), COLOR_TYPE);
     out.at(1)->mat.create(Size(320, 240), DEPTH_TYPE);
 
+    qDebug() << "Kinect: init fake kinect";
+
     METHOD_END
 }
