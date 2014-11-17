@@ -9,12 +9,17 @@ void ExampleManager::initScene()
     nodes.append(cameraNode);
 
     Node *colorNode = new ColorNode();
-    colorNode->setPos(200, 0);
+    colorNode->setPos(150, 0);
     nodes.append(colorNode);
 
     Node *erodeNode = new ErodeNode();
-    erodeNode->setPos(400, 0);
+    erodeNode->setPos(300, 0);
     nodes.append(erodeNode);
+
+    Node *dilateNode = new DilateNode();
+    dilateNode->setPos(450, 0);
+    nodes.append(dilateNode);
+
 
     Node *debugNode1 = new DebugNode();
     debugNode1->setPos(200, 50);
@@ -24,18 +29,18 @@ void ExampleManager::initScene()
     debugNode2->setPos(600, 0);
     nodes.append(debugNode2);
 
-    cameraNode->out.at(0)->links.append(new Link(debugNode1, 0));
-    cameraNode->out.at(0)->links.append(new Link(colorNode, 0));
-    colorNode->out.at(0)->links.append(new Link(erodeNode, 0));
-    erodeNode->out.at(0)->links.append(new Link(debugNode2, 0));
+    cameraNode->outputs.at(0)->links.append(new Link(debugNode1, 0));
+    cameraNode->outputs.at(0)->links.append(new Link(colorNode, 0));
+    colorNode->outputs.at(0)->links.append(new Link(erodeNode, 0));
+    erodeNode->outputs.at(0)->links.append(new Link(dilateNode, 0));
+    dilateNode->outputs.at(0)->links.append(new Link(debugNode2, 0));
 
-    QGLFormat format;
-    format.setDoubleBuffer(false);
-    viewNode = new ViewNode(format);
-    viewNode->in.append(new Port(PortType::Mat));
+    viewNode = new ViewNode();
+    viewNode->inputs.append(new Port(PortType::Mat));
     viewNode->setPos(200, 100);
-    viewNode->setScene(new DefaultScene);
+    viewNode->setScene(new ShadowScene);
     nodes.append(viewNode);
 
-    cameraNode->out.at(0)->links.append(new Link(viewNode, 0));
+    //cameraNode->outputs.at(0)->links.append(new Link(viewNode, 0));
+    dilateNode->outputs.at(0)->links.append(new Link(viewNode, 0));
 }

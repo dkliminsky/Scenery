@@ -1,10 +1,14 @@
 #include "viewnode.h"
 #include "scene.h"
 
-ViewNode::ViewNode(QGLFormat &format, QWidget *parent)
-     : QGLWidget(format, parent)
+ViewNode::ViewNode(QWidget *parent)
+     : QGLWidget(parent)
 {
     METHOD_BEGIN
+
+    QGLFormat format;
+    format.setDoubleBuffer(false);
+    setFormat(format);
 
     setWindowTitle("Scenery View");
     setScene(&emptyScene);

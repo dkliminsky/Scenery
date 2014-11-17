@@ -62,8 +62,8 @@ void Image::bind()
             format = GL_BGR;
         }
         else {
-            qDebug() << "Image: Error channels";
-            return;
+            internalformat = GL_RED;
+            format = GL_RED;
         }
 
         if (!bindId || width() != bindWidth || height() != bindHeight ||

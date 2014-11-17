@@ -13,7 +13,7 @@
 class ViewNode : public Node, public QGLWidget, protected QGLFunctions
 {
 public:
-    ViewNode(QGLFormat &format, QWidget *parent = 0);
+    ViewNode(QWidget *parent = 0);
     ~ViewNode();
     virtual const QString name() { return "View"; }
     virtual const QString tooltip() { return "View graphics"; }

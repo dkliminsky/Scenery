@@ -85,7 +85,7 @@ void MainWindow::createNodes()
         NodeItem *nodeItem = new NodeItem(node);
         scene->addItem(nodeItem);
 
-        foreach (Port *port, node->out) {
+        foreach (Port *port, node->outputs) {
             foreach (Link *link, port->links) {
                 Node *next = link->node;
                 LinkItem *linkItem = new LinkItem(node, next);

@@ -6,7 +6,7 @@ CameraNode::CameraNode(int device) :
 {
     METHOD_BEGIN
 
-    out.append(new Port(PortType::Mat));
+    outputs.append(new Port(PortType::Mat));
     openCamera(device);
 
     METHOD_END
@@ -15,7 +15,7 @@ CameraNode::CameraNode(int device) :
 void CameraNode::run()
 {
     if (capture.isOpened())
-        capture >> out.at(0)->mat;
+        capture >> outputs.at(0)->mat;
 }
 
 void CameraNode::openCamera(int device)

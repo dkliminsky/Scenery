@@ -5,6 +5,7 @@
 #include "nodes/nodes.h"
 
 #include "scenes/defaultscene.h"
+#include "scenes/shadowscene.h"
 
 
 class ExampleManager : public Manager

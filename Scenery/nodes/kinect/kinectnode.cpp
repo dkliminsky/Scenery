@@ -6,8 +6,8 @@ KinectNode::KinectNode(int device) :
 {
 	METHOD_BEGIN
 
-	out.append(new Port(PortType::Mat));
-	out.append(new Port(PortType::Mat));
+	outputs.append(new Port(PortType::Mat));
+	outputs.append(new Port(PortType::Mat));
 	openKinect(device);
 
 	METHOD_END
@@ -19,7 +19,7 @@ void KinectNode::run()
 	{
 		if (SUCCEEDED(m_frameHelper.UpdateColorFrame()))
 		{
-			Mat &colorMat = out.at(0)->mat;
+			Mat &colorMat = outputs.at(0)->mat;
 			HRESULT hr = m_frameHelper.GetColorImage(&colorMat);
 			if (FAILED(hr))	{
 				return;
@@ -33,7 +33,7 @@ void KinectNode::run()
 
 		if (SUCCEEDED(m_frameHelper.UpdateDepthFrame()))
 		{
-			Mat &depthMat = out.at(1)->mat;
+			Mat &depthMat = outputs.at(1)->mat;
 			HRESULT hr = m_frameHelper.GetDepthImageAsArgb(&depthMat);
 			if (FAILED(hr)) {
 				return;
@@ -85,12 +85,12 @@ void KinectNode::openKinect(int)
 			{
 				qDebug() << "Kinect: success connected";
 
-				Mat &colorMat = out.at(0)->mat;
+				Mat &colorMat = outputs.at(0)->mat;
 				DWORD width, height;
 				m_frameHelper.GetColorFrameSize(&width, &height);
 				colorMat.create(Size(width, height), m_frameHelper.COLOR_TYPE);
 
-				Mat &depthMat = out.at(1)->mat;
+				Mat &depthMat = outputs.at(1)->mat;
 				m_frameHelper.GetDepthFrameSize(&width, &height);
 				depthMat.create(Size(width, height), m_frameHelper.DEPTH_RGB_TYPE);
 

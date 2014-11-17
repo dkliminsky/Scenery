@@ -24,15 +24,15 @@ Node::~Node()
 
 void Node::processNext()
 {
-    foreach (Port *port, out) {
+    foreach (Port *port, outputs) {
         foreach (Link *link, port->links) {
             Node *next = link->node;
 
             Q_ASSERT(next);
-            Q_ASSERT(next->in.count() > link->port_id);
+            Q_ASSERT(next->inputs.count() > link->port_id);
 
             if (!next->isProcessing()) {
-                next->in.at(link->port_id)->mat = port->mat.clone();
+                next->inputs.at(link->port_id)->mat = port->mat.clone();
                 next->process();
             }
         }
@@ -55,6 +55,16 @@ void Node::timing_finish()
 
         //qDebug() << name() << timeResult;
     }
+}
+
+void Node::input(PortType type)
+{
+    inputs.append(new Port(type));
+}
+
+void Node::output(PortType type)
+{
+    outputs.append(new Port(type));
 }
 
 void Node::control(int &x, QString description, int min, int max, int step)

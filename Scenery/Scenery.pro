@@ -74,7 +74,9 @@ HEADERS += \
     gui/controls/controldoublewidget.h \
     gui/controls/controlintwidget.h \
     gui/controls/controlstringwidget.h \
-    gui/controls/controlwidgets.h
+    gui/controls/controlwidgets.h \
+    nodes/opencv/dilatenode.h \
+    scenes/shadowscene.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -112,7 +114,9 @@ SOURCES += \
     gui/controls/controldoublewidget.cpp \
     gui/controls/controlintwidget.cpp \
     gui/controls/controlstringwidget.cpp \
-    gui/controls/controlwidgets.cpp
+    gui/controls/controlwidgets.cpp \
+    nodes/opencv/dilatenode.cpp \
+    scenes/shadowscene.cpp
 
 RESOURCES += \
 icons.qrc

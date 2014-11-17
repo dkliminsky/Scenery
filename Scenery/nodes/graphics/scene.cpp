@@ -12,7 +12,7 @@
 
 Scene::Scene()
 {
-    view = 0;
+    view = nullptr;
 }
 
 Scene::~Scene()
@@ -337,8 +337,8 @@ void Scene::signal(int id)
 
 Port *Scene::process(int n)
 {
-    Q_ASSERT(view->in.count() > n);
-    return view->in[n];
+    Q_ASSERT(view->inputs.count() > n);
+    return view->inputs[n];
 }
 
 void Scene::setupEvent(void *view)
@@ -349,6 +349,9 @@ void Scene::setupEvent(void *view)
     }
     imagesBuffer.clear();
     setup();
+    foreach (IControl *control, _controls) {
+        this->view->controls += control;
+    }
 }
 
 void Scene::paintEvent()

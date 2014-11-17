@@ -5,16 +5,16 @@ ColorNode::ColorNode()
 {
     METHOD_BEGIN
 
-    in.append(new Port(PortType::Mat));
-    out.append(new Port(PortType::Mat));
+    inputs.append(new Port(PortType::Mat));
+    outputs.append(new Port(PortType::Mat));
 
     METHOD_END
 }
 
 void ColorNode::run()
 {
-    Mat &mat_in = in.at(0)->mat;
-    Mat &mat_out = out.at(0)->mat;
+    Mat &mat_in = inputs.at(0)->mat;
+    Mat &mat_out = outputs.at(0)->mat;
 
     cvtColor(mat_in, mat_out, COLOR_RGB2GRAY);
 }
