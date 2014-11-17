@@ -29,11 +29,11 @@ void ExampleManager::initScene()
     debugNode2->setPos(600, 0);
     nodes.append(debugNode2);
 
-    cameraNode->outputs.at(0)->links.append(new Link(debugNode1, 0));
+    //cameraNode->outputs.at(0)->links.append(new Link(debugNode1, 0));
     cameraNode->outputs.at(0)->links.append(new Link(colorNode, 0));
     colorNode->outputs.at(0)->links.append(new Link(erodeNode, 0));
     erodeNode->outputs.at(0)->links.append(new Link(dilateNode, 0));
-    dilateNode->outputs.at(0)->links.append(new Link(debugNode2, 0));
+    //dilateNode->outputs.at(0)->links.append(new Link(debugNode2, 0));
 
     viewNode = new ViewNode();
     viewNode->inputs.append(new Port(PortType::Mat));

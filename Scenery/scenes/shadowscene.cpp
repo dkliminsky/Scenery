@@ -5,6 +5,7 @@ ShadowScene::ShadowScene()
     control(shadow_width=200, "shadow_width", 0, 200);
     control(shadow_height=200, "shadow_height", 0, 200);
     control(shadow_shift=50, "shadow_shift", -200, 200);
+    control(backColor=Color(0,0,0,0.2), "Background");
 }
 
 void ShadowScene::setup()
@@ -19,7 +20,7 @@ void ShadowScene::resize()
 void ShadowScene::paint()
 {
     size(200, 200);
-    background(1, 1, 1, 1);
+    background(backColor);
 
     color(1, 1, 1, 1);
     imageShadow.set(process(0)->mat);

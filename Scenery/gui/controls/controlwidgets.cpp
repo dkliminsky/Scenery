@@ -13,7 +13,7 @@ QWidget *control_widget_factory(IControl *control)
     case IControl::ControlString:
         return new QWidget;
     case IControl::ControlColor:
-        return new QWidget;
+        return new ControlColorWidget(static_cast<ControlColor *>(control));
     case IControl::ControlImage:
         return new QWidget;
     case IControl::ControlButton:

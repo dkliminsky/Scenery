@@ -6,6 +6,7 @@
 #include "controlintwidget.h"
 #include "controldoublewidget.h"
 #include "controlboolwidget.h"
+#include "controlcolorwidget.h"
 
 QWidget *control_widget_factory(IControl *control);
 

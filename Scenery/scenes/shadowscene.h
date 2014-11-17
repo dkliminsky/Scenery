@@ -20,6 +20,8 @@ private:
     int shadow_width;
     int shadow_height;
     int shadow_shift;
+    Color backColor;
+    Color shadowColor;
 };
 
 #endif // SHADOWSCENE_H
