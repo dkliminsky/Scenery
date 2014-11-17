@@ -15,12 +15,11 @@ Node::Node() :
     METHOD_END
 }
 
-void Node::process()
+Node::~Node()
 {
-    timing_start();
-    _process();
-    timing_finish();
-    processNext();
+    foreach (IControl *control, controls) {
+        delete control;
+    }
 }
 
 void Node::processNext()
@@ -56,4 +55,19 @@ void Node::timing_finish()
 
         //qDebug() << name() << timeResult;
     }
+}
+
+void Node::control(int &x, QString description, int min, int max, int step)
+{
+    controls += new ControlInt(x, description, min, max, step);
+}
+
+void Node::control(double &x, QString description, double min, double max, int precision)
+{
+    controls += new ControlDouble(x, description, min, max, precision);
+}
+
+void Node::control(bool &x, QString description)
+{
+    controls += new ControlBool(x, description);
 }

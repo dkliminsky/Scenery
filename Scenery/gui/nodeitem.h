@@ -4,6 +4,7 @@
 #include <QGraphicsItem>
 #include "nodes/node.h"
 #include "linkitem.h"
+#include "controls/controlwidgets.h"
 
 
 class NodeItem : public QGraphicsItem
@@ -21,6 +22,7 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event);
 
 private:
     Node *node;

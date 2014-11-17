@@ -45,7 +45,7 @@ class Node
 {
 public:
     Node();
-    virtual ~Node() {}
+    virtual ~Node();
 
     virtual const QString name() { return QString("Noname"); }
     virtual const QString tooltip() { return "Node"; }
@@ -56,7 +56,10 @@ public:
 
     int timing() { return timeResult; }
 
-    virtual void process();
+    virtual void process() { timing_start();
+                             run();
+                             timing_finish();
+                             processNext();}
     virtual void process_wait() {}
     virtual bool isProcessing() { return false; }
 
@@ -69,18 +72,20 @@ protected:
     int _posY;
 
     virtual void run() {}
-    virtual void _process() { run(); }
 
     void processNext();
     void timing_start();
     void timing_finish();
+
+    void control(int &x, QString description, int min=0, int max=999, int step=1);
+    void control(double &x, QString description, double min=0, double max=100, int precision=1);
+    void control(bool &x, QString description);
 
 private:
     QTime time;
     int timeMean;
     int timeNum;
     int timeResult;
-
 };
 
 
@@ -90,12 +95,15 @@ public:
     ThreadNode() {}
     virtual ~ThreadNode() {}
 
+    virtual void process() { timing_start();
+                             start();
+                             timing_finish();
+                             processNext();}
     virtual void process_wait() override final { wait(); }
     virtual bool isProcessing() override final { return isRunning(); }
 
 protected:
-    virtual void _process() override final { start(); }
-
+    virtual void run() {}
 };
 
 #endif // NODE_H

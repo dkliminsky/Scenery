@@ -3,6 +3,8 @@
 
 #include "icontrol.h"
 #include "controlint.h"
+#include "controldouble.h"
+#include "controlbool.h"
 
 
 #endif // CONTROLS_H

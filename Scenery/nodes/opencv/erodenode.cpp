@@ -7,7 +7,7 @@ ErodeNode::ErodeNode()
      in.append(new Port(PortType::Mat));
     out.append(new Port(PortType::Mat));
 
-    controls.append(new ControlInt(&erosion_size, "Erosion size", 0, 30));
+    control(erosion_size=2, "Erosion size", 0, 30);
 
     METHOD_END
 }
@@ -19,8 +19,6 @@ void ErodeNode::run()
 
     if (in_mat.empty())
         return;
-
-    int erosion_size = 2;
 
     Mat element = cv::getStructuringElement(cv::MORPH_RECT,
                                             Size( 2*erosion_size + 1, 2*erosion_size+1 ),

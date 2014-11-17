@@ -11,11 +11,25 @@ win32 {
     LIBS += c:/opencv/opencv-2.4.10_vs12x64/lib/*d.lib \
         "c:/Program Files/Microsoft SDKs/Kinect/v1.8/lib/amd64/Kinect10.lib"
 
+    HEADERS += \
+        nodes/kinect/KinectHelper.h \
+        nodes/kinect/kinectnode.h \
+        nodes/kinect/OpenCVFrameHelper.h
+
+    SOURCES += \
+        nodes/kinect/kinectnode.cpp \
+        nodes/kinect/OpenCVFrameHelper.cpp \
 }
 
 unix {
     LIBS += /usr/lib/x86_64-linux-gnu/libopencv_*.so
     DEFINES += NOKINECT
+
+    HEADERS += \
+        nodes/kinect/kinectfakenode.h
+
+    SOURCES += \
+        nodes/kinect/kinectfakenode.cpp
 }
 
 CONFIG += c++11
@@ -52,11 +66,15 @@ HEADERS += \
     nodes/nodes.h \
     scenes/examplemanager.h \
     scenes/examplekinectmanager.h \
-    nodes/kinect/KinectHelper.h \
-    nodes/kinect/kinectnode.h \
-    nodes/kinect/OpenCVFrameHelper.h \
     nodes/controls/controls.h \
-    nodes/opencv/erodenode.h
+    nodes/opencv/erodenode.h \
+    gui/controls/controlboolwidget.h \
+    gui/controls/controlbuttonwidget.h \
+    gui/controls/controlcolorwidget.h \
+    gui/controls/controldoublewidget.h \
+    gui/controls/controlintwidget.h \
+    gui/controls/controlstringwidget.h \
+    gui/controls/controlwidgets.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -87,9 +105,14 @@ SOURCES += \
     nodes/controls/controlstring.cpp \
     scenes/examplemanager.cpp \
     scenes/examplekinectmanager.cpp \
-    nodes/kinect/kinectnode.cpp \
-    nodes/kinect/OpenCVFrameHelper.cpp \
-    nodes/opencv/erodenode.cpp
+    nodes/opencv/erodenode.cpp \
+    gui/controls/controlboolwidget.cpp \
+    gui/controls/controlbuttonwidget.cpp \
+    gui/controls/controlcolorwidget.cpp \
+    gui/controls/controldoublewidget.cpp \
+    gui/controls/controlintwidget.cpp \
+    gui/controls/controlstringwidget.cpp \
+    gui/controls/controlwidgets.cpp
 
 RESOURCES += \
 icons.qrc
