@@ -1,7 +1,9 @@
 #ifndef SHADOWSCENE_H
 #define SHADOWSCENE_H
 
+#include <opencv2/opencv.hpp>
 #include "nodes/graphics/scene.h"
+using namespace cv;
 
 
 class ShadowScene : public Scene
@@ -22,6 +24,10 @@ private:
     int shadow_shift;
     Color backColor;
     Color shadowColor;
+
+    int depth_min;
+    int depth_max;
+
 };
 
 #endif // SHADOWSCENE_H

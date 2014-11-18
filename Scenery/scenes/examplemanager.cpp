@@ -35,12 +35,12 @@ void ExampleManager::initScene()
     erodeNode->outputs.at(0)->links.append(new Link(dilateNode, 0));
     //dilateNode->outputs.at(0)->links.append(new Link(debugNode2, 0));
 
-    viewNode = new ViewNode();
+    ViewNode *viewNode = new ViewNode();
     viewNode->inputs.append(new Port(PortType::Mat));
     viewNode->setPos(200, 100);
     viewNode->setScene(new ShadowScene);
     nodes.append(viewNode);
 
-    //cameraNode->outputs.at(0)->links.append(new Link(viewNode, 0));
-    dilateNode->outputs.at(0)->links.append(new Link(viewNode, 0));
+    cameraNode->outputs.at(0)->links.append(new Link(viewNode, 0));
+    //dilateNode->outputs.at(0)->links.append(new Link(viewNode, 0));
 }

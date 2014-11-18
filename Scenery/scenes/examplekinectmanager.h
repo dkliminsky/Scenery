@@ -3,7 +3,8 @@
 
 #include "nodes/manager.h"
 #include "nodes/nodes.h"
-//#include "scenes/defaultscene.h"
+#include "scenes/defaultscene.h"
+#include "scenes/shadowscene.h"
 
 
 class ExampleKinectManager : public Manager

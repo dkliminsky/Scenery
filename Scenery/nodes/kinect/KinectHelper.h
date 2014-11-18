@@ -1154,6 +1154,7 @@ namespace Microsoft {
         {
             SHORT realDepth = NuiDepthPixelToDepth(depth);
             USHORT playerIndex = NuiDepthPixelToPlayerIndex(depth);
+			playerIndex = 0; // ToDo: Hack!!
 
             // Convert depth info into an intensity for display
             BYTE b = 255 - static_cast<BYTE>(256 * realDepth / 0x0fff);

@@ -10,7 +10,7 @@
 using namespace cv;
 
 
-class KinectNode : public Node
+class KinectNode : public ThreadNode
 {
 public:
 	KinectNode(int device = 0);

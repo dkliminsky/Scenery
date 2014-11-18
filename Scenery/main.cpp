@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
 	QCoreApplication::setOrganizationDomain("turlicht.tk");
 	QCoreApplication::setApplicationName("Scenery");
 
-    ExampleManager manager;
-    //ExampleKinectManager manager;
+    //ExampleManager manager;
+    ExampleKinectManager manager;
 	
 	
 	manager.initScene();

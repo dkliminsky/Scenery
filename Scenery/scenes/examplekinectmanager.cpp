@@ -18,4 +18,12 @@ void ExampleKinectManager::initScene()
 
     kinectNode->outputs.at(0)->links.append(new Link(debugColorNode, 0));
     kinectNode->outputs.at(1)->links.append(new Link(debugDepthNode, 0));
+
+    ViewNode *viewNode = new ViewNode();
+    viewNode->inputs.append(new Port(PortType::Mat));
+    viewNode->setPos(200, 100);
+    viewNode->setScene(new ShadowScene);
+    nodes.append(viewNode);
+
+    kinectNode->outputs.at(1)->links.append(new Link(viewNode, 0));
 }

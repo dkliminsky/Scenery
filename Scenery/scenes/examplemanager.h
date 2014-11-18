@@ -14,7 +14,7 @@ public:
     void initScene();
 
 private:
-    ViewNode *viewNode;
+    //ViewNode *viewNode;
 
 };
 

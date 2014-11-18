@@ -8,7 +8,7 @@ win32 {
         c:/opencv/opencv-2.4.10_vs12x64/include/ \
         "c:/Program Files/Microsoft SDKs/Kinect/v1.8/inc"
 
-    LIBS += c:/opencv/opencv-2.4.10_vs12x64/lib/*d.lib \
+    LIBS += c:/opencv/opencv-2.4.10_vs12x64/lib/*.lib \
         "c:/Program Files/Microsoft SDKs/Kinect/v1.8/lib/amd64/Kinect10.lib"
 
     HEADERS += \
