@@ -2,6 +2,10 @@
 #define EFFECT01_H
 
 #include "graphics/scene.h"
+#define M_PI_2	3.14159265358979323846/2	/* pi */
+#define M_PI_4	3.14159265358979323846/4	/* pi */
+
+
 
 /*
  *  Need a SeqAreas

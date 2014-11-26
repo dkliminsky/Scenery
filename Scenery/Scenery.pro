@@ -3,8 +3,10 @@ QT += widgets opengl network
 TARGET = Scenery
 TEMPLATE = app
 
-win32:INCLUDEPATH += c:/opencv/include
-win32:LIBS += c:/opencv/lib/*.a
+win32:INCLUDEPATH += . \
+    c:/opencv/opencv-2.4.10_vs12x64/include/
+
+win32:LIBS += c:/opencv/opencv-2.4.10_vs12x64/lib/*.lib
 
 unix:LIBS += /usr/lib/x86_64-linux-gnu/libopencv_*.so
 
