@@ -66,7 +66,8 @@ void Graphic::lineParts(int parts)
     lineParts_ = parts;
 }
 
-void Graphic::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle)
+void Graphic::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height,
+                    GLfloat angle, ReverseType reverse)
 {
     Q_ASSERT(img);
 
@@ -83,14 +84,38 @@ void Graphic::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat hei
     GLfloat x4 = x - width/2.0;
     GLfloat y4 = y + height/2.0;
 
-//    GLfloat x1 = x - width/2.0;
-//    GLfloat y1 = y + height/2.0;
-//    GLfloat x2 = x + width/2.0;
-//    GLfloat y2 = y + height/2.0;
-//    GLfloat x3 = x + width/2.0;
-//    GLfloat y3 = y - height/2.0;
-//    GLfloat x4 = x - width/2.0;
-//    GLfloat y4 = y - height/2.0;
+    switch (reverse) {
+    case ReverseType::None:
+        x1 = x - width/2.0;
+        y1 = y - height/2.0;
+        x2 = x + width/2.0;
+        y2 = y - height/2.0;
+        x3 = x + width/2.0;
+        y3 = y + height/2.0;
+        x4 = x - width/2.0;
+        y4 = y + height/2.0;
+        break;
+    case ReverseType::Vertical:
+        x1 = x - width/2.0;
+        y1 = y + height/2.0;
+        x2 = x + width/2.0;
+        y2 = y + height/2.0;
+        x3 = x + width/2.0;
+        y3 = y - height/2.0;
+        x4 = x - width/2.0;
+        y4 = y - height/2.0;
+        break;
+    case ReverseType::Horizontal:
+        x1 = x + width/2.0;
+        y1 = y - height/2.0;
+        x2 = x - width/2.0;
+        y2 = y - height/2.0;
+        x3 = x - width/2.0;
+        y3 = y + height/2.0;
+        x4 = x + width/2.0;
+        y4 = y + height/2.0;
+        break;
+    }
 
     if (angle != 0) {
         // Повернем углы прямоугольника относительно координаты x и y

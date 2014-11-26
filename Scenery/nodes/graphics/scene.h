@@ -54,8 +54,8 @@ public:
     Image *loadImage(const QString &fileName);
     Image *createImage(int width, int height, int channels);
     Image *copyImage(Image *img);
-    void image(Image *img, GLfloat x, GLfloat y,
-                           GLfloat width, GLfloat height, GLfloat angle=0);
+    void image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height,
+               GLfloat angle=0, ReverseType reverse=ReverseType::None);
     void text(GLint x, GLint y, const QString & str,
                                 const QFont & fnt = QFont());
     void flush();

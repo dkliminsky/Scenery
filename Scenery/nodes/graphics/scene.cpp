@@ -118,9 +118,9 @@ Image *Scene::copyImage(Image *img)
 	return nullptr;
 }
 
-void Scene::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle)
+void Scene::image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle, ReverseType reverse)
 {
-    view->graphic()->image(img, x, y, width, height, angle);
+    view->graphic()->image(img, x, y, width, height, angle, reverse);
 }
 
 void Scene::text(GLint x, GLint y, const QString & str, const QFont & fnt)

@@ -7,6 +7,9 @@
 #include "elements/color.h"
 #include "elements/point.h"
 
+
+enum class ReverseType { None, Vertical, Horizontal };
+
 class Graphic
 {
 public:
@@ -32,7 +35,8 @@ public:
     void bezier(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
                             GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4);
 
-    void image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat angle=0);
+    void image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height,
+               GLfloat angle=0, ReverseType reverse=ReverseType::None);
 
     void flush();
 

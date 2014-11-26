@@ -21,12 +21,16 @@ private:
     Image imageShadow;
     int shadow_width;
     int shadow_height;
+    int shadow_vertical;
     int shadow_shift;
     Color backColor;
     Color shadowColor;
 
     int depth_min;
     int depth_max;
+
+    bool is_active;
+    bool is_reverse;
 
 };
 
