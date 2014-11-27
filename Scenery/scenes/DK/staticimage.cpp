@@ -2,7 +2,8 @@
 
 StaticImage::StaticImage()
 {
-    control(&imageStatic, "Image", "images/DK/", "static.png");
+    control(&imageStatic, "Image", "images/DK/", "white.png");
+    control(backColor=Color(0,0,0,1), "Background");
 }
 
 void StaticImage::setup()
@@ -16,6 +17,7 @@ void StaticImage::paint()
     int h = height();
 
     size(width(), height());
-    color(1,1,1,1);
-    image(imageStatic, w/2, h/2, w, h-200);
+    color(backColor);
+    //image(imageStatic, w/2, h/2, w, h-200);
+    image(imageStatic, w/2, h/2, w, h);
 }

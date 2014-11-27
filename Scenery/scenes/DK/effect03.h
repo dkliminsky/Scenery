@@ -16,6 +16,7 @@ public:
     void paint();
 
 private:
+    Color backColor;
     double decrease;
 
     int flareSize;

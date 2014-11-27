@@ -15,6 +15,7 @@ public:
 
 private:
     Image *imageStatic;
+    Color backColor;
 
 };
 

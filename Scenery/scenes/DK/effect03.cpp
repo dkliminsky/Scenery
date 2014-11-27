@@ -3,6 +3,8 @@
 
 Effect03::Effect03()
 {
+    control(backColor=Color(0,0,0,1), "Background");
+
     control(decrease=0.1, "Decrease elements", 0, 1, 2);
 
     control(&imageFlare, "Flare: Image", "images/flares/", "flare02.png");
@@ -34,10 +36,12 @@ void Effect03::paint()
     int height = process(0)->height();
 
     size(width, height);
-    process(0)->image()->bind();
-    color(1,1,1,1);
-    image(process(0)->image(), width/2, height/2, width, height);
-    flush();
+    background(backColor);
+
+    //process(0)->image()->bind();
+    //color(1,1,1,1);
+    //image(process(0)->image(), width/2, height/2, width, height);
+    //flush();
 
     effectFlare();
     effectContour();
