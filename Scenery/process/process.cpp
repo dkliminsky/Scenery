@@ -441,19 +441,23 @@ void Process::findSeqAreas(Areas &areas, SeqAreas &seqAreas)
 
     // Создаем двумерную матрицу, в которой просчитаем все расстояния
     // от новых точек до предыдущих
-    double m[areaN][seqN];
+    //double m[areaN][seqN];
+    vector< vector<double> > m(areaN, vector<double>(seqN));
 
     // Отмечаем в массиве, если одна линия не имеет элементов
-    bool newMat[seqN];
+    //bool newMat[seqN];
+    vector<bool> newMat(seqN);
     // Отмечаем, если новые точки использованы
-    bool useNewAreaMat[areaN];
+    //bool useNewAreaMat[areaN];
+    vector<bool> useNewAreaMat(areaN);
 
     for (unsigned int i=0; i<areaN; i++) {
         useNewAreaMat[i] = false;
     }
 
     // Отмечаем использованные линии
-    bool useOldSeqAreaMat[seqN];
+    //bool useOldSeqAreaMat[seqN];
+    vector<bool> useOldSeqAreaMat(seqN);
 
     // ===========================================
 

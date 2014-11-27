@@ -22,3 +22,12 @@
 build*/
 
 
+# Visual Studio
+*.opensdf
+*.sdf
+*.sln
+*.v12.suo
+*.vcxproj.filters
+*.vcxproj.user
+x64/
+GeneratedFiles/

@@ -1,6 +1,9 @@
 #ifndef PROCESSTOOLS_H
 #define PROCESSTOOLS_H
 
+
+#define M_PI	3.14159265358979323846	/* pi */
+
 class ProcessTools
 {
 public:

@@ -25,7 +25,7 @@ ManagerDK::ManagerDK()
     views.at(0)->datas()->append(processes.at(3));
 
     scenes += new SpeedTest();
-    scenes += new StaticImage();
+    //scenes += new StaticImage();
     scenes += new Effect01();
     scenes += new Effect02();
     scenes += new Effect03();
