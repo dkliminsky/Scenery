@@ -2,6 +2,8 @@
 
 Effect01::Effect01()
 {
+    control(scaleX=1, "Scale X", 1, 5, 1);
+    control(scaleY=1, "Scale Y", 1, 5, 1);
     control(backColor=Color(0,0,0,1), "Background");
     control(treeColor=Color(1,0,0,1), "Tree color");
     control(treeWidth=3, "Tree width", 0, 10);
@@ -13,12 +15,12 @@ Effect01::Effect01()
     control(treeGrowLenght=2, "Tree grow lenght", 0, 10);
     control(treeGrowDisappear=1, "Tree grow disappear", 0, 10);
     control(treeMaxLevel=3, "Tree max level", 0, 10);
-    control(treeDeviation=30, "Tree deviation", 0, 100);
+    control(treeDeviation=30, "Tree deviation", 1, 100);
 
     control(treeProbNothing=0, "Tree prob nothing", 0, 10);
     control(treeProb0=0, "Tree prob 0", 0, 10);
     control(treeProb45=0, "Tree prob 45", 0, 10);
-    control(treeProb90=10, "Tree prob 90", 0, 10);
+    control(treeProb90=10, "Tree prob 90", 1, 10);
     control(treeProbTree=0, "Tree prob tree", 0, 10);
 }
 
@@ -144,7 +146,8 @@ void Effect01::paint()
 
         color(tree.color);
         lineWidth(tree.width);
-        line(tree.x, tree.y, x2, y2);
+        line(tree.x*scaleX - (w*scaleX - w)/2, tree.y*scaleY - (h*scaleY - h)/2,
+                 x2*scaleX - (w*scaleX - w)/2,     y2*scaleY - (h*scaleY - h)/2);
 
         ic++;
     }

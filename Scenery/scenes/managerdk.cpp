@@ -10,7 +10,9 @@ ManagerDK::ManagerDK()
     cameraWidth = inputs.at(0)->getWidth();
     cameraHeight = inputs.at(0)->getHeight();
 
-    processes += new Process("Motion", cameraWidth, cameraHeight);
+    Process *motionProcess = new Process("Motion", cameraWidth, cameraHeight);
+    motionProcess->setDebug(true);
+    processes += motionProcess;
     processes += new Process("Color", cameraWidth, cameraHeight);
     processes += new Process("IR Color", cameraWidth, cameraHeight);
     processes += new Process("Contour", cameraWidth, cameraHeight);

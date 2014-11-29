@@ -2,6 +2,8 @@
 
 Effect02::Effect02()
 {
+    control(scaleX=1, "Scale X", 1, 5, 1);
+    control(scaleY=1, "Scale Y", 1, 5, 1);
     control(&imageCircle, "Circle image", "images/forms/", "circle01.png");
     control(&imageCircle2, "Circle image 2", "images/forms/", "circle02.png");
 
@@ -29,6 +31,9 @@ void Effect02::setup()
 
 void Effect02::paint()
 {
+    int w = process(0)->width();
+    int h = process(0)->height();
+
     size(process(0)->width(), process(0)->height());
     background(backColor);
 
@@ -84,7 +89,11 @@ void Effect02::paint()
             int y = circle.y + (random(circleDeviation) - circleDeviation/2);
 
             color(circle.color);
-            image(imageCircle, x, y, circle.size/(n+1), circle.size/(n+1));
+            image(imageCircle,
+                  x*scaleX - (w*scaleX - w)/2,
+                  y*scaleY - (h*scaleY - h)/2,
+                  circle.size/(n+1),
+                  circle.size/(n+1));
 
             i++;
         }

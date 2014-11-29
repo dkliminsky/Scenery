@@ -3,6 +3,8 @@
 
 Effect03::Effect03()
 {
+    control(scaleX=1, "Scale X", 1, 5, 1);
+    control(scaleY=1, "Scale Y", 1, 5, 1);
     control(backColor=Color(0,0,0,1), "Background");
 
     control(decrease=0.1, "Decrease elements", 0, 1, 2);
@@ -164,6 +166,9 @@ void Effect03::effectContour()
 
 void Effect03::drawElements()
 {
+    int w = process(0)->width();
+    int h = process(0)->height();
+
     QMutableListIterator<ElementDraw> i(elementsDraw);
     while (i.hasNext()) {
         ElementDraw &e = i.next();
@@ -179,11 +184,17 @@ void Effect03::drawElements()
         color(e.color);
 
         if (type == 0) {
-            image(e.image, x1, y1, width, width);
+            image(e.image,
+                  x1*scaleX - (w*scaleX - w)/2,
+                  y1*scaleY - (h*scaleY - h)/2,
+                  width, width);
         }
         else if (type == 1) {
             lineWidth(e.width);
-            line(x1, y1, x2, y2);
+            line(x1*scaleX - (w*scaleX - w)/2,
+                 y1*scaleY - (h*scaleY - h)/2,
+                 x2*scaleX - (w*scaleX - w)/2,
+                 y2*scaleY - (h*scaleY - h)/2);
         }
         else if ( type == 2) {
             float a = angle(x1, y1, x2, y2);
@@ -193,9 +204,18 @@ void Effect03::drawElements()
             float y4 = (y1 + (y2 - y1) / 2) - d/4 * cos(a + pi() / 4);
 
             lineWidth(e.width);
-            line(x1, y1, x3, y3);
-            line(x3, y3, x4, y4);
-            line(x4, y4, x2, y2);
+            line(x1*scaleX - (w*scaleX - w)/2,
+                 y1*scaleY - (h*scaleY - h)/2,
+                 x3*scaleX - (w*scaleX - w)/2,
+                 y3*scaleY - (h*scaleY - h)/2);
+            line(x3*scaleX - (w*scaleX - w)/2,
+                 y3*scaleY - (h*scaleY - h)/2,
+                 x4*scaleX - (w*scaleX - w)/2,
+                 y4*scaleY - (h*scaleY - h)/2);
+            line(x4*scaleX - (w*scaleX - w)/2,
+                 y4*scaleY - (h*scaleY - h)/2,
+                 x2*scaleX - (w*scaleX - w)/2,
+                 y2*scaleY - (h*scaleY - h)/2);
         }
         else if ( type == 3) {
             float a = angle(x1, y1, x2, y2);
@@ -206,7 +226,14 @@ void Effect03::drawElements()
 
             lineWidth(e.width);
             lineParts(10);
-            bezier(x1, y1, x3, y3, x4, y4, x2, y2);
+            bezier(x1*scaleX - (w*scaleX - w)/2,
+                   y1*scaleY - (h*scaleY - h)/2,
+                   x3*scaleX - (w*scaleX - w)/2,
+                   y3*scaleY - (h*scaleY - h)/2,
+                   x4*scaleX - (w*scaleX - w)/2,
+                   y4*scaleY - (h*scaleY - h)/2,
+                   x2*scaleX - (w*scaleX - w)/2,
+                   y2*scaleY - (h*scaleY - h)/2);
         }
 
         e.color.a -= decrease;
@@ -216,5 +243,5 @@ void Effect03::drawElements()
     }
 
     color(1, 1, 1, 1);
-    text(30, 20, QString("Elements: %1").arg(elementsDraw.size()));
+    //text(30, 20, QString("Elements: %1").arg(elementsDraw.size()));
 }

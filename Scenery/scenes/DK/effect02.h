@@ -8,12 +8,14 @@ class Effect02 : public Scene
 public:
     Effect02();
 
-    QString name() { return "Effect 01 Circles"; }
+    QString name() { return "Effect 02 Circles"; }
 
     void setup();
     void paint();
 
 private:
+    double scaleX;
+    double scaleY;
     Image *imageCircle;
     Image *imageCircle2;
 

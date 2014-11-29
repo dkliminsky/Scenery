@@ -17,6 +17,8 @@ public:
     void paint();
 
 private:
+    double scaleX;
+    double scaleY;
     Color backColor;
     Color treeColor;
     int treeWidth;
