@@ -13,11 +13,12 @@ class LinkItem : public QGraphicsItem
 public:
     LinkItem(Node *node_from, Node *node_to);
 
+    QRectF bound;
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void repaint();
 
-    QRect calcRect() const;
+    QRectF calcBound() const;
 
 private:
     Node *node_from;
