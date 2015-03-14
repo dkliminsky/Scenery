@@ -2,6 +2,7 @@
 #include "debug.h"
 
 Node::Node() :
+    _uuid(QUuid::createUuid()),
     _posX(0),
     _posY(0)
 {

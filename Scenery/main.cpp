@@ -2,8 +2,7 @@
 
 #include "gui/mainwindow.h"
 
-#include "scenes/examplemanager.h"
-#include "scenes/examplekinectmanager.h"
+#include "scenes/example_scene.cpp"
 
 
 int main(int argc, char *argv[])
@@ -15,7 +14,6 @@ int main(int argc, char *argv[])
 
     ExampleManager manager;
     //ExampleKinectManager manager;
-	
 	
 	manager.initScene();
     MainWindow mainWindow(&manager);

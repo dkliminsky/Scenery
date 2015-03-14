@@ -5,6 +5,6 @@
 #include "controlint.h"
 #include "controldouble.h"
 #include "controlbool.h"
-
+#include "controlstring.h"
 
 #endif // CONTROLS_H

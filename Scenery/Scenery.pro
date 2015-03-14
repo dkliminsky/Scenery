@@ -44,7 +44,6 @@ HEADERS += \
     debug.h \
     nodes/opencv/colornode.h \
     gui/linkitem.h \
-    nodes/graphics/iscene.h \
     nodes/graphics/graphic.h \
     nodes/graphics/scene.h \
     nodes/graphics/tools.h \
@@ -53,8 +52,6 @@ HEADERS += \
     nodes/graphics/elements/point.h \
     nodes/graphics/threads/loadimagethread.h \
     nodes/graphics/threads/saveimagethread.h \
-    nodes/graphics/viewnode.h \
-    scenes/defaultscene.h \
     nodes/controls/controlbool.h \
     nodes/controls/controlbutton.h \
     nodes/controls/controlcolor.h \
@@ -64,8 +61,6 @@ HEADERS += \
     nodes/controls/controlstring.h \
     nodes/controls/icontrol.h \
     nodes/nodes.h \
-    scenes/examplemanager.h \
-    scenes/examplekinectmanager.h \
     nodes/controls/controls.h \
     nodes/opencv/erodenode.h \
     gui/controls/controlboolwidget.h \
@@ -76,7 +71,8 @@ HEADERS += \
     gui/controls/controlstringwidget.h \
     gui/controls/controlwidgets.h \
     nodes/opencv/dilatenode.h \
-    scenes/shadowscene.h
+    nodes/graphics/scenesnode.h \
+    nodes/graphics/view.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -96,8 +92,6 @@ SOURCES += \
     nodes/graphics/elements/point.cpp \
     nodes/graphics/threads/loadimagethread.cpp \
     nodes/graphics/threads/saveimagethread.cpp \
-    nodes/graphics/viewnode.cpp \
-    scenes/defaultscene.cpp \
     nodes/controls/controlbool.cpp \
     nodes/controls/controlbutton.cpp \
     nodes/controls/controlcolor.cpp \
@@ -105,8 +99,6 @@ SOURCES += \
     nodes/controls/controlimage.cpp \
     nodes/controls/controlint.cpp \
     nodes/controls/controlstring.cpp \
-    scenes/examplemanager.cpp \
-    scenes/examplekinectmanager.cpp \
     nodes/opencv/erodenode.cpp \
     gui/controls/controlboolwidget.cpp \
     gui/controls/controlbuttonwidget.cpp \
@@ -116,7 +108,9 @@ SOURCES += \
     gui/controls/controlstringwidget.cpp \
     gui/controls/controlwidgets.cpp \
     nodes/opencv/dilatenode.cpp \
-    scenes/shadowscene.cpp
+    scenes/example_scene.cpp \
+    nodes/graphics/scenesnode.cpp \
+    nodes/graphics/view.cpp
 
 RESOURCES += \
 icons.qrc

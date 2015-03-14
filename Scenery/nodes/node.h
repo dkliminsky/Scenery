@@ -4,6 +4,7 @@
 #include <QString>
 #include <QTime>
 #include <QThread>
+#include <QUuid>
 #include <opencv2/core/core.hpp>
 #include "debug.h"
 #include "controls/controls.h"
@@ -50,6 +51,7 @@ public:
     virtual const QString name() { return QString("Noname"); }
     virtual const QString tooltip() { return "Node"; }
 
+    QString uuid() { return _uuid.toString(); }
     int posX() { return _posX; }
     int posY() { return _posY; }
     void setPos(int x, int y) { _posX = x; _posY = y; }
@@ -68,11 +70,7 @@ public:
     Controls controls;
 
 protected:
-    int _posX;
-    int _posY;
-
     virtual void run() {}
-
     void processNext();
     void timing_start();
     void timing_finish();
@@ -84,10 +82,15 @@ protected:
     void control(bool &x, QString description);
 
 private:
+    QUuid _uuid;
+    int _posX;
+    int _posY;
+
     QTime time;
     int timeMean;
     int timeNum;
     int timeResult;
+
 };
 
 

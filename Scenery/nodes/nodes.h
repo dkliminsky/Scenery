@@ -7,7 +7,8 @@
 #include "opencv/erodenode.h"
 #include "opencv/dilatenode.h"
 
-#include "graphics/viewnode.h"
+#include "graphics/scenesnode.h"
+#include "graphics/view.h"
 
 #ifdef NOKINECT
 #include "kinect/kinectfakenode.h"

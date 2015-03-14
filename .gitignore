@@ -17,6 +17,7 @@
 
 # Qt project files:
 *.pro.user
+*.3-pre1
 
 # Build catalog
 build*/

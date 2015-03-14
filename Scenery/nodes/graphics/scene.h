@@ -2,124 +2,40 @@
 #define SCENE_H
 
 #include <QString>
-#include <QStack>
-#include <QQueue>
-#include <QDebug>
-#include <math.h>
+#include <QPainter>
 
-#include "iscene.h"
+#include "nodes/node.h"
+#include "tools.h"
+#include "graphic.h"
 #include "nodes/controls/icontrol.h"
-#include "viewnode.h"
 
 
-typedef QVector<Image *> Images;
-
-
-class Scene  : public IScene
+class Scene: public Tools, public Graphic
 {
 public:
     Scene();
     ~Scene();
 
-    // Scene APIs
-
-    // Virtual functions
     virtual QString name() { return "Noname"; }
     virtual void setup(){}
     virtual void resize(){}
     virtual void paint(){}
     virtual void action(int){}
 
-    // Graphics functions
-    void size(int width, int height);
-    int width();
-    int height();
+    Port *input(int n) { return _inputs->at(n); }
 
-    void background(GLfloat r, GLfloat g, GLfloat b, GLfloat a=1);
-    void background(const Color &color);
-
-    void color(GLfloat r, GLfloat g, GLfloat b, GLfloat a=1);
-    void color(const Color &color);
-
-    void lineWidth(GLfloat width);
-    void lineParts(int parts);
-    void line(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
-    void line(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2);
-
-    void bezier(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
-                GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4);
-    void bezier(Image *img, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
-                            GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4);
-
-    Image *loadImage(const QString &fileName);
-    Image *createImage(int width, int height, int channels);
-    Image *copyImage(Image *img);
-    void image(Image *img, GLfloat x, GLfloat y, GLfloat width, GLfloat height,
-               GLfloat angle=0, ReverseType reverse=ReverseType::None);
-    void text(GLint x, GLint y, const QString & str,
-                                const QFont & fnt = QFont());
-    void flush();
-
-    // Time function
-    int time();
-    int dtime();
-    int fps();
-
-    // Math function
-    int random(int high);
-    bool chance(double probability);
-    float distance(float x1, float y1, float x2, float y2);
-    double distance(double x1, double y1, double x2, double y2);
-    float angle(float x1, float y1, float x2, float y2);
-    float pi();
-
-    // Control function
-    void signal(int id);
-    void button(QString description, int id, QString name);
-    void button(QString description, int id1, QString name1,
-                                     int id2, QString name2);
-    void button(QString description, int id1, QString name1,
-                                     int id2, QString name2,
-                                     int id3, QString name3);
-    void button(QString description, int id1, QString name1,
-                                     int id2, QString name2,
-                                     int id3, QString name3,
-                                     int id4, QString name4);
-    void button(QString description, int id1, QString name1,
-                                     int id2, QString name2,
-                                     int id3, QString name3,
-                                     int id4, QString name4,
-                                     int id5, QString name5);
-    void button(QString description, int id1, QString name1,
-                                     int id2, QString name2,
-                                     int id3, QString name3,
-                                     int id4, QString name4,
-                                     int id5, QString name5,
-                                     int id6, QString name6);
     void control(int &x, QString description, int min=0, int max=999, int step=1);
     void control(double &x, QString description, double min=0, double max=100, int precision=1);
     void control(bool &x, QString description);
     void control(QString &string, QString description, QStringList list);
-    void control(Color &color, QString description);
-    void control(Image **image, QString description, QString path, QString file="");
-
-    // Process function
-    Port *process(int n);
-
-    // Controls
-    Controls &controls() { return _controls; }
 
 private:
-    void virtual setupEvent(void *view);
-    void virtual paintEvent();
-    void virtual resizeEvent();
+    friend class View;
+    friend class ScenesNode;
 
-    ViewNode *view;
-
-    Images _images;
     Controls _controls;
+    Ports *_inputs;
 
-    Images imagesBuffer;
 };
 
 #endif // SCENE_H
