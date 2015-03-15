@@ -61,6 +61,7 @@ void View::resizeGL(int width, int height)
     QPainter p(this);
     _scene->_painter = &p;
     _scene->resize();
+    _scene->flush();
 
     glScalef((GLfloat)width, (GLfloat)height, 1.0f);
 
@@ -83,6 +84,7 @@ void View::paintGL()
     QPainter p(this);
     _scene->_painter = &p;
     _scene->paint();
+    _scene->flush();
 
     GLenum errCode = glGetError();
     if (errCode != GL_NO_ERROR) {

@@ -72,7 +72,8 @@ HEADERS += \
     gui/controls/controlwidgets.h \
     nodes/opencv/dilatenode.h \
     nodes/graphics/scenesnode.h \
-    nodes/graphics/view.h
+    nodes/graphics/view.h \
+    nodes/graphics/elements/elements.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -110,7 +111,8 @@ SOURCES += \
     nodes/opencv/dilatenode.cpp \
     scenes/example_scene.cpp \
     nodes/graphics/scenesnode.cpp \
-    nodes/graphics/view.cpp
+    nodes/graphics/view.cpp \
+    scenes/dance.cpp
 
 RESOURCES += \
 icons.qrc

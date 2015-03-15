@@ -15,7 +15,8 @@ public:
     void paint();
 
 private:
-    QImage ship;
+    Image ship;
+    Image stream;
 //    Image *imageShip;
 //    Image *imageStream;
 
@@ -43,23 +44,40 @@ void DefaultScene::resize()
 void DefaultScene::paint()
 {
     size(640, 480);
-    //background(1, 1, 0.5, 0.5);
+    //background(0, 0, 1, 1);
 
-    Mat &mat = input(0)->mat;
+    stream.set(input(0)->mat);
+    stream.bind();
+    color(1.0f, 1.0f, 1.0f, 1.0f);
+    draw(&stream, 320, 240, 640, 480);
 
-    if (mat.rows) {
-        Mat image;
-        cvtColor(mat, image, CV_BGR2RGB);
-        QImage stream = QImage(image.data, image.cols, image.rows, QImage::Format_RGB888);
-        painter()->drawImage(0, 0, stream);
-    }
 
+//    Mat &mat = input(0)->mat;
+
+//    if (mat.rows) {
+//        Mat image;
+//        cvtColor(mat, image, CV_BGR2RGB);
+//        QImage stream = QImage(image.data, image.cols, image.rows, QImage::Format_RGB888);
+//        painter()->drawImage(0, 0, stream);
+//    }
+
+    flush();
     painter()->fillRect(40, 40, 200, 200, Qt::red);
-    painter()->fillRect(0, 0, 128, 128, Qt::green);
+
+    QLineF line(10.0, 80.0, 90.0, 20.0);
+    painter()->drawLine(line);
+
+
+    QPainterPath path;
+    path.moveTo(20, 80);
+    path.lineTo(20, 30);
+    path.cubicTo(80, 0, 50, 50, 80, 80);
+
+    painter()->drawPath(path);
+
+   // painter()->fillRect(0, 0, 128, 128, Qt::green);
 //    QImage i = QImage("images/ship_512.png");
-    painter()->drawImage(0, 0, ship);
-
-
+    //painter()->drawImage(130, 130, ship);
 
     //    size(200, 200);
 //    background(1, 1, 1, 1);
@@ -78,7 +96,7 @@ void DefaultScene::paint()
 class ExampleManager : public Manager
 {
 public:
-    void initScene() {
+    void init() {
         Node *cameraNode = new CameraNode();
         cameraNode->setPos(0, 0);
         sources.append(cameraNode);

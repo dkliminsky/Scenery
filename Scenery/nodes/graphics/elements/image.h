@@ -1,14 +1,12 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include <QGLFunctions>
+#include <QOpenGLFunctions>
 #include <QImage>
 #include <QString>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "../threads/saveimagethread.h"
-#include "../threads/loadimagethread.h"
 
 class Image
 {
@@ -28,31 +26,25 @@ public:
     cv::Mat &mat() { return _mat; }
 
     QString fileName() { return _fileName; }
-    GLuint id() { return bindId; }
+    GLuint id() { return _id; }
 
     void set(IplImage *ipl);
     void set(cv::Mat &mat);
-    void bind();
     void create(int width, int height, int channels);
-
     void load(const QString &fileName);
-    void save(const QString &fileName);
-
-    void saveThread(const QString &fileName);
-    void saveWait();
+    void bind();
 
 private:
+    void initDefault();
+
+
     cv::Mat _mat;
     QString _fileName;
 
-    SaveImageThread *saveImageThread;
-
-    GLuint bindId;
+    GLuint _id;
     int bindWidth;
     int bindHeight;
     int bindChannels;
-
-    void initDefault();
 };
 
 #endif // IMAGE_H

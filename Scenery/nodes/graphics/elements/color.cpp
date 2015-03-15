@@ -47,3 +47,4 @@ void Color::randomRGB()
     g = (GLfloat)rand()/RAND_MAX;
     b = (GLfloat)rand()/RAND_MAX;
 }
+

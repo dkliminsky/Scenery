@@ -18,7 +18,7 @@ public:
 
 protected:
     void timerEvent(QTimerEvent *);
-    virtual void initScene() = 0;
+    virtual void init() = 0;
     
 };
 

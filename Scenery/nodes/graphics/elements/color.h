@@ -1,7 +1,8 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include <QGLFunctions>
+#include <QOpenGLFunctions>
+
 
 class Color
 {
