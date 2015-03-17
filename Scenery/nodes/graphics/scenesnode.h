@@ -5,6 +5,9 @@
 #include "scene.h"
 #include "view.h"
 
+#include <QTableWidget>
+#include <QStackedWidget>
+
 
 class ScenesNode : public Node, public QObject
 {
@@ -14,8 +17,9 @@ public:
 
     virtual const QString name() { return "Scenes"; }
     virtual const QString tooltip() { return "Scenes"; }
+    QWidget *widget() { return _widget; }
 
-    void setScene(Scene *scene);
+    void addScene(Scene *scene);
 
 protected:
     void timerEvent(QTimerEvent *);
@@ -23,6 +27,11 @@ protected:
 private:
     View _view;
     Scene *_scene;
+    QWidget *_widget;
+    QTableWidget *scenesTable;
+    QStackedWidget *controlsStacked;
+
+    void createWidget();
 
 };
 

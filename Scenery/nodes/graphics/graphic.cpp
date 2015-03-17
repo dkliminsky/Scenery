@@ -14,6 +14,11 @@ Graphic::Graphic() :
 
 }
 
+Graphic::~Graphic()
+{
+
+}
+
 void Graphic::size(int width, int height)
 {
     Q_ASSERT(_painter);
@@ -59,7 +64,11 @@ void Graphic::draw(Image *image, GLfloat x, GLfloat y, GLfloat width, GLfloat he
 {
     Q_ASSERT(image);
 
-    if (imageBuffers.size() > 0 && imageBuffers.last().id != image->id()){
+    if (!image->isBind()) {
+        image->bind();
+    }
+
+    if (imageBuffers.size() > 0 && imageBuffers.last().id != image->id()) {
         flush();
     }
 
@@ -200,15 +209,18 @@ void Graphic::flush()
 
     glBindTexture(GL_TEXTURE_2D, imageBuffers.at(0).id);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-//    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    //GLfloat envColor[4] = {1, 1, 1, 0};
-    //glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, envColor);
+    //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-    //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
+//    GLfloat envColor[4] = {1, 1, 1, 0};
+//    glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, envColor);
+
+//    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
     //GLfloat envColor[4] = {curColor.r, curColor.g, curColor.b, curColor.a};
     //glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, envColor);
 
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);

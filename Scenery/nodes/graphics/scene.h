@@ -20,7 +20,7 @@ public:
     virtual void setup(){}
     virtual void resize(){}
     virtual void paint(){}
-    virtual void action(int){}
+    virtual void signal(int){}
 
     Port *input(int n) { return _inputs->at(n); }
 
@@ -28,6 +28,8 @@ public:
     void control(double &x, QString description, double min=0, double max=100, int precision=1);
     void control(bool &x, QString description);
     void control(QString &string, QString description, QStringList list);
+    void control(Color &color, QString description);
+    void control(Image **image, QString description, QString path, QString file="");
 
 private:
     friend class View;

@@ -50,30 +50,30 @@ ControlButtonWidget::ControlButtonWidget(Scene *scene, ControlButton *control, Q
 
 void ControlButtonWidget::button0()
 {
-    scene->action(control->getButtons().at(0).id);
+    scene->signal(control->getButtons().at(0).id);
 }
 
 void ControlButtonWidget::button1()
 {
-    scene->action(control->getButtons().at(1).id);
+    scene->signal(control->getButtons().at(1).id);
 }
 
 void ControlButtonWidget::button2()
 {
-    scene->action(control->getButtons().at(2).id);
+    scene->signal(control->getButtons().at(2).id);
 }
 
 void ControlButtonWidget::button3()
 {
-    scene->action(control->getButtons().at(3).id);
+    scene->signal(control->getButtons().at(3).id);
 }
 
 void ControlButtonWidget::button4()
 {
-    scene->action(control->getButtons().at(4).id);
+    scene->signal(control->getButtons().at(4).id);
 }
 
 void ControlButtonWidget::button5()
 {
-    scene->action(control->getButtons().at(5).id);
+    scene->signal(control->getButtons().at(5).id);
 }

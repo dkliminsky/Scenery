@@ -85,26 +85,23 @@ public:
             imageShadow.bind();
             color(1, 1, 1, 1);
             if (!is_reverse) {
-    //            image(&imageShadow, 100 + shadow_shift, (200 - shadow_height) + (shadow_height / 2),
-    //                  shadow_width, shadow_height);
                 draw(&imageShadow, 100 + shadow_shift, 100 + shadow_vertical,
                       shadow_width, shadow_height);
             }
             else {
-    //            image(&imageShadow, 100 + shadow_shift, (200 - shadow_height) + (shadow_height / 2),
-    //                  shadow_width, shadow_height, 0, ReverseType::Horizontal);
                 draw(&imageShadow, 100 + shadow_shift, 100 + shadow_vertical,
                       shadow_width, shadow_height, 0, ReverseType::Horizontal);
             }
+
         }
     }
 };
 
 
-class KinectManager : public Manager
+class Manager_ : public Manager
 {
 public:
-    virtual void init()
+    void init()
     {
         Node *kinectNode = new KinectNode();
         kinectNode->setPos(0, 0);
@@ -125,7 +122,7 @@ public:
         ScenesNode *scenesNode = new ScenesNode();
         scenesNode->inputs.append(new Port(PortType::Mat));
         scenesNode->setPos(200, 100);
-        scenesNode->setScene(new ShadowScene);
+        scenesNode->addScene(new ShadowScene);
         nodes.append(scenesNode);
 
         kinectNode->outputs.at(1)->links.append(new Link(scenesNode, 0));

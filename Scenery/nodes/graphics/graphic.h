@@ -15,11 +15,12 @@ class Graphic
 {
 public:
     Graphic();
+    ~Graphic();
 
     QPainter *painter() { return _painter; }
 
-    int width() { return _widthView; }
-    int height() { return _heightView; }
+    int width() { return _widthScene; }
+    int height() { return _heightScene; }
     void size(int width, int height);
 
     void color(GLfloat r, GLfloat g, GLfloat b, GLfloat a=1);

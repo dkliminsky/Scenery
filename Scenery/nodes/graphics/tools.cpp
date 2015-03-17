@@ -50,7 +50,7 @@ float Tools::angle(float x1, float y1, float x2, float y2)
         }
     }
 
-    return a;
+    return float(a);
 }
 
 float Tools::pi()

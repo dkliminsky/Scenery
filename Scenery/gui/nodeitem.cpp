@@ -75,18 +75,14 @@ void NodeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *)
 
 void NodeItem::createWidget()
 {
-    if (node->controls.empty())
-        return;
-
-    QGridLayout *layout = new QGridLayout();
-    layout->setContentsMargins(0, 0, 0, 0);
-
-    for(int i=0; i<node->controls.size(); i++) {
-        IControl *control = node->controls.at(i);
-        layout->addWidget(new QLabel(control->name()), i, 0);
-        layout->addWidget(control_widget_factory(control), i, 1);
-    }
-    layout->setRowStretch(layout->count()-1, 1);
-    widget.setLayout(layout);
     widget.setWindowTitle(node->name());
+
+    if (node->widget()) {
+        QVBoxLayout *layout = new QVBoxLayout;
+        layout->addWidget(node->widget());
+        widget.setLayout(layout);
+    }
+    else if (!node->controls.empty()) {
+        widget.setLayout(make_controls_layout(&node->controls));
+    }
 }

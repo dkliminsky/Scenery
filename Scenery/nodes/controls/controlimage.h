@@ -7,17 +7,17 @@
 class ControlImage : public IControl
 {
 public:
-    ControlImage(Image **img, QString name,
+    ControlImage(Image **image, QString name,
                  QVector<Image*> images);
 
     void set(QString &data);
     QString get();
 
-    Image **value() { return _img; }
+    Image **value() { return _image; }
     QVector<Image*> images() { return _images; }
 
 private:
-    Image **_img;
+    Image **_image;
     QVector<Image*> _images;
 
 };

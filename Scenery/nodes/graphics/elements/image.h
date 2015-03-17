@@ -32,7 +32,9 @@ public:
     void set(cv::Mat &mat);
     void create(int width, int height, int channels);
     void load(const QString &fileName);
+
     void bind();
+    bool isBind() { return _isBind; }
 
 private:
     void initDefault();
@@ -42,6 +44,7 @@ private:
     QString _fileName;
 
     GLuint _id;
+    bool _isBind;
     int bindWidth;
     int bindHeight;
     int bindChannels;

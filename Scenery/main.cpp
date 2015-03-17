@@ -2,8 +2,8 @@
 
 #include "gui/mainwindow.h"
 
-//#include "scenes/example_scene.cpp"
-#include "scenes/dance.cpp"
+#include "scenes/example.cpp"
+//#include "scenes/dance.cpp"
 
 
 int main(int argc, char *argv[])
@@ -13,9 +13,7 @@ int main(int argc, char *argv[])
 	QCoreApplication::setOrganizationDomain("turlicht.tk");
 	QCoreApplication::setApplicationName("Scenery");
 
-//    ExampleManager manager;
-    KinectManager manager;
-	
+    Manager_ manager;
     manager.init();
     MainWindow mainWindow(&manager);
     mainWindow.show();

@@ -22,3 +22,17 @@ QWidget *control_widget_factory(IControl *control)
         return new QWidget;
     }
 }
+
+QLayout *make_controls_layout(Controls *controls)
+{
+    QGridLayout *layout = new QGridLayout();
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    for(int i=0; i<controls->size(); i++) {
+        IControl *control = controls->at(i);
+        layout->addWidget(new QLabel(control->name()), i, 0);
+        layout->addWidget(control_widget_factory(control), i, 1);
+    }
+    layout->setRowStretch(layout->count()-1, 1);
+    return layout;
+}

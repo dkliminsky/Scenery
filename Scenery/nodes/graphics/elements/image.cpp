@@ -29,6 +29,7 @@ void Image::initDefault()
 {
     _fileName = "";
     _id = 0;
+    _isBind = false;
     bindWidth = 0;
     bindHeight = 0;
     bindChannels = 0;
@@ -43,26 +44,33 @@ void Image::set(IplImage *ipl)
 {
     create(ipl->width, ipl->height, ipl->nChannels);
     _mat.data = reinterpret_cast<uchar *>(ipl->imageData);
+    _isBind = false;
 }
 
 void Image::set(cv::Mat &mat)
 {
     _mat = mat.clone();
+    _isBind = false;
 }
 
 void Image::create(int width, int height, int channels)
 {
     _mat.create(height, width, CV_8UC(channels));
+    _isBind = false;
 }
 
 void Image::load(const QString &fileName)
 {
     _mat = cv::imread(fileName.toStdString(), CV_LOAD_IMAGE_UNCHANGED);
+    qDebug() << _mat.cols;
+
+    _isBind = false;
 }
 
 void Image::bind()
 {
     if (width() && height()) {
+        _isBind = true;
 
         int internalformat;
         int format;

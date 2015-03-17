@@ -6,5 +6,7 @@
 #include "controldouble.h"
 #include "controlbool.h"
 #include "controlstring.h"
+#include "controlcolor.h"
+#include "controlimage.h"
 
 #endif // CONTROLS_H

@@ -109,10 +109,11 @@ SOURCES += \
     gui/controls/controlstringwidget.cpp \
     gui/controls/controlwidgets.cpp \
     nodes/opencv/dilatenode.cpp \
-    scenes/example_scene.cpp \
     nodes/graphics/scenesnode.cpp \
     nodes/graphics/view.cpp \
-    scenes/dance.cpp
+    scenes/dance.cpp \
+    scenes/example.cpp
 
 RESOURCES += \
 icons.qrc
+

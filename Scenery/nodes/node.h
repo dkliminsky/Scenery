@@ -1,6 +1,7 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include <QWidget>
 #include <QString>
 #include <QTime>
 #include <QThread>
@@ -50,6 +51,7 @@ public:
 
     virtual const QString name() { return QString("Noname"); }
     virtual const QString tooltip() { return "Node"; }
+    virtual QWidget *widget() { return nullptr; }
 
     QString uuid() { return _uuid.toString(); }
     int posX() { return _posX; }
