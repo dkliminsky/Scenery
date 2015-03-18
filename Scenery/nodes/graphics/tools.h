@@ -1,8 +1,6 @@
 #ifndef TOOLS_H
 #define TOOLS_H
 
-#define M_PI		3.14159265358979323846f	/* pi */
-
 
 class Tools
 {

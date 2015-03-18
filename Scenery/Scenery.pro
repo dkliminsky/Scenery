@@ -21,8 +21,21 @@ win32 {
         nodes/kinect/OpenCVFrameHelper.cpp \
 }
 
-unix {
+unix:!macx {
     LIBS += /usr/lib/x86_64-linux-gnu/libopencv_*.so
+    DEFINES += NOKINECT
+
+    HEADERS += \
+        nodes/kinect/kinectfakenode.h
+
+    SOURCES += \
+        nodes/kinect/kinectfakenode.cpp
+}
+
+macx {
+    INCLUDEPATH += /usr/local/include/
+    LIBS += /usr/local/lib/libopencv_*.a
+
     DEFINES += NOKINECT
 
     HEADERS += \

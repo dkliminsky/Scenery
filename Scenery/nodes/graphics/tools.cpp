@@ -55,6 +55,6 @@ float Tools::angle(float x1, float y1, float x2, float y2)
 
 float Tools::pi()
 {
-    return M_PI;
+    return 3.14159265358979323846f;
 }
 
