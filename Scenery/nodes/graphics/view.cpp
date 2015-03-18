@@ -9,6 +9,8 @@ View::View() :
     METHOD_BEGIN
 
     _scene = nullptr;
+    _width = 0;
+    _height = 0;
 
     setTitle("Scenery View");
     show();
@@ -24,6 +26,8 @@ View::~View()
 void View::setScene(Scene *scene)
 {
      _scene = scene;
+     _scene->_widthView = _width;
+     _scene->_heightView = _height;
 }
 
 void View::initializeGL()
@@ -46,8 +50,8 @@ void View::initializeGL()
     // выходящие за границу текстуры для s и t координаты
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void View::resizeGL(int width, int height)
@@ -55,6 +59,8 @@ void View::resizeGL(int width, int height)
     if (!_scene)
         return;
 
+    _width = width;
+    _height = height;
     _scene->_widthView = width;
     _scene->_heightView = height;
 
@@ -82,9 +88,11 @@ void View::paintGL()
     glLoadIdentity();
     
     QPainter p(this);
+    p.beginNativePainting();
     _scene->_painter = &p;
     _scene->paint();
     _scene->flush();
+    p.endNativePainting();
 
     GLenum errCode = glGetError();
     if (errCode != GL_NO_ERROR) {

@@ -38,7 +38,7 @@ float Tools::angle(float x1, float y1, float x2, float y2)
 
         // III
         if ( (x2 < x1) && (y2 > y1) ) {
-            a = M_PI + M_PI - a;
+            a = pi() + pi() - a;
         }
         // II
         else if (x2 < x1) {
@@ -46,7 +46,7 @@ float Tools::angle(float x1, float y1, float x2, float y2)
         }
         // IV
         else if (y2 > y1) {
-            a = M_PI + M_PI - a;
+            a = pi() + pi() - a;
         }
     }
 

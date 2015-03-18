@@ -7,10 +7,14 @@
 
 #include <QTableWidget>
 #include <QStackedWidget>
+#include <QToolBar>
+
+typedef QList<Scene *> Scenes;
 
 
-class ScenesNode : public Node, public QObject
-{
+class ScenesNode : public QObject, public Node
+{ 
+    Q_OBJECT
 public:
     ScenesNode();
     ~ScenesNode();
@@ -20,18 +24,24 @@ public:
     QWidget *widget() { return _widget; }
 
     void addScene(Scene *scene);
+    void setCurScene(Scene *scene);
 
 protected:
     void timerEvent(QTimerEvent *);
 
 private:
     View _view;
-    Scene *_scene;
+    Scenes _scenes;
+    Scene *curScene;
+
     QWidget *_widget;
     QTableWidget *scenesTable;
     QStackedWidget *controlsStacked;
-
     void createWidget();
+
+public slots:
+    void slotFullScreen(bool isFull);
+    void slotChangeScene(int row, int column);
 
 };
 

@@ -25,6 +25,8 @@ protected:
 
 private:
     Scene *_scene;
+    int _width;
+    int _height;
 
 };
 

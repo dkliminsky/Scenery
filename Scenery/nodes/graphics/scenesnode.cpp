@@ -8,7 +8,7 @@
 
 
 ScenesNode::ScenesNode() :
-    _scene(nullptr)
+    curScene(nullptr)
 {
     startTimer(17);
     createWidget();
@@ -21,18 +21,27 @@ ScenesNode::~ScenesNode()
 
 void ScenesNode::addScene(Scene *scene)
 {
-    _scene = scene;
-    _scene->_inputs = &inputs;
-    _view.setScene(scene);
+    if (!curScene) {
+        setCurScene(scene);
+    }
+
+    _scenes.append(scene);
+    scene->_inputs = &inputs;
 
     QTableWidgetItem *sceneItem = new QTableWidgetItem(scene->name());
-    scenesTable->setItem(0, 0, sceneItem);
-    scenesTable->resizeRowsToContents();
-    scenesTable->resizeColumnsToContents();
+    scenesTable->setRowCount(_scenes.size());
+    scenesTable->setItem(_scenes.size()-1, 0, sceneItem);
 
     QWidget *controlsWidget = new QWidget;
     controlsWidget->setLayout(make_controls_layout(&scene->_controls));
     controlsStacked->addWidget(controlsWidget);
+}
+
+void ScenesNode::setCurScene(Scene *scene)
+{
+    curScene = scene;
+    _view.setScene(scene);
+    qDebug() << "Set scene:" << scene->name();
 }
 
 void ScenesNode::timerEvent(QTimerEvent *)
@@ -43,11 +52,38 @@ void ScenesNode::timerEvent(QTimerEvent *)
 void ScenesNode::createWidget()
 {
     _widget = new QWidget();
-    scenesTable = new QTableWidget(1, 1);
+    QPushButton *button = new QPushButton("&Full");
+    scenesTable = new QTableWidget(2, 1);
     controlsStacked = new QStackedWidget;
     QHBoxLayout *layout = new QHBoxLayout();
+    layout->addWidget(button);
     layout->addWidget(scenesTable);
     layout->addWidget(controlsStacked);
     _widget->setLayout(layout);
+
+    connect(scenesTable, SIGNAL(cellDoubleClicked(int,int)),
+            this, SLOT(slotChangeScene(int,int)));
+
+    connect(button, SIGNAL(clicked(bool)), this, SLOT(slotFullScreen(bool)));
+}
+
+void ScenesNode::slotFullScreen(bool isFull)
+{
+    _view.showFullScreen();
+
+//    if (isFull) {
+//        _view.showFullScreen();
+//    }
+//    else {
+//        _view.showNormal();
+//    }
+}
+
+void ScenesNode::slotChangeScene(int row, int column)
+{
+    if ( column == 0) {
+       setCurScene(_scenes.at(row));
+       controlsStacked->setCurrentIndex(row);
+   }
 }
 
