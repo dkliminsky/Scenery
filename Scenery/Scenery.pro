@@ -86,7 +86,9 @@ HEADERS += \
     nodes/opencv/dilatenode.h \
     nodes/graphics/scenesnode.h \
     nodes/graphics/view.h \
-    nodes/graphics/elements/elements.h
+    nodes/graphics/elements/elements.h \
+    nodes/graphics/elements/position.h \
+    nodes/graphics/camerapositionnode.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -125,8 +127,10 @@ SOURCES += \
     nodes/graphics/scenesnode.cpp \
     nodes/graphics/view.cpp \
     scenes/dance.cpp \
-    scenes/example.cpp
+    scenes/example.cpp \
+    nodes/graphics/camerapositionnode.cpp
 
 RESOURCES += \
 icons.qrc
+
 

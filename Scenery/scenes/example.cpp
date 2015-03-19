@@ -34,7 +34,8 @@ public:
         color(1.0f, 1.0f, 1.0f, 1.0f);
 
         stream.set(input(0)->mat);
-        draw(&stream, 50, 50, 100, 100);
+        Rect pos = input(1)->rect;
+        draw(&stream, pos.x, pos.y, pos.width, pos.height);
         flush();
 
         painter()->endNativePainting();
@@ -100,8 +101,14 @@ public:
         dilateNode->setPos(450, 0);
         nodes.append(dilateNode);
 
+        Node *positionNode = new CameraPositionNode();
+        positionNode->setPos(0, 200);
+        nodes.append(positionNode);
+        sources.append(positionNode);
+
         ScenesNode *scenesNode = new ScenesNode();
         scenesNode->inputs.append(new Port(PortType::Mat));
+        scenesNode->inputs.append(new Port(PortType::Rect));
         scenesNode->setPos(200, 100);
         scenesNode->addScene(new Example1Scene());
         scenesNode->addScene(new Example2Scene());
@@ -110,5 +117,6 @@ public:
         cameraNode->outputs.at(0)->links.append(new Link(erodeNode, 0));
         erodeNode->outputs.at(0)->links.append(new Link(dilateNode, 0));
         dilateNode->outputs.at(0)->links.append(new Link(scenesNode, 0));
+        positionNode->outputs.at(0)->links.append(new Link(scenesNode, 1));
     }
 };

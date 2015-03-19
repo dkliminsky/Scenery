@@ -13,8 +13,6 @@ ControlStringWidget::ControlStringWidget(ControlString *control,
         this->addItems(control->list());
     }
 
-//    connect(this, &QComboBox::currentIndexChanged,
-//            this, &ControlStringWidget::change);
     connect(this, SIGNAL(currentIndexChanged(int)), SLOT(change()));
 }
 

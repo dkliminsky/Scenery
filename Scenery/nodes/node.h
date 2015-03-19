@@ -9,6 +9,7 @@
 #include <opencv2/core/core.hpp>
 #include "debug.h"
 #include "controls/controls.h"
+#include "graphics/elements/position.h"
 using namespace cv;
 
 class Node;
@@ -19,7 +20,7 @@ typedef QList<Link *> Links;
 typedef QList<Port *> Ports;
 typedef QList<Node *> Nodes;
 
-enum class PortType { Mat, Human, Rects };
+enum class PortType { Mat, Human, Rect, Rects };
 
 
 class Link
@@ -38,8 +39,12 @@ public:
     Links links;
 
     // Data
+    void *data;
+
     Mat mat;
+    Rect rect;
     vector<Rect> rects;
+    Position position;
     // ...
 };
 

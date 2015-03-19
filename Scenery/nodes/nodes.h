@@ -8,6 +8,7 @@
 #include "opencv/dilatenode.h"
 
 #include "graphics/scenesnode.h"
+#include "graphics/camerapositionnode.h"
 #include "graphics/view.h"
 
 #ifdef NOKINECT
