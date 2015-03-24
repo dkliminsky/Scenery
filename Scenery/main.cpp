@@ -2,8 +2,8 @@
 
 #include "gui/mainwindow.h"
 
-#include "scenes/example.cpp"
-//#include "scenes/dance.cpp"
+//#include "scenes/example.cpp"
+#include "scenes/dance.cpp"
 
 
 int main(int argc, char *argv[])

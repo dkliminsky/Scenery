@@ -9,12 +9,16 @@ public:
     Image *ship;
     Image stream;
     int ship_size;
+    int ship_dx;
     Color back;
 
     Example1Scene()
     {
         ship = new Image("images/ship_512.png");
+        ship_dx = 80;
         control(ship_size=50, "ship_size", 0, 1000);
+        button(1, "Left");
+        button(2, "Right");
         control(back=Color(1,1,1,0), "Background");
     }
 
@@ -49,7 +53,16 @@ public:
         painter()->drawPath(path);
         painter()->beginNativePainting();
 
-        draw(ship, 80, 80, ship_size, ship_size);
+        draw(ship, ship_dx, 80, ship_size, ship_size);
+    }
+
+    void signal(int id) {
+        if (id == 1) {
+            ship_dx -= 5;
+        }
+        else if (id == 2) {
+            ship_dx += 5;
+        }
     }
 };
 

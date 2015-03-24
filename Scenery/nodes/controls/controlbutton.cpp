@@ -1,7 +1,8 @@
 #include "controlbutton.h"
 
-ControlButton::ControlButton(QString name, QVector<Button> buttons) :
+ControlButton::ControlButton(Scene *scene, int id, QString name) :
     IControl(IControl::ControlButton, name)
 {
-    this->buttons = buttons;
+    this->scene = scene;
+    this->id = id;
 }

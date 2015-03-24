@@ -62,7 +62,6 @@ HEADERS += \
     nodes/graphics/tools.h \
     nodes/graphics/elements/color.h \
     nodes/graphics/elements/image.h \
-    nodes/graphics/elements/point.h \
     nodes/graphics/threads/loadimagethread.h \
     nodes/graphics/threads/saveimagethread.h \
     nodes/controls/controlbool.h \
@@ -88,7 +87,9 @@ HEADERS += \
     nodes/graphics/view.h \
     nodes/graphics/elements/elements.h \
     nodes/graphics/elements/position.h \
-    nodes/graphics/camerapositionnode.h
+    nodes/graphics/camerapositionnode.h \
+    nodes/kinect/OpenCVHelper.h \
+    nodes/kinect/human.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -105,7 +106,6 @@ SOURCES += \
     nodes/graphics/tools.cpp \
     nodes/graphics/elements/color.cpp \
     nodes/graphics/elements/image.cpp \
-    nodes/graphics/elements/point.cpp \
     nodes/graphics/threads/loadimagethread.cpp \
     nodes/graphics/threads/saveimagethread.cpp \
     nodes/controls/controlbool.cpp \
@@ -128,9 +128,9 @@ SOURCES += \
     nodes/graphics/view.cpp \
     scenes/dance.cpp \
     scenes/example.cpp \
-    nodes/graphics/camerapositionnode.cpp
+    nodes/graphics/camerapositionnode.cpp \
+    nodes/kinect/OpenCVHelper.cpp
 
 RESOURCES += \
 icons.qrc
-
 

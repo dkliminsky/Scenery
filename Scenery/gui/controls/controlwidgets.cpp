@@ -17,7 +17,7 @@ QWidget *control_widget_factory(IControl *control)
     case IControl::ControlImage:
         return new QWidget;
     case IControl::ControlButton:
-        return new QWidget;
+        return new ControlButtonWidget(static_cast<ControlButton *>(control));
     default:
         return new QWidget;
     }

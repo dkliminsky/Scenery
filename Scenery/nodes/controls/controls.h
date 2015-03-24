@@ -8,5 +8,6 @@
 #include "controlstring.h"
 #include "controlcolor.h"
 #include "controlimage.h"
+#include "controlbutton.h"
 
 #endif // CONTROLS_H

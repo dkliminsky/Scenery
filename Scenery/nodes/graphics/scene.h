@@ -31,6 +31,8 @@ public:
     void control(Color &color, QString description);
     void control(Image **image, QString description, QString path, QString file="");
 
+    void button(int id, QString description);
+
 private:
     friend class View;
     friend class ScenesNode;

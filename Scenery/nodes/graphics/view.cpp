@@ -4,7 +4,7 @@
 #include "debug.h"
 
 View::View() :
-    QOpenGLWindow(QOpenGLWindow::NoPartialUpdate)
+    QOpenGLWindow(QOpenGLWindow::PartialUpdateBlit)
 {
     METHOD_BEGIN
 

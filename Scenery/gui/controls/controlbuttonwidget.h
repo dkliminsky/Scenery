@@ -12,23 +12,16 @@ class ControlButtonWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ControlButtonWidget(Scene *scene, ControlButton *control, QWidget *parent = 0);
+    explicit ControlButtonWidget(ControlButton *control, QWidget *parent = 0);
 
 private:
     Scene *scene;
     ControlButton *control;
-    QVector<ControlButton::Button> buttons;
 
 signals:
 
 public slots:
-    void button0();
-    void button1();
-    void button2();
-    void button3();
-    void button4();
-    void button5();
-
+    void button();
 };
 
 #endif // CONTROLBUTTONWIDGET_H

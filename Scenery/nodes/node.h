@@ -9,7 +9,7 @@
 #include <opencv2/core/core.hpp>
 #include "debug.h"
 #include "controls/controls.h"
-#include "graphics/elements/position.h"
+#include "kinect/human.h"
 using namespace cv;
 
 class Node;
@@ -20,7 +20,7 @@ typedef QList<Link *> Links;
 typedef QList<Port *> Ports;
 typedef QList<Node *> Nodes;
 
-enum class PortType { Mat, Human, Rect, Rects };
+enum class PortType { Mat, Humans, Rect, Rects };
 
 
 class Link
@@ -44,7 +44,7 @@ public:
     Mat mat;
     Rect rect;
     vector<Rect> rects;
-    Position position;
+    vector<Human> humans;
     // ...
 };
 

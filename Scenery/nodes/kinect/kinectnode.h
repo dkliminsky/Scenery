@@ -7,6 +7,8 @@
 #include <NuiApi.h>
 #include "nodes/node.h"
 #include "nodes/kinect/OpenCVFrameHelper.h"
+#include "nodes/kinect/OpenCVHelper.h"
+#include "human.h"
 using namespace cv;
 
 
@@ -22,10 +24,14 @@ protected:
 
 private:
 	Microsoft::KinectBridge::OpenCVFrameHelper m_frameHelper;
+    OpenCVHelper m_openCVHelper;
 
 	int device;
-	Mat m_colorMat;
-	Mat m_depthMat;
+    NUI_IMAGE_RESOLUTION m_colorResolution;
+    NUI_IMAGE_RESOLUTION m_depthResolution;
+
+    bool isDrawDepthSkeleton;
+    bool isDrawColorSkeleton;
 
 	void openKinect(int device);
 };

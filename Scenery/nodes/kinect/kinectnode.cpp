@@ -6,8 +6,23 @@ KinectNode::KinectNode(int device) :
 {
 	METHOD_BEGIN
 
+    control(isDrawDepthSkeleton=true, "Depth skeleton");
+    control(isDrawColorSkeleton=true, "Color skeleton");
+
 	outputs.append(new Port(PortType::Mat));
 	outputs.append(new Port(PortType::Mat));
+    outputs.append(new Port(PortType::Humans));
+
+    for (int i=0; i < NUI_SKELETON_COUNT; i++) {
+        Human human;
+        outputs.at(2)->humans.push_back(human);
+    }
+
+    m_colorResolution = NUI_IMAGE_RESOLUTION_640x480;
+    m_depthResolution = NUI_IMAGE_RESOLUTION_320x240;
+    m_frameHelper.SetColorFrameResolution(m_colorResolution);
+    m_frameHelper.SetDepthFrameResolution(m_depthResolution);
+
 	openKinect(device);
 
 	METHOD_END
@@ -15,33 +30,94 @@ KinectNode::KinectNode(int device) :
 
 void KinectNode::run()
 {
-	if (m_frameHelper.IsInitialized())
-	{
-		if (SUCCEEDED(m_frameHelper.UpdateColorFrame()))
-		{
-			Mat &colorMat = outputs.at(0)->mat;
-			HRESULT hr = m_frameHelper.GetColorImage(&colorMat);
-			if (FAILED(hr))	{
-				return;
-			}
+    Mat &colorMat = outputs.at(0)->mat;
+    Mat &depthMat = outputs.at(1)->mat;
 
-			//imshow("Kinect color", m_colorMat);
-		}
-		else {
-			//qDebug() << "Kinect: error update color frame";
-		}
+    if (!m_frameHelper.IsInitialized()) {
+        return;
+    }
 
-		if (SUCCEEDED(m_frameHelper.UpdateDepthFrame()))
-		{
-			Mat &depthMat = outputs.at(1)->mat;
-			HRESULT hr = m_frameHelper.GetDepthImageAsArgb(&depthMat);
-			if (FAILED(hr)) {
-				return;
-			}
 
-			//imshow("Kinect depth", m_depthMat);
-		}
-	}
+    if (SUCCEEDED(m_frameHelper.UpdateColorFrame())) {
+        HRESULT hr = m_frameHelper.GetColorImage(&colorMat);
+        if (FAILED(hr))	{
+            return;
+        }
+    }
+
+    if (SUCCEEDED(m_frameHelper.UpdateDepthFrame())) {
+        HRESULT hr = m_frameHelper.GetDepthImageAsArgb(&depthMat);
+        if (FAILED(hr)) {
+            return;
+        }
+    }
+
+    if (SUCCEEDED(m_frameHelper.UpdateSkeletonFrame())) {
+        vector<Human> &humans = outputs.at(2)->humans;
+        for (int i=0; i < NUI_SKELETON_COUNT; i++) {
+            humans.at(i).isTracking = false;
+        }
+
+        NUI_SKELETON_FRAME skeletonFrame;
+        HRESULT hr = m_frameHelper.GetSkeletonFrame(&skeletonFrame);
+        if (FAILED(hr)) {
+            return;
+        }
+
+        if (isDrawColorSkeleton) {
+            hr = m_openCVHelper.DrawSkeletonsInColorImage(&colorMat,
+                                                          &skeletonFrame,
+                                                          m_colorResolution,
+                                                          m_depthResolution);
+
+            if (FAILED(hr)) {
+                qDebug() << "Sceleton fail";
+            }
+        }
+
+        if (isDrawDepthSkeleton) {
+            hr = m_openCVHelper.DrawSkeletonsInDepthImage(&depthMat,
+                                                          &skeletonFrame,
+                                                          m_depthResolution);
+            if (FAILED(hr)) {
+                qDebug() << "Sceleton fail";
+            }
+        }
+
+        for (int i=0; i < NUI_SKELETON_COUNT; ++i) {
+
+            NUI_SKELETON_TRACKING_STATE trackingState =
+                    skeletonFrame.SkeletonData[i].eTrackingState;
+
+            Human &human = humans.at(i);
+            if (trackingState == NUI_SKELETON_TRACKED) {
+                // Draw entire skeleton
+                NUI_SKELETON_DATA *pSkel = &(skeletonFrame.SkeletonData[i]);
+                Point jointPositions[NUI_SKELETON_POSITION_COUNT];
+                for (int j = 0; j < NUI_SKELETON_POSITION_COUNT; ++j) {
+                    LONG x, y;
+                    m_openCVHelper.GetCoordinatesForSkeletonPoint(
+                                pSkel->SkeletonPositions[j], &x, &y,
+                                m_colorResolution, m_depthResolution);
+                    jointPositions[j] = Point(x, y);
+                }
+
+                human.isTracking = true;
+                human.head = jointPositions[NUI_SKELETON_POSITION_HEAD];
+                human.wristRight = jointPositions[NUI_SKELETON_POSITION_WRIST_RIGHT];
+                human.wristLeft = jointPositions[NUI_SKELETON_POSITION_WRIST_LEFT];
+                human.footRight = jointPositions[NUI_SKELETON_POSITION_FOOT_RIGHT];
+                human.footLeft = jointPositions[NUI_SKELETON_POSITION_FOOT_LEFT];
+
+            }
+            else if (trackingState == NUI_SKELETON_POSITION_INFERRED) {
+                // Draw a filled circle at the skeleton's inferred position
+//                    LONG x, y;
+//                    GetCoordinatesForSkeletonPoint(pSkeletons->SkeletonData[i].Position, &x, &y, colorResolution, depthResolution);
+//                    circle(*pImg, Point(x, y), 7, SKELETON_COLORS[i], CV_FILLED);
+            }
+        }
+    }
 }
 
 void KinectNode::openKinect(int)

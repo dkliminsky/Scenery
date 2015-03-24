@@ -4,10 +4,10 @@ CameraPositionNode::CameraPositionNode()
 {
     output(PortType::Rect);
 
-    control(x=0, "x", -500, 500);
-    control(y=0, "y", -500, 500);
-    control(h=200, "width", 0, 1000);
-    control(w=200, "height", 0, 1000);
+    control(x=160, "x", -500, 500);
+    control(y=120, "y", -500, 500);
+    control(h=320, "width", 0, 1000);
+    control(w=240, "height", 0, 1000);
 }
 
 void CameraPositionNode::run()

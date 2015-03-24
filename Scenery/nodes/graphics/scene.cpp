@@ -74,3 +74,9 @@ void Scene::control(Image **image, QString description, QString path, QString fi
     *image = images.at(index);
     _controls += new ControlImage(image, description, images);
 }
+
+void Scene::button(int id, QString description)
+{
+    _controls += new ControlButton(this, id, description);
+}
+

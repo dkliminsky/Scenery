@@ -9,6 +9,7 @@
 #include "controlboolwidget.h"
 #include "controlcolorwidget.h"
 #include "controlstringwidget.h"
+#include "controlbuttonwidget.h"
 
 QWidget *control_widget_factory(IControl *control);
 QLayout *make_controls_layout(Controls *controls);
