@@ -33,6 +33,7 @@ void Image::initDefault()
     bindWidth = 0;
     bindHeight = 0;
     bindChannels = 0;
+    _reverse = ReverseType::None;
 }
 
 Image::~Image()
@@ -62,8 +63,6 @@ void Image::create(int width, int height, int channels)
 void Image::load(const QString &fileName)
 {
     _mat = cv::imread(fileName.toStdString(), CV_LOAD_IMAGE_UNCHANGED);
-    qDebug() << _mat.cols;
-
     _isBind = false;
 }
 
@@ -120,4 +119,3 @@ void Image::bind()
         }
     }
 }
-

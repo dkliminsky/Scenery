@@ -28,6 +28,10 @@ private:
     int _width;
     int _height;
 
+    QTime timer;
+    int timeLast;
+    int timeStep;
+
 };
 
 #endif // VIEW_H

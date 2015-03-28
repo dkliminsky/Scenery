@@ -7,6 +7,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+enum class ReverseType { None, Vertical, Horizontal };
+
 
 class Image
 {
@@ -36,10 +38,13 @@ public:
     void bind();
     bool isBind() { return _isBind; }
 
-private:
+    ReverseType reverse() { return _reverse; }
+    void setReverse(ReverseType reverse) { this->_reverse = reverse; }
+
+protected:
     void initDefault();
 
-
+private:
     cv::Mat _mat;
     QString _fileName;
 
@@ -48,6 +53,8 @@ private:
     int bindWidth;
     int bindHeight;
     int bindChannels;
+
+    ReverseType _reverse;
 };
 
 #endif // IMAGE_H

@@ -6,11 +6,14 @@
 #include "nodes/graphics/scene.h"
 using namespace cv;
 
+enum class Signals { None, DoubleLeft, DoubleRight, DoubleReturn, StrikeLeft, StrikeRight };
+enum class DoubleShadowCommand {None, Left, Right, Return};
 
 class ShadowScene : public Scene
 {
 public:
     QString name() { return "Shadow"; }
+    Rect pos;
 
     int depth_min;
     int depth_max;
@@ -19,29 +22,103 @@ public:
 
     Image imageShadow;
     Color backColor;
-    Color shadowColor;
 
-    bool is_active;
+    bool is_self_shadow;
+    Color self_shadow_color;
+
+    bool is_double_shadow;
+    Color double_shadow_color;
+    int double_shadow_max_shift;
+    int double_shadow_shift_time;
     bool is_reverse;
+    int double_shadow_shift;
+    Signals double_shadow_command;
+
+    bool is_strike_shadow;
+    Color strike_shadow_color;
 
     ShadowScene()
     {
-        control(depth_min=0, "depth_min", 0, 255);
-        control(depth_max=255, "depth_max", 0, 255);
-        control(blur_size=5, "Blur size", 1, 50);
+        control(depth_min=50, "depth_min", 0, 255);
+        control(depth_max=110, "depth_max", 0, 255);
+        control(blur_size=7, "Blur size", 1, 50);
         control(dilation_size=1, "Erosion size", 0, 50);
-
-        control(is_active=true, "is_active");
         control(backColor=Color(1, 1, 1, 0.2f), "Background");
-        control(shadowColor = Color(0, 0, 0, 1), "Shadow");
 
+        control(is_self_shadow=true, "Self Shadow");
+        control(self_shadow_color = Color(0, 0, 0, 1), "Self Shadow Color");
+
+        control(is_double_shadow=false, "Double Shadow");
+        button(int(Signals::DoubleLeft), "Double Left");
+        button(int(Signals::DoubleRight), "Double Right");
+        button(int(Signals::DoubleReturn), "Double Return");
+        control(double_shadow_color = Color(0, 0, 0, 1), "Double Shadow Color");
+        control(double_shadow_max_shift=60, "Double Shadow Shift", 0, 100);
+        control(double_shadow_shift_time=300, "Double Shadow Shift Time", 0, 500);
         control(is_reverse=false, "is_reverse");
+        double_shadow_command = Signals::None;
+        double_shadow_shift = 0;
+
+        control(is_strike_shadow=true, "Self Shadow");
+        button(int(Signals::StrikeLeft), "Strike Left");
+        button(int(Signals::StrikeRight), "Strike Right");
+        control(strike_shadow_color = Color(0.8f, 0, 0, 1), "Self Shadow Color");
+    }
+
+    void selfShadow() {
+        color(self_shadow_color);
+        draw(&imageShadow, pos.x, pos.y, pos.width, pos.height);
+    }
+
+    void doubleShadow() {
+        if (is_reverse) {
+            imageShadow.setReverse(ReverseType::Horizontal);
+        }
+
+        int step = float(dtime())/float(double_shadow_shift_time)*double_shadow_max_shift;
+        if (double_shadow_command == Signals::DoubleLeft) {
+            double_shadow_shift -= step;
+            if (double_shadow_shift < -double_shadow_max_shift) {
+                double_shadow_shift = -double_shadow_max_shift;
+                double_shadow_command = Signals::None;
+            }
+        }
+        if (double_shadow_command == Signals::DoubleRight) {
+            double_shadow_shift += step;
+            if (double_shadow_shift > double_shadow_max_shift) {
+                double_shadow_shift = double_shadow_max_shift;
+                double_shadow_command = Signals::None;
+            }
+        }
+        if (double_shadow_command == Signals::DoubleReturn) {
+            if (-step <= double_shadow_shift && double_shadow_shift <= step) {
+                double_shadow_shift = 0;
+                double_shadow_command = Signals::None;
+            }
+            else {
+                if (double_shadow_shift > 0) {
+                    double_shadow_shift -= step;
+                }
+                else {
+                    double_shadow_shift += step;
+                }
+            }
+        }
+
+        color(double_shadow_color);
+        draw(&imageShadow, pos.x + double_shadow_shift, pos.y, pos.width, pos.height);
+        imageShadow.setReverse(ReverseType::None);
+    }
+
+    void strikeShadow() {
+        color(strike_shadow_color);
+        draw(&imageShadow, pos.x, pos.y, pos.width, pos.height);
     }
 
     virtual void paint()
     {
         Mat &depth = input(1)->mat;
-        Rect pos = input(3)->rect;
+        pos = input(3)->rect;
 
         if (depth.empty())
             return;
@@ -81,25 +158,46 @@ public:
         cv::blur(depth_big, depth_blur, cv::Size(blur_size, blur_size));
 
         imageShadow.set(depth_blur);
-        color(shadowColor);
-//        if (!is_reverse) {
-//            draw(&imageShadow, width()/2 + shadow_shift, height()/2 + shadow_vertical,
-//                  shadow_width, shadow_height);
-//        }
-//        else {
-//            draw(&imageShadow, width()/2 + shadow_shift, height()/2 + shadow_vertical,
-//                  shadow_width, shadow_height, 0, ReverseType::Horizontal);
-//        }
 
-        draw(&imageShadow, pos.x, pos.y, pos.width, pos.height);
-
-
+        if (is_self_shadow)
+            selfShadow();
+        if (is_double_shadow)
+            doubleShadow();
+        if (is_double_shadow)
+            doubleShadow();
     }
 
-    void self_shadow(Rect pos)
+    virtual void signal(int id)
     {
-        draw(&imageShadow, pos.x, pos.y, pos.width, pos.height);
+        Particle *particle;
+
+        switch (id) {
+        case Signals::DoubleLeft:
+            double_shadow_command = Signals::DoubleLeft;
+            break;
+        case Signals::DoubleRight:
+            double_shadow_command = Signals::DoubleRight;
+            break;
+        case Signals::DoubleReturn:
+            double_shadow_command = Signals::DoubleReturn;
+            break;
+        case Signals::StrikeLeft:
+            particle = new Particle(&imageShadow, false);
+            particle->setPos(pos);
+            particle->setTTL(300);
+            addParticle(particle);
+            break;
+        case Signals::StrikeRight:
+            particle = new Particle(&imageShadow, false);
+            particle->setPos(pos);
+            particle->setTTL(300);
+            addParticle(particle);
+            break;
+        default:
+            break;
+        }
     }
+
 };
 
 

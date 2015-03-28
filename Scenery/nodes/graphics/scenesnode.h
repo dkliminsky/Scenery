@@ -8,6 +8,7 @@
 #include <QTableWidget>
 #include <QStackedWidget>
 #include <QToolBar>
+#include <QTime>
 
 typedef QList<Scene *> Scenes;
 

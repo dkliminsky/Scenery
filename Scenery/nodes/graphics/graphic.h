@@ -8,9 +8,6 @@
 #include "elements/elements.h"
 
 
-enum class ReverseType { None, Vertical, Horizontal };
-
-
 class Graphic
 {
 public:
@@ -30,9 +27,14 @@ public:
     void background(const Color &color);
 
     void draw(Image *image, GLfloat x, GLfloat y, GLfloat width, GLfloat height,
-               GLfloat angle=0, ReverseType reverse=ReverseType::None);
+              GLfloat angle=0);
 
     void flush();
+
+    int time() { return _time; }
+    int dtime() { return _dtime; }
+
+    void addParticle(Particle *particle);
 
 protected:
 
@@ -68,6 +70,11 @@ private:
 
     QVector<ImageBuffer> imageBuffers;
     Color curColor;
+    int _time;
+    int _dtime;
+    QList<Particle *> _particles;
+
+    void processParticles();
 };
 
 #endif // GRAPHIC_H

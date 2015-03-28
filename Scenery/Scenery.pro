@@ -89,7 +89,8 @@ HEADERS += \
     nodes/graphics/elements/position.h \
     nodes/graphics/camerapositionnode.h \
     nodes/kinect/OpenCVHelper.h \
-    nodes/kinect/human.h
+    nodes/kinect/human.h \
+    nodes/graphics/elements/particle.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -129,8 +130,11 @@ SOURCES += \
     scenes/dance.cpp \
     scenes/example.cpp \
     nodes/graphics/camerapositionnode.cpp \
-    nodes/kinect/OpenCVHelper.cpp
+    nodes/kinect/OpenCVHelper.cpp \
+    nodes/graphics/elements/particle.cpp
 
 RESOURCES += \
 icons.qrc
+
+
 

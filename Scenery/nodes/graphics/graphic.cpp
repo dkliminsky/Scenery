@@ -69,7 +69,7 @@ void Graphic::background(const Color &color)
 }
 
 void Graphic::draw(Image *image, GLfloat x, GLfloat y, GLfloat width, GLfloat height,
-                    GLfloat angle, ReverseType reverse)
+                   GLfloat angle)
 {
     Q_ASSERT(image);
 
@@ -90,7 +90,7 @@ void Graphic::draw(Image *image, GLfloat x, GLfloat y, GLfloat width, GLfloat he
     GLfloat x4 = x - width/2.0f;
     GLfloat y4 = y + height/2.0f;
 
-    switch (reverse) {
+    switch (image->reverse()) {
     case ReverseType::None:
         x1 = x - width/2.0;
         y1 = y - height/2.0;
@@ -250,4 +250,27 @@ void Graphic::flush()
     delete [] vertexes;
     delete [] colors;
     delete [] coords;
+}
+
+void Graphic::addParticle(Particle *particle)
+{
+    _particles.append(particle);
+}
+
+void Graphic::processParticles()
+{
+    QMutableListIterator<Particle *> i(_particles);
+    while (i.hasNext()) {
+        Particle *particle = i.next();
+
+        particle->setTTL(particle->ttl() - dtime());
+        if (particle->ttl() <= 0) {
+            delete particle;
+            i.remove();
+            continue;
+        }
+
+        draw(particle->image(), particle->x(), particle->y(),
+                                particle->w(), particle->h());
+    }
 }

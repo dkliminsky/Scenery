@@ -15,6 +15,9 @@ View::View() :
     setTitle("Scenery View");
     show();
 
+    timeLast = 0;
+    timer.start();
+
     METHOD_END
 }
 
@@ -49,9 +52,6 @@ void View::initializeGL()
     // При фильтрации игнорируются тексели,
     // выходящие за границу текстуры для s и t координаты
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-
-//    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void View::resizeGL(int width, int height)
@@ -90,7 +90,15 @@ void View::paintGL()
     QPainter p(this);
     p.beginNativePainting();
     _scene->_painter = &p;
+
+    int curTime = timer.elapsed();
+    timeStep = curTime - timeLast;
+    timeLast = curTime;
+    _scene->_time = curTime;
+    _scene->_dtime = timeStep;
+
     _scene->paint();
+    _scene->processParticles();
     _scene->flush();
     p.endNativePainting();
 
