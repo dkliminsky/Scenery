@@ -30,6 +30,7 @@ public:
     void control(QString &string, QString description, QStringList list);
     void control(Color &color, QString description);
     void control(Image **image, QString description, QString path, QString file="");
+    void addControlGroup(QString description);
 
     void button(int id, QString description);
 

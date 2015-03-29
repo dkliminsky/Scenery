@@ -1,5 +1,8 @@
 #include "controlwidgets.h"
 
+#include <QScrollArea>
+#include <QScrollBar>
+
 
 QWidget *control_widget_factory(IControl *control)
 {
@@ -18,21 +21,54 @@ QWidget *control_widget_factory(IControl *control)
         return new QWidget;
     case IControl::ControlButton:
         return new ControlButtonWidget(static_cast<ControlButton *>(control));
+    case IControl::ControlGroup:
+        return new ControlGroupWidget(static_cast<ControlGroup *>(control));
     default:
         return new QWidget;
     }
 }
 
-QLayout *make_controls_layout(Controls *controls)
+QWidget *make_controls_widget(Controls *controls)
 {
-    QGridLayout *layout = new QGridLayout();
-    layout->setContentsMargins(0, 0, 0, 0);
+    QVBoxLayout *layout = new QVBoxLayout();
 
+    QGridLayout *gridLayout = nullptr;
+    ControlGroupWidget *groupWidget = nullptr;
+    int n = 0;
     for(int i=0; i<controls->size(); i++) {
         IControl *control = controls->at(i);
-        layout->addWidget(new QLabel(control->name()), i, 0);
-        layout->addWidget(control_widget_factory(control), i, 1);
+        QWidget *widget = control_widget_factory(control);
+
+        if (control->type() == IControl::ControlGroup) {
+            gridLayout = new QGridLayout();
+            gridLayout->setContentsMargins(5, 8, 5, 5);
+
+            groupWidget = static_cast<ControlGroupWidget *>(widget);
+            groupWidget->setLayout(gridLayout);
+            layout->addWidget(groupWidget);
+            n = 0;
+        }
+        else {
+            if (!gridLayout) {
+                gridLayout = new QGridLayout();
+                gridLayout->setContentsMargins(5, 8, 5, 5);
+            }
+            gridLayout->addWidget(new QLabel(control->name()), n, 0);
+            gridLayout->addWidget(widget, n, 1);
+            layout->addLayout(gridLayout);
+            n++;
+        }
     }
-    layout->setRowStretch(layout->count()-1, 1);
-    return layout;
+    //gridLayout->setRowStretch(gridLayout->count()-1, 1);
+
+
+    QWidget *widget = new QWidget();
+    widget->setLayout(layout);
+
+    QScrollArea *scroll = new QScrollArea();
+    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    scroll->setWidget(widget);
+    scroll->setFixedWidth(widget->width() + 20);
+    return scroll;
 }

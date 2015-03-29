@@ -75,6 +75,11 @@ void Scene::control(Image **image, QString description, QString path, QString fi
     _controls += new ControlImage(image, description, images);
 }
 
+void Scene::addControlGroup(QString description)
+{
+    _controls += new ControlGroup(description);
+}
+
 void Scene::button(int id, QString description)
 {
     _controls += new ControlButton(this, id, description);

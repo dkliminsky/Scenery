@@ -6,8 +6,8 @@
 #include "nodes/graphics/scene.h"
 using namespace cv;
 
-enum class Signals { None, DoubleLeft, DoubleRight, DoubleReturn, StrikeLeft, StrikeRight };
-enum class DoubleShadowCommand {None, Left, Right, Return};
+enum class Signals { None, DoubleLeft, DoubleRight, DoubleReturn, StrikeLeft, StrikeRight,
+                     Dead };
 
 class ShadowScene : public Scene
 {
@@ -18,6 +18,7 @@ public:
     int depth_min;
     int depth_max;
     int blur_size;
+    int erosion_size;
     int dilation_size;
 
     Image imageShadow;
@@ -36,33 +37,54 @@ public:
 
     bool is_strike_shadow;
     Color strike_shadow_color;
+    double strike_shadow_acceleartion;
+    Signals strike_shadow_command;
+
+    bool is_dead_shadow;
+    Color dead_shadow_color;
+    double dead_shadow_acceleartion;
+    Signals dead_shadow_command;
 
     ShadowScene()
     {
-        control(depth_min=50, "depth_min", 0, 255);
-        control(depth_max=110, "depth_max", 0, 255);
+        addControlGroup("Main");
+        control(depth_min=50, "Depth min", 0, 255);
+        control(depth_max=110, "Depth max", 0, 255);
         control(blur_size=7, "Blur size", 1, 50);
-        control(dilation_size=1, "Erosion size", 0, 50);
+        control(erosion_size=1, "Erosion size", 0, 50);
+        control(dilation_size=1, "Dilation size", 0, 50);
         control(backColor=Color(1, 1, 1, 0.2f), "Background");
 
-        control(is_self_shadow=true, "Self Shadow");
-        control(self_shadow_color = Color(0, 0, 0, 1), "Self Shadow Color");
+        addControlGroup("Self Shadow");
+        control(is_self_shadow=true, "On");
+        control(self_shadow_color = Color(0, 0, 0, 1), "Color");
 
-        control(is_double_shadow=false, "Double Shadow");
-        button(int(Signals::DoubleLeft), "Double Left");
-        button(int(Signals::DoubleRight), "Double Right");
-        button(int(Signals::DoubleReturn), "Double Return");
-        control(double_shadow_color = Color(0, 0, 0, 1), "Double Shadow Color");
-        control(double_shadow_max_shift=60, "Double Shadow Shift", 0, 100);
-        control(double_shadow_shift_time=300, "Double Shadow Shift Time", 0, 500);
-        control(is_reverse=false, "is_reverse");
+        addControlGroup("Double Shadow");
+        control(is_double_shadow=false, "On");
+        button(int(Signals::DoubleLeft), "Left");
+        button(int(Signals::DoubleRight), "Right");
+        button(int(Signals::DoubleReturn), "Return");
+        control(double_shadow_color = Color(0, 0, 0, 1), "Color");
+        control(double_shadow_max_shift=60, "Shift", 0, 100);
+        control(double_shadow_shift_time=300, "Shift Time", 0, 500);
+        control(is_reverse=false, "Reverse");
         double_shadow_command = Signals::None;
         double_shadow_shift = 0;
 
-        control(is_strike_shadow=true, "Self Shadow");
-        button(int(Signals::StrikeLeft), "Strike Left");
-        button(int(Signals::StrikeRight), "Strike Right");
-        control(strike_shadow_color = Color(0.8f, 0, 0, 1), "Self Shadow Color");
+        addControlGroup("Strike Shadow");
+        control(is_strike_shadow=true, "On");
+        button(int(Signals::StrikeLeft), "Left");
+        button(int(Signals::StrikeRight), "Right");
+        control(strike_shadow_color = Color(0.8f, 0, 0, 1), "Color");
+        control(strike_shadow_acceleartion=0.4, "Acceleration", 0, 10, 2);
+        strike_shadow_command = Signals::None;
+
+        addControlGroup("Dead Shadow");
+        control(is_dead_shadow=true, "On");
+        button(int(Signals::Dead), "Dead");
+        control(dead_shadow_color = Color(0, 0.2f, 0, 1), "Color");
+        control(dead_shadow_acceleartion=0.4, "Acceleration", 0, 10, 2);
+        dead_shadow_command = Signals::None;
     }
 
     void selfShadow() {
@@ -71,7 +93,7 @@ public:
     }
 
     void doubleShadow() {
-        if (is_reverse) {
+        if (is_reverse && double_shadow_command != Signals::None) {
             imageShadow.setReverse(ReverseType::Horizontal);
         }
 
@@ -111,8 +133,36 @@ public:
     }
 
     void strikeShadow() {
-        color(strike_shadow_color);
-        draw(&imageShadow, pos.x, pos.y, pos.width, pos.height);
+        if (strike_shadow_command == Signals::None)
+            return;
+
+        Particle *particle;
+        particle = new Particle(&imageShadow, false);
+        particle->setPos(pos);
+        particle->setColor(strike_shadow_color);
+        particle->setTTL(2000);
+        if (strike_shadow_command == Signals::StrikeLeft) {
+            particle->setAcceleration(-strike_shadow_acceleartion, 0);
+        }
+        else {
+            particle->setAcceleration(strike_shadow_acceleartion, 0);
+        }
+        addParticle(particle);
+        strike_shadow_command = Signals::None;
+    }
+
+    void deadShadow() {
+        if (dead_shadow_command == Signals::None)
+            return;
+
+        Particle *particle;
+        particle = new Particle(&imageShadow);
+        particle->setPos(pos);
+        particle->setColor(dead_shadow_color);
+        particle->setTTL(2000);
+        particle->setAcceleration(0, -dead_shadow_acceleartion);
+        addParticle(particle);
+        dead_shadow_command = Signals::None;
     }
 
     virtual void paint()
@@ -147,13 +197,21 @@ public:
             }
         }
 
-        Mat element = cv::getStructuringElement(cv::MORPH_RECT,
-                                                Size( 2*dilation_size + 1, 2*dilation_size+1 ),
-                                                Point( dilation_size, dilation_size ));
+        Mat erode_element =
+                cv::getStructuringElement(cv::MORPH_RECT,
+                                          Size( 2*erosion_size + 1, 2*erosion_size+1 ),
+                                          Point( erosion_size, erosion_size ));
+        Mat dilate_element =
+                cv::getStructuringElement(cv::MORPH_RECT,
+                                          Size( 2*dilation_size + 1, 2*dilation_size+1 ),
+                                          Point( dilation_size, dilation_size ));
+
+        Mat depth_erode;
         Mat depth_dilate;
         Mat depth_big;
         Mat depth_blur;
-        cv::dilate(depth, depth_dilate, element);
+        cv::erode(depth, depth_erode, erode_element);
+        cv::dilate(depth_erode, depth_dilate, dilate_element);
         cv::resize(depth_dilate, depth_big, Size(960, 720), 0, 0, INTER_CUBIC);
         cv::blur(depth_big, depth_blur, cv::Size(blur_size, blur_size));
 
@@ -163,14 +221,14 @@ public:
             selfShadow();
         if (is_double_shadow)
             doubleShadow();
-        if (is_double_shadow)
-            doubleShadow();
+        if (is_strike_shadow)
+            strikeShadow();
+        if (is_dead_shadow)
+            deadShadow();
     }
 
     virtual void signal(int id)
     {
-        Particle *particle;
-
         switch (id) {
         case Signals::DoubleLeft:
             double_shadow_command = Signals::DoubleLeft;
@@ -182,16 +240,13 @@ public:
             double_shadow_command = Signals::DoubleReturn;
             break;
         case Signals::StrikeLeft:
-            particle = new Particle(&imageShadow, false);
-            particle->setPos(pos);
-            particle->setTTL(300);
-            addParticle(particle);
+            strike_shadow_command = Signals::StrikeLeft;
             break;
         case Signals::StrikeRight:
-            particle = new Particle(&imageShadow, false);
-            particle->setPos(pos);
-            particle->setTTL(300);
-            addParticle(particle);
+            strike_shadow_command = Signals::StrikeRight;
+            break;
+        case Signals::Dead:
+            dead_shadow_command = Signals::Dead;
             break;
         default:
             break;

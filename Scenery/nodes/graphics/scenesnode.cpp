@@ -32,9 +32,7 @@ void ScenesNode::addScene(Scene *scene)
     scenesTable->setRowCount(_scenes.size());
     scenesTable->setItem(_scenes.size()-1, 0, sceneItem);
 
-    QWidget *controlsWidget = new QWidget;
-    controlsWidget->setLayout(make_controls_layout(&scene->_controls));
-    controlsStacked->addWidget(controlsWidget);
+    controlsStacked->addWidget(make_controls_widget(&scene->_controls));
 }
 
 void ScenesNode::setCurScene(Scene *scene)

@@ -16,7 +16,8 @@ public:
         ControlString,
         ControlImage,
         ControlColor,
-        ControlButton
+        ControlButton,
+        ControlGroup
     };
 
     IControl(Type type, QString name) { _type = type; _name = name; }

@@ -38,7 +38,9 @@ void Image::initDefault()
 
 Image::~Image()
 {
-
+    if (_id) {
+        glDeleteTextures(1, &_id);
+    }
 }
 
 void Image::set(IplImage *ipl)

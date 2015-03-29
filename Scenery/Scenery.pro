@@ -90,7 +90,9 @@ HEADERS += \
     nodes/graphics/camerapositionnode.h \
     nodes/kinect/OpenCVHelper.h \
     nodes/kinect/human.h \
-    nodes/graphics/elements/particle.h
+    nodes/graphics/elements/particle.h \
+    nodes/controls/controlgroup.h \
+    gui/controls/controlgroupwidget.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -131,10 +133,10 @@ SOURCES += \
     scenes/example.cpp \
     nodes/graphics/camerapositionnode.cpp \
     nodes/kinect/OpenCVHelper.cpp \
-    nodes/graphics/elements/particle.cpp
+    nodes/graphics/elements/particle.cpp \
+    nodes/controls/controlgroup.cpp \
+    gui/controls/controlgroupwidget.cpp
 
 RESOURCES += \
 icons.qrc
-
-
 

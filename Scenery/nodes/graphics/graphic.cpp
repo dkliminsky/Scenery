@@ -262,14 +262,15 @@ void Graphic::processParticles()
     QMutableListIterator<Particle *> i(_particles);
     while (i.hasNext()) {
         Particle *particle = i.next();
+        particle->process(dtime());
 
-        particle->setTTL(particle->ttl() - dtime());
         if (particle->ttl() <= 0) {
             delete particle;
             i.remove();
             continue;
         }
 
+        color(particle->color());
         draw(particle->image(), particle->x(), particle->y(),
                                 particle->w(), particle->h());
     }

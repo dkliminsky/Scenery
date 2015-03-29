@@ -83,6 +83,6 @@ void NodeItem::createWidget()
         widget.setLayout(layout);
     }
     else if (!node->controls.empty()) {
-        widget.setLayout(make_controls_layout(&node->controls));
+        widget.setParent(make_controls_widget(&node->controls));
     }
 }

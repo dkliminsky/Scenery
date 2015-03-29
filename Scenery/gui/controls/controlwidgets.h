@@ -10,9 +10,10 @@
 #include "controlcolorwidget.h"
 #include "controlstringwidget.h"
 #include "controlbuttonwidget.h"
+#include "controlgroupwidget.h"
 
 QWidget *control_widget_factory(IControl *control);
-QLayout *make_controls_layout(Controls *controls);
+QWidget *make_controls_widget(Controls *controls);
 
 
 #endif // CONTROLWIDGETS_H

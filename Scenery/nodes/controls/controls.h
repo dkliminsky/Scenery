@@ -9,5 +9,6 @@
 #include "controlcolor.h"
 #include "controlimage.h"
 #include "controlbutton.h"
+#include "controlgroup.h"
 
 #endif // CONTROLS_H
