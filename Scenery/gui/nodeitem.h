@@ -11,6 +11,7 @@ class NodeItem : public QGraphicsItem
 {
 public:
     NodeItem(Node *node);
+    ~NodeItem();
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -26,7 +27,7 @@ protected:
 
 private:
     Node *node;
-    QWidget widget;
+    QWidget *widget;
 
     int width;
     int height;

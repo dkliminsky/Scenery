@@ -11,14 +11,14 @@ Particle::Particle(Image *image, bool copy)
         _image = image;
     }
 
-    _accX = 0;
-    _accY = 0;
-    _accX2 = 0;
-    _accY2 = 0;
-    _decX = 1;
-    _decY = 1;
-    _decX2 = 1;
-    _decY2 = 1;
+    init();
+}
+
+Particle::Particle(Mat &mat)
+{
+    _image = new Image(mat);
+    isCopy = true;
+    init();
 }
 
 Particle::~Particle()
@@ -58,5 +58,26 @@ void Particle::process(int dtime)
     _ttl -= dtime;
     _x += _accX * float(dtime);
     _y += _accY * float(dtime);
+
+    _color.a -= _disappear * float(dtime);
+    if (_color.a < 0)
+        _color.a = 0;
+    if (_color.a > 1)
+        _color.a = 1;
+
+
+}
+
+void Particle::init()
+{
+    _accX = 0;
+    _accY = 0;
+    _accX2 = 0;
+    _accY2 = 0;
+    _decX = 1;
+    _decY = 1;
+    _decX2 = 1;
+    _decY2 = 1;
+    _disappear = 0;
 }
 

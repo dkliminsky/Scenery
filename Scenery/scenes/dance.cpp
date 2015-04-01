@@ -37,12 +37,15 @@ public:
 
     bool is_strike_shadow;
     Color strike_shadow_color;
+    double strike_shadow_disappear;
     double strike_shadow_acceleartion;
     Signals strike_shadow_command;
 
     bool is_dead_shadow;
     Color dead_shadow_color;
+    double dead_shadow_disappear;
     double dead_shadow_acceleartion;
+    int dead_shadow_erode;
     Signals dead_shadow_command;
 
     ShadowScene()
@@ -76,6 +79,7 @@ public:
         button(int(Signals::StrikeLeft), "Left");
         button(int(Signals::StrikeRight), "Right");
         control(strike_shadow_color = Color(0.8f, 0, 0, 1), "Color");
+        control(strike_shadow_disappear=0.001, "Disappear", 0, 1, 4);
         control(strike_shadow_acceleartion=0.4, "Acceleration", 0, 10, 2);
         strike_shadow_command = Signals::None;
 
@@ -83,7 +87,9 @@ public:
         control(is_dead_shadow=true, "On");
         button(int(Signals::Dead), "Dead");
         control(dead_shadow_color = Color(0, 0.2f, 0, 1), "Color");
-        control(dead_shadow_acceleartion=0.4, "Acceleration", 0, 10, 2);
+        control(dead_shadow_disappear=0.001, "Disappear", 0, 1, 4);
+        control(dead_shadow_acceleartion=0.2, "Acceleration", 0, 10, 2);
+        control(dead_shadow_erode=1, "Erosion", 0, 50);
         dead_shadow_command = Signals::None;
     }
 
@@ -141,6 +147,7 @@ public:
         particle->setPos(pos);
         particle->setColor(strike_shadow_color);
         particle->setTTL(2000);
+        particle->setDisappear(strike_shadow_disappear);
         if (strike_shadow_command == Signals::StrikeLeft) {
             particle->setAcceleration(-strike_shadow_acceleartion, 0);
         }
@@ -155,11 +162,19 @@ public:
         if (dead_shadow_command == Signals::None)
             return;
 
+        Mat erode_element =
+                cv::getStructuringElement(cv::MORPH_RECT,
+                                          Size( 2*dead_shadow_erode + 1, 2*dead_shadow_erode+1 ),
+                                          Point( dead_shadow_erode, dead_shadow_erode ));
+        Mat depth_erode;
+        cv::erode(imageShadow.mat(), depth_erode, erode_element);
+
         Particle *particle;
-        particle = new Particle(&imageShadow);
+        particle = new Particle(depth_erode);
         particle->setPos(pos);
         particle->setColor(dead_shadow_color);
         particle->setTTL(2000);
+        particle->setDisappear(dead_shadow_disappear);
         particle->setAcceleration(0, -dead_shadow_acceleartion);
         addParticle(particle);
         dead_shadow_command = Signals::None;

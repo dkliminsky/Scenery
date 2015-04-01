@@ -9,6 +9,7 @@ class Particle
 {
 public:
     Particle(Image *image, bool copy=true);
+    Particle(Mat &mat);
     ~Particle();
 
     Image *image() { return _image; }
@@ -29,7 +30,13 @@ public:
     void setAcceleration(float x, float y, float x2=0, float y2=0);
     void setDeceleration(float x, float y, float x2=1, float y2=1);
 
+    int disappear() { return _disappear; }
+    void setDisappear(float disappear) { _disappear = disappear; }
+
     virtual void process(int dtime);
+
+protected:
+    void init();
 
 private:
     Image *_image;
@@ -39,6 +46,8 @@ private:
     float _x, _y, _w, _h;
     float _accX, _accY, _accX2, _accY2;
     float _decX, _decY, _decX2, _decY2;
+    float _disappear;
+
 };
 
 #endif // PARTICLE_H

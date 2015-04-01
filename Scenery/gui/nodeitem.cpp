@@ -21,6 +21,11 @@ NodeItem::NodeItem(Node *node) :
     METHOD_END
 }
 
+NodeItem::~NodeItem()
+{
+    delete widget;
+}
+
 QRectF NodeItem::boundingRect() const
 {
     return QRectF(0, 0, width, height);
@@ -70,19 +75,23 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *)
 
 void NodeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *)
 {
-    widget.show();
+    widget->show();
 }
 
 void NodeItem::createWidget()
 {
-    widget.setWindowTitle(node->name());
-
     if (node->widget()) {
-        QVBoxLayout *layout = new QVBoxLayout;
-        layout->addWidget(node->widget());
-        widget.setLayout(layout);
+        widget = node->widget();
     }
-    else if (!node->controls.empty()) {
-        widget.setParent(make_controls_widget(&node->controls));
+    else {
+        widget = new QWidget();
+        QHBoxLayout *layout = new QHBoxLayout();
+        widget->setLayout(layout);
+
+        if (!node->controls.empty()) {
+            layout->addWidget(make_controls_widget(&node->controls));
+        }
     }
+
+    widget->setWindowTitle(node->name());
 }

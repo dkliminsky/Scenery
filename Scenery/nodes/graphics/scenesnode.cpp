@@ -49,7 +49,7 @@ void ScenesNode::timerEvent(QTimerEvent *)
 
 void ScenesNode::createWidget()
 {
-    _widget = new QWidget();
+    _widget = new QMainWindow();
     QPushButton *button = new QPushButton("&Full");
     scenesTable = new QTableWidget(2, 1);
     controlsStacked = new QStackedWidget;
@@ -57,7 +57,9 @@ void ScenesNode::createWidget()
     layout->addWidget(button);
     layout->addWidget(scenesTable);
     layout->addWidget(controlsStacked);
-    _widget->setLayout(layout);
+    QWidget *centralWidget = new QWidget();
+    centralWidget->setLayout(layout);
+    _widget->setCentralWidget(centralWidget);
 
     connect(scenesTable, SIGNAL(cellDoubleClicked(int,int)),
             this, SLOT(slotChangeScene(int,int)));

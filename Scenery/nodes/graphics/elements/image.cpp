@@ -3,29 +3,35 @@
 
 Image::Image()
 {
-    initDefault();
+    init();
     create(0, 0, 4);
 }
 
 Image::Image(Image *image)
 {
-    initDefault();
+    init();
     _mat = image->mat().clone();
+}
+
+Image::Image(cv::Mat &mat)
+{
+    init();
+    _mat = mat.clone();
 }
 
 Image::Image(int width, int height, int channels)
 {
-    initDefault();
+    init();
     create(width, height, channels);
 }
 
 Image::Image(const QString &fileName)
 {
-    initDefault();
+    init();
     load(fileName);
 }
 
-void Image::initDefault()
+void Image::init()
 {
     _fileName = "";
     _id = 0;

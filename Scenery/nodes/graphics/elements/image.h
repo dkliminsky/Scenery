@@ -15,6 +15,7 @@ class Image
 public:
     Image();
     Image(Image *image);
+    Image(cv::Mat &mat);
     Image(int width, int height, int channels);
     Image(const QString &fileName);
     ~Image();
@@ -42,7 +43,7 @@ public:
     void setReverse(ReverseType reverse) { this->_reverse = reverse; }
 
 protected:
-    void initDefault();
+    void init();
 
 private:
     cv::Mat _mat;

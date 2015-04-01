@@ -5,6 +5,7 @@
 #include "scene.h"
 #include "view.h"
 
+#include <QMainWindow>
 #include <QTableWidget>
 #include <QStackedWidget>
 #include <QToolBar>
@@ -35,7 +36,7 @@ private:
     Scenes _scenes;
     Scene *curScene;
 
-    QWidget *_widget;
+    QMainWindow *_widget;
     QTableWidget *scenesTable;
     QStackedWidget *controlsStacked;
     void createWidget();

@@ -52,15 +52,14 @@ QWidget *make_controls_widget(Controls *controls)
             if (!gridLayout) {
                 gridLayout = new QGridLayout();
                 gridLayout->setContentsMargins(5, 8, 5, 5);
+                layout->addLayout(gridLayout);
             }
             gridLayout->addWidget(new QLabel(control->name()), n, 0);
             gridLayout->addWidget(widget, n, 1);
-            layout->addLayout(gridLayout);
             n++;
         }
     }
-    //gridLayout->setRowStretch(gridLayout->count()-1, 1);
-
+    layout->addStretch(1);
 
     QWidget *widget = new QWidget();
     widget->setLayout(layout);
