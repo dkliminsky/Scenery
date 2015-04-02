@@ -87,12 +87,12 @@ HEADERS += \
     nodes/graphics/view.h \
     nodes/graphics/elements/elements.h \
     nodes/graphics/elements/position.h \
-    nodes/graphics/camerapositionnode.h \
     nodes/kinect/OpenCVHelper.h \
     nodes/kinect/human.h \
     nodes/graphics/elements/particle.h \
     nodes/controls/controlgroup.h \
-    gui/controls/controlgroupwidget.h
+    gui/controls/controlgroupwidget.h \
+    nodes/opencv/rectnode.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -131,11 +131,11 @@ SOURCES += \
     nodes/graphics/view.cpp \
     scenes/dance.cpp \
     scenes/example.cpp \
-    nodes/graphics/camerapositionnode.cpp \
     nodes/kinect/OpenCVHelper.cpp \
     nodes/graphics/elements/particle.cpp \
     nodes/controls/controlgroup.cpp \
-    gui/controls/controlgroupwidget.cpp
+    gui/controls/controlgroupwidget.cpp \
+    nodes/opencv/rectnode.cpp
 
 RESOURCES += \
 icons.qrc

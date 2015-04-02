@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QTableWidgetItem>
+#include <QAction>
 
 
 ScenesNode::ScenesNode() :
@@ -12,6 +13,8 @@ ScenesNode::ScenesNode() :
 {
     startTimer(17);
     createWidget();
+    createActions();
+    createToolBars();
 }
 
 ScenesNode::~ScenesNode()
@@ -50,11 +53,9 @@ void ScenesNode::timerEvent(QTimerEvent *)
 void ScenesNode::createWidget()
 {
     _widget = new QMainWindow();
-    QPushButton *button = new QPushButton("&Full");
     scenesTable = new QTableWidget(2, 1);
     controlsStacked = new QStackedWidget;
     QHBoxLayout *layout = new QHBoxLayout();
-    layout->addWidget(button);
     layout->addWidget(scenesTable);
     layout->addWidget(controlsStacked);
     QWidget *centralWidget = new QWidget();
@@ -63,20 +64,30 @@ void ScenesNode::createWidget()
 
     connect(scenesTable, SIGNAL(cellDoubleClicked(int,int)),
             this, SLOT(slotChangeScene(int,int)));
+}
 
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(slotFullScreen(bool)));
+void ScenesNode::createActions()
+{
+    fullAct = new QAction(QIcon(":/icons/resources/icons/fullscreen.png"),
+                          tr("&Full Screen"), this);
+    fullAct->setCheckable(true);
+    connect(fullAct, SIGNAL(triggered(bool)), this, SLOT(slotFullScreen(bool)));
+}
+
+void ScenesNode::createToolBars()
+{
+    sceneToolBar = _widget->addToolBar(tr("Scene"));
+    sceneToolBar->addAction(fullAct);
 }
 
 void ScenesNode::slotFullScreen(bool isFull)
 {
-    _view.showFullScreen();
-
-//    if (isFull) {
-//        _view.showFullScreen();
-//    }
-//    else {
-//        _view.showNormal();
-//    }
+    if (isFull) {
+        _view.showFullScreen();
+    }
+    else {
+        _view.showNormal();
+    }
 }
 
 void ScenesNode::slotChangeScene(int row, int column)

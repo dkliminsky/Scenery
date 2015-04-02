@@ -1,6 +1,6 @@
-#include "camerapositionnode.h"
+#include "rectnode.h"
 
-CameraPositionNode::CameraPositionNode()
+RectNode::RectNode()
 {
     output(PortType::Rect);
 
@@ -10,7 +10,7 @@ CameraPositionNode::CameraPositionNode()
     control(w=240, "height", 0, 1000);
 }
 
-void CameraPositionNode::run()
+void RectNode::run()
 {
     Rect &rect = outputs.at(0)->rect;
     rect.x = x;

@@ -325,10 +325,10 @@ public:
         sources.append(kinectNode);
         nodes.append(kinectNode);
 
-        Node *positionNode = new CameraPositionNode();
-        positionNode->setPos(0, 200);
-        nodes.append(positionNode);
-        sources.append(positionNode);
+        Node *rectNode = new RectNode();
+        rectNode->setPos(0, 200);
+        nodes.append(rectNode);
+        sources.append(rectNode);
 
         ScenesNode *scenesNode = new ScenesNode();
         scenesNode->inputs.append(new Port(PortType::Mat));
@@ -343,6 +343,6 @@ public:
         kinectNode->outputs.at(0)->links.append(new Link(scenesNode, 0));
         kinectNode->outputs.at(1)->links.append(new Link(scenesNode, 1));
         kinectNode->outputs.at(2)->links.append(new Link(scenesNode, 2));
-        positionNode->outputs.at(0)->links.append(new Link(scenesNode, 3));
+        rectNode->outputs.at(0)->links.append(new Link(scenesNode, 3));
     }
 };

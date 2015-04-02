@@ -11,6 +11,7 @@
 #include <QToolBar>
 #include <QTime>
 
+
 typedef QList<Scene *> Scenes;
 
 
@@ -39,7 +40,11 @@ private:
     QMainWindow *_widget;
     QTableWidget *scenesTable;
     QStackedWidget *controlsStacked;
+    QAction *fullAct;
+    QToolBar *sceneToolBar;
     void createWidget();
+    void createActions();
+    void createToolBars();
 
 public slots:
     void slotFullScreen(bool isFull);

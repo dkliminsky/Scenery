@@ -2,13 +2,13 @@
 #define PROCESS_H
 
 #include "opencv/cameranode.h"
+#include "opencv/rectnode.h"
 #include "opencv/debugnode.h"
 #include "opencv/colornode.h"
 #include "opencv/erodenode.h"
 #include "opencv/dilatenode.h"
 
 #include "graphics/scenesnode.h"
-#include "graphics/camerapositionnode.h"
 #include "graphics/view.h"
 
 #ifdef NOKINECT

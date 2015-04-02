@@ -114,7 +114,7 @@ public:
         dilateNode->setPos(450, 0);
         nodes.append(dilateNode);
 
-        Node *positionNode = new CameraPositionNode();
+        Node *positionNode = new RectNode();
         positionNode->setPos(0, 200);
         nodes.append(positionNode);
         sources.append(positionNode);
