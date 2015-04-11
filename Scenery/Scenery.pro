@@ -92,7 +92,8 @@ HEADERS += \
     nodes/graphics/elements/particle.h \
     nodes/controls/controlgroup.h \
     gui/controls/controlgroupwidget.h \
-    nodes/opencv/rectnode.h
+    nodes/opencv/rectnode.h \
+    gui/controls/controlimagewidget.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -135,8 +136,10 @@ SOURCES += \
     nodes/graphics/elements/particle.cpp \
     nodes/controls/controlgroup.cpp \
     gui/controls/controlgroupwidget.cpp \
-    nodes/opencv/rectnode.cpp
+    nodes/opencv/rectnode.cpp \
+    gui/controls/controlimagewidget.cpp
 
 RESOURCES += \
 icons.qrc
+
 

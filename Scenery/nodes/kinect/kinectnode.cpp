@@ -90,8 +90,10 @@ void KinectNode::run()
                     skeletonFrame.SkeletonData[i].eTrackingState;
 
             Human &human = humans.at(i);
-            if (trackingState == NUI_SKELETON_TRACKED) {
-                // Draw entire skeleton
+            human.isTracking = false;
+            if (trackingState == NUI_SKELETON_TRACKED ||
+                trackingState == NUI_SKELETON_POSITION_INFERRED) {
+
                 NUI_SKELETON_DATA *pSkel = &(skeletonFrame.SkeletonData[i]);
                 Point jointPositions[NUI_SKELETON_POSITION_COUNT];
                 for (int j = 0; j < NUI_SKELETON_POSITION_COUNT; ++j) {
@@ -103,18 +105,26 @@ void KinectNode::run()
                 }
 
                 human.isTracking = true;
+                human.hipCenter = jointPositions[NUI_SKELETON_POSITION_HIP_CENTER];
+                human.spine = jointPositions[NUI_SKELETON_POSITION_SPINE];
+                human.shoulderCenter = jointPositions[NUI_SKELETON_POSITION_SHOULDER_CENTER];
                 human.head = jointPositions[NUI_SKELETON_POSITION_HEAD];
-                human.wristRight = jointPositions[NUI_SKELETON_POSITION_WRIST_RIGHT];
+                human.shoulderLeft = jointPositions[NUI_SKELETON_POSITION_SHOULDER_LEFT];
+                human.elbowLeft = jointPositions[NUI_SKELETON_POSITION_ELBOW_LEFT];
                 human.wristLeft = jointPositions[NUI_SKELETON_POSITION_WRIST_LEFT];
-                human.footRight = jointPositions[NUI_SKELETON_POSITION_FOOT_RIGHT];
+                human.handLeft = jointPositions[NUI_SKELETON_POSITION_HAND_LEFT];
+                human.shoulderRight = jointPositions[NUI_SKELETON_POSITION_SHOULDER_RIGHT];
+                human.elbowRight = jointPositions[NUI_SKELETON_POSITION_ELBOW_RIGHT];
+                human.wristRight = jointPositions[NUI_SKELETON_POSITION_WRIST_RIGHT];
+                human.handRight = jointPositions[NUI_SKELETON_POSITION_HAND_RIGHT];
+                human.hipLeft = jointPositions[NUI_SKELETON_POSITION_HIP_LEFT];
+                human.kneeLeft = jointPositions[NUI_SKELETON_POSITION_KNEE_LEFT];
+                human.ankleLeft = jointPositions[NUI_SKELETON_POSITION_ANKLE_LEFT];
                 human.footLeft = jointPositions[NUI_SKELETON_POSITION_FOOT_LEFT];
-
-            }
-            else if (trackingState == NUI_SKELETON_POSITION_INFERRED) {
-                // Draw a filled circle at the skeleton's inferred position
-//                    LONG x, y;
-//                    GetCoordinatesForSkeletonPoint(pSkeletons->SkeletonData[i].Position, &x, &y, colorResolution, depthResolution);
-//                    circle(*pImg, Point(x, y), 7, SKELETON_COLORS[i], CV_FILLED);
+                human.hipRight = jointPositions[NUI_SKELETON_POSITION_HIP_RIGHT];
+                human.kneeRight = jointPositions[NUI_SKELETON_POSITION_KNEE_RIGHT];
+                human.ankleRight = jointPositions[NUI_SKELETON_POSITION_ANKLE_RIGHT];
+                human.footRight = jointPositions[NUI_SKELETON_POSITION_FOOT_RIGHT];
             }
         }
     }

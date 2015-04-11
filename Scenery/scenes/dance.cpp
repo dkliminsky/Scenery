@@ -14,6 +14,7 @@ class ShadowScene : public Scene
 public:
     QString name() { return "Shadow"; }
     Rect pos;
+    Image stream;
 
     int depth_min;
     int depth_max;
@@ -164,7 +165,8 @@ public:
 
         Mat erode_element =
                 cv::getStructuringElement(cv::MORPH_RECT,
-                                          Size( 2*dead_shadow_erode + 1, 2*dead_shadow_erode+1 ),
+                                          Size( 2*dead_shadow_erode + 1,
+                                                2*dead_shadow_erode+1 ),
                                           Point( dead_shadow_erode, dead_shadow_erode ));
         Mat depth_erode;
         cv::erode(imageShadow.mat(), depth_erode, erode_element);
@@ -271,6 +273,119 @@ public:
 };
 
 
+class RaysScene : public Scene
+{
+public:
+    QString name() { return "Rays"; }
+
+    Image stream;
+    Color backColor;
+    Color rayColor;
+    Image *rayImage;
+    int raySize;
+    int haloSize;
+
+
+    RaysScene()
+    {
+        control(backColor=Color(1, 1, 1, 0.8f), "Back color");
+        control(&rayImage, "Image", "images/rays/", "ray_04.png");
+        control(rayColor=Color(1, 0, 0, 1), "Ray color");
+        control(raySize=200, "Ray Size", 0, 1000);
+        control(haloSize=100, "Halo Size", 0, 1000);
+    }
+
+    void drawRay(Point from, Point to)
+    {
+        float a = angle(from.x, from.y, to.x, to.y);
+
+        if (a > pi()/4 && a < pi() - pi()/4)
+            return;
+
+        if (a > pi() + pi()/4 && a < 2*pi() - pi()/4)
+            return;
+
+        float s = raySize;
+        float x = from.x;
+        float y = from.y;
+
+        x += s/2 * cos(a);
+        y -= s/2 * sin(a);
+
+        draw(rayImage, x, y, s, s, a);
+    }
+
+    void drawRayFromCemter(Point center, Point to)
+    {
+        float a = angle(center.x, center.y, to.x, to.y);
+        float d = distance(float(center.x), center.y, to.x, to.y);
+
+        if (d < haloSize)
+            return;
+
+        if (a > pi()/4 && a < pi() - pi()/4)
+            return;
+
+        if (a > pi() + pi()/4 && a < 2*pi() - pi()/4)
+            return;
+
+        float s = raySize;
+        float x = center.x;
+        float y = center.y;
+
+        x += s/2 * cos(a);
+        y -= s/2 * sin(a);
+
+        draw(rayImage, x, y, s, s, a);
+    }
+
+    virtual void paint()
+    {
+        Mat &kinectColor = input(0)->mat;
+        //Mat &kinectDepth = input(1)->mat;
+        vector<Human> &humans = input(2)->humans;
+        Rect pos = input(3)->rect;
+
+        if (kinectColor.empty())
+            return;
+
+        Mat kinectColor3;
+        cv::cvtColor(kinectColor, kinectColor3, COLOR_RGBA2RGB);
+        stream.set(kinectColor3);
+
+
+        size(320*2, 240*2);
+        background(backColor);
+
+        //draw(&stream, pos.x, pos.y, pos.width, pos.height);
+        color(1,1,1);
+        draw(&stream, width()/2, height()/2, width(), height());
+        flush();
+
+        color(rayColor);
+        for (int i=0; i < humans.size(); ++i) {
+            Human &human = humans.at(i);
+            if (human.isTracking) {
+                drawRay(human.shoulderCenter, human.head);
+
+                Point center;
+                center.x = (human.shoulderCenter.x + human.spine.x)/2;
+                center.y = (human.shoulderCenter.y + human.spine.y)/2;
+
+                drawRayFromCemter(center, human.elbowLeft);
+                drawRayFromCemter(center, human.elbowRight);
+                drawRayFromCemter(center, human.handLeft);
+                drawRayFromCemter(center, human.handRight);
+                drawRayFromCemter(center, human.kneeLeft);
+                drawRayFromCemter(center, human.kneeRight);
+                drawRayFromCemter(center, human.ankleLeft);
+                drawRayFromCemter(center, human.ankleRight);
+            }
+        }
+    }
+};
+
+
 class TailHandsScene : public Scene
 {
 public:
@@ -295,10 +410,14 @@ public:
 
     virtual void paint()
     {
-        Mat kinectColor = input(0)->mat;
+        Mat &depth = input(1)->mat;
         vector<Human> &humans = input(2)->humans;
+        Rect pos = input(3)->rect;
 
-        size(320, 240);
+        if (depth.empty())
+            return;
+
+        size(320*2, 240*2);
         background(backColor);
 
 
@@ -336,6 +455,7 @@ public:
         scenesNode->inputs.append(new Port(PortType::Humans));
         scenesNode->inputs.append(new Port(PortType::Rect));
         scenesNode->setPos(200, 100);
+        scenesNode->addScene(new RaysScene);
         scenesNode->addScene(new ShadowScene);
         scenesNode->addScene(new TailHandsScene);
         nodes.append(scenesNode);

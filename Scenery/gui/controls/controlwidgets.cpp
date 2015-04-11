@@ -18,7 +18,7 @@ QWidget *control_widget_factory(IControl *control)
     case IControl::ControlColor:
         return new ControlColorWidget(static_cast<ControlColor *>(control));
     case IControl::ControlImage:
-        return new QWidget;
+        return new ControlImageWidget(static_cast<ControlImage *>(control));
     case IControl::ControlButton:
         return new ControlButtonWidget(static_cast<ControlButton *>(control));
     case IControl::ControlGroup:

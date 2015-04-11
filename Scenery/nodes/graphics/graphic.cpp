@@ -49,18 +49,21 @@ void Graphic::color(const Color &color)
 
 void Graphic::background(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 {
-//    glClearColor(r, g, b, a);
-//    glClear(GL_COLOR_BUFFER_BIT);
-
-    glEnable(GL_BLEND);
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    glColor4f(r, g, b, a);
-    glBegin(GL_QUADS);
-        glVertex2f(0, 0);
-        glVertex2f(0, _heightScene);
-        glVertex2f(_widthScene, _heightScene);
-        glVertex2f(_widthScene, 0);
-    glEnd();
+    if (a == 1) {
+        glClearColor(r, g, b, a);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+    else {
+        glEnable(GL_BLEND);
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+        glColor4f(r, g, b, a);
+        glBegin(GL_QUADS);
+            glVertex2f(0, 0);
+            glVertex2f(0, _heightScene);
+            glVertex2f(_widthScene, _heightScene);
+            glVertex2f(_widthScene, 0);
+        glEnd();
+    }
 }
 
 void Graphic::background(const Color &color)
