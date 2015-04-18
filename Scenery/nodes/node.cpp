@@ -34,8 +34,9 @@ void Node::processNext()
 
             if (!next->isProcessing()) {
                 next->inputs.at(link->port_id)->mat = port->mat.clone();
+                next->inputs.at(link->port_id)->human = port->human;
                 next->inputs.at(link->port_id)->rect = port->rect;
-                next->inputs.at(link->port_id)->humans = port->humans;
+                next->inputs.at(link->port_id)->booleans = port->booleans;
                 next->process();
             }
         }

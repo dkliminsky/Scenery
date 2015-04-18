@@ -3,16 +3,9 @@
 
 #include <QMainWindow>
 
-#include "../nodes/manager.h"
+#include "../nodes/project.h"
 #include "nodeitem.h"
 #include "linkitem.h"
-
-//#include "controls/controlboolwidget.h"
-//#include "controls/controlintwidget.h"
-//#include "controls/controldoublewidget.h"
-//#include "controls/controlstringwidget.h"
-//#include "controls/controlcolorwidget.h"
-//#include "controls/controlbuttonwidget.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -27,32 +20,44 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-    explicit MainWindow(Manager *manager, QWidget *parent = 0);
+    explicit MainWindow(Project *manager, QWidget *parent = 0);
     ~MainWindow();
 
 protected:
     void closeEvent(QCloseEvent *);
     void timerEvent(QTimerEvent *);
 
+    NodeItem *getOrCreateNodeItem(Node *node);
+
 private:
-    Manager *manager;
+    Project *manager;
     QGraphicsScene *scene;
     QGraphicsView *graphics;
+
+    QHash<QString, NodeItem *> nodeItemHash;
 
     QAction *exitAct;
     QAction *aboutAct;
     QAction *aboutQtAct;
+    QAction *saveAct;
+    QAction *loadAct;
     QMenu *fileMenu;
     QMenu *helpMenu;
 
+    QToolBar *mainToolBar;
+
     void readSettings();
+
     void createActions();
+    void createToolBars();
     void createMenus();
     void createScene();
     void createNodes();
 
 private slots:
-    void about();
+    void slotAbout();
+    void slotSave();
+    void slotLoad();
 
 };
 

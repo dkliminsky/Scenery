@@ -63,7 +63,12 @@ void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     node->setPos(event->scenePos().x() - event->buttonDownPos(Qt::LeftButton).x(),
                  event->scenePos().y() - event->buttonDownPos(Qt::LeftButton).y());
     setPos(node->posX(), node->posY());
+
     foreach (LinkItem *linkItem, links_out) {
+        linkItem->repaint();
+    }
+
+    foreach (LinkItem *linkItem, links_in) {
         linkItem->repaint();
     }
 }

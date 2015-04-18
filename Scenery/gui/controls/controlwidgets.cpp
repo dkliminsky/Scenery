@@ -65,9 +65,11 @@ QWidget *make_controls_widget(Controls *controls)
     widget->setLayout(layout);
 
     QScrollArea *scroll = new QScrollArea();
-    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     scroll->setWidget(widget);
-    scroll->setFixedWidth(widget->width() + 20);
+    scroll->setWidgetResizable(true);
+    //scroll->setMinimumWidth(widget->width() + 20);
+    //scroll->setFixedWidth(widget->width() + 20);
     return scroll;
 }

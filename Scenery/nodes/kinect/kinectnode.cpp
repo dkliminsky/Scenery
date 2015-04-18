@@ -11,7 +11,7 @@ KinectNode::KinectNode(int device) :
 
 	outputs.append(new Port(PortType::Mat));
 	outputs.append(new Port(PortType::Mat));
-    outputs.append(new Port(PortType::Humans));
+    outputs.append(new Port(PortType::Human));
 
     for (int i=0; i < NUI_SKELETON_COUNT; i++) {
         Human human;
@@ -32,6 +32,7 @@ void KinectNode::run()
 {
     Mat &colorMat = outputs.at(0)->mat;
     Mat &depthMat = outputs.at(1)->mat;
+    Human &human = outputs.at(2)->human;
 
     if (!m_frameHelper.IsInitialized()) {
         return;
@@ -53,11 +54,6 @@ void KinectNode::run()
     }
 
     if (SUCCEEDED(m_frameHelper.UpdateSkeletonFrame())) {
-        vector<Human> &humans = outputs.at(2)->humans;
-        for (int i=0; i < NUI_SKELETON_COUNT; i++) {
-            humans.at(i).isTracking = false;
-        }
-
         NUI_SKELETON_FRAME skeletonFrame;
         HRESULT hr = m_frameHelper.GetSkeletonFrame(&skeletonFrame);
         if (FAILED(hr)) {
@@ -84,13 +80,12 @@ void KinectNode::run()
             }
         }
 
+        human.isTracking = false;
         for (int i=0; i < NUI_SKELETON_COUNT; ++i) {
 
             NUI_SKELETON_TRACKING_STATE trackingState =
                     skeletonFrame.SkeletonData[i].eTrackingState;
 
-            Human &human = humans.at(i);
-            human.isTracking = false;
             if (trackingState == NUI_SKELETON_TRACKED ||
                 trackingState == NUI_SKELETON_POSITION_INFERRED) {
 
@@ -125,6 +120,7 @@ void KinectNode::run()
                 human.kneeRight = jointPositions[NUI_SKELETON_POSITION_KNEE_RIGHT];
                 human.ankleRight = jointPositions[NUI_SKELETON_POSITION_ANKLE_RIGHT];
                 human.footRight = jointPositions[NUI_SKELETON_POSITION_FOOT_RIGHT];
+                break;
             }
         }
     }

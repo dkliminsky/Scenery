@@ -1,4 +1,4 @@
-#include "nodes/manager.h"
+#include "nodes/project.h"
 #include "nodes/nodes.h"
 #include "nodes/graphics/scene.h"
 
@@ -97,7 +97,7 @@ public:
 
 
 
-class Manager_ : public Manager
+class Manager_ : public Project
 {
 public:
     void init() {

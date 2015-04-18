@@ -1,4 +1,4 @@
-#include "nodes/manager.h"
+#include "nodes/project.h"
 #include "nodes/nodes.h"
 
 
@@ -236,8 +236,10 @@ public:
 
         if (is_self_shadow)
             selfShadow();
-        if (is_double_shadow)
+        if (is_double_shadow) {
+            gestures();
             doubleShadow();
+        }
         if (is_strike_shadow)
             strikeShadow();
         if (is_dead_shadow)
@@ -267,6 +269,17 @@ public:
             break;
         default:
             break;
+        }
+    }
+
+    void gestures()
+    {
+        vector<bool> &gests = input(4)->booleans;
+        if (gests.at(0)) {
+            double_shadow_command = Signals::DoubleRight;
+        }
+        if (gests.at(1)) {
+            double_shadow_command = Signals::DoubleLeft;
         }
     }
 
@@ -315,7 +328,7 @@ public:
         draw(rayImage, x, y, s, s, a);
     }
 
-    void drawRayFromCemter(Point center, Point to)
+    void drawRayFromCenter(Point center, Point to)
     {
         float a = angle(center.x, center.y, to.x, to.y);
         float d = distance(float(center.x), center.y, to.x, to.y);
@@ -342,8 +355,8 @@ public:
     virtual void paint()
     {
         Mat &kinectColor = input(0)->mat;
+        Human &human = input(2)->human;
         //Mat &kinectDepth = input(1)->mat;
-        vector<Human> &humans = input(2)->humans;
         Rect pos = input(3)->rect;
 
         if (kinectColor.empty())
@@ -363,24 +376,21 @@ public:
         flush();
 
         color(rayColor);
-        for (int i=0; i < humans.size(); ++i) {
-            Human &human = humans.at(i);
-            if (human.isTracking) {
-                drawRay(human.shoulderCenter, human.head);
+        if (human.isTracking) {
+            drawRay(human.shoulderCenter, human.head);
 
-                Point center;
-                center.x = (human.shoulderCenter.x + human.spine.x)/2;
-                center.y = (human.shoulderCenter.y + human.spine.y)/2;
+            Point center;
+            center.x = (human.shoulderCenter.x + human.spine.x)/2;
+            center.y = (human.shoulderCenter.y + human.spine.y)/2;
 
-                drawRayFromCemter(center, human.elbowLeft);
-                drawRayFromCemter(center, human.elbowRight);
-                drawRayFromCemter(center, human.handLeft);
-                drawRayFromCemter(center, human.handRight);
-                drawRayFromCemter(center, human.kneeLeft);
-                drawRayFromCemter(center, human.kneeRight);
-                drawRayFromCemter(center, human.ankleLeft);
-                drawRayFromCemter(center, human.ankleRight);
-            }
+            drawRayFromCenter(center, human.elbowLeft);
+            drawRayFromCenter(center, human.elbowRight);
+            drawRayFromCenter(center, human.handLeft);
+            drawRayFromCenter(center, human.handRight);
+            drawRayFromCenter(center, human.kneeLeft);
+            drawRayFromCenter(center, human.kneeRight);
+            drawRayFromCenter(center, human.ankleLeft);
+            drawRayFromCenter(center, human.ankleRight);
         }
     }
 };
@@ -411,7 +421,7 @@ public:
     virtual void paint()
     {
         Mat &depth = input(1)->mat;
-        vector<Human> &humans = input(2)->humans;
+        Human &human = input(2)->human;
         Rect pos = input(3)->rect;
 
         if (depth.empty())
@@ -420,21 +430,16 @@ public:
         size(320*2, 240*2);
         background(backColor);
 
-
         color(tailColor);
-        for (int i=0; i < humans.size(); ++i) {
-            Human &human = humans.at(i);
-            if (human.isTracking) {
-                draw(tailImage, human.wristRight.x, human.wristRight.y, tailSize, tailSize);
-                draw(tailImage, human.wristLeft.x, human.wristLeft.y, tailSize, tailSize);
-            }
+        if (human.isTracking) {
+            draw(tailImage, human.wristRight.x, human.wristRight.y, tailSize, tailSize);
+            draw(tailImage, human.wristLeft.x, human.wristLeft.y, tailSize, tailSize);
         }
-
     }
 };
 
 
-class Manager_ : public Manager
+class Manager_ : public Project
 {
 public:
     void init()
@@ -449,20 +454,28 @@ public:
         nodes.append(rectNode);
         sources.append(rectNode);
 
+        Node *gestureNode = new GestureNode();
+        gestureNode->setPos(0, 400);
+        nodes.append(gestureNode);
+
         ScenesNode *scenesNode = new ScenesNode();
         scenesNode->inputs.append(new Port(PortType::Mat));
         scenesNode->inputs.append(new Port(PortType::Mat));
-        scenesNode->inputs.append(new Port(PortType::Humans));
+        scenesNode->inputs.append(new Port(PortType::Human));
         scenesNode->inputs.append(new Port(PortType::Rect));
+        scenesNode->inputs.append(new Port(PortType::Booleans));
         scenesNode->setPos(200, 100);
         scenesNode->addScene(new RaysScene);
         scenesNode->addScene(new ShadowScene);
         scenesNode->addScene(new TailHandsScene);
         nodes.append(scenesNode);
 
+
+        kinectNode->outputs.at(2)->links.append(new Link(gestureNode, 0));
         kinectNode->outputs.at(0)->links.append(new Link(scenesNode, 0));
         kinectNode->outputs.at(1)->links.append(new Link(scenesNode, 1));
         kinectNode->outputs.at(2)->links.append(new Link(scenesNode, 2));
         rectNode->outputs.at(0)->links.append(new Link(scenesNode, 3));
+        gestureNode->outputs.at(0)->links.append(new Link(scenesNode, 4));
     }
 };

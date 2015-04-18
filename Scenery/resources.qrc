@@ -3,5 +3,8 @@
         <file>resources/icons/fullscreen.png</file>
         <file>resources/icons/play.png</file>
         <file>resources/icons/pause.png</file>
+        <file>resources/icons/load.svg</file>
+        <file>resources/icons/save.svg</file>
+        <file>resources/icons/save_32.png</file>
     </qresource>
 </RCC>

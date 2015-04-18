@@ -11,6 +11,8 @@
 #include "graphics/scenesnode.h"
 #include "graphics/view.h"
 
+#include "kinect/gesturenode.h"
+
 #ifdef NOKINECT
 #include "kinect/kinectfakenode.h"
 #else

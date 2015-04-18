@@ -20,7 +20,7 @@ typedef QList<Link *> Links;
 typedef QList<Port *> Ports;
 typedef QList<Node *> Nodes;
 
-enum class PortType { Mat, Humans, Rect, Rects };
+enum class PortType { Mat, Human, Boolean, Booleans, Number, Numbers, Rect, Rects };
 
 
 class Link
@@ -42,9 +42,18 @@ public:
     void *data;
 
     Mat mat;
+
+    Human human;
+    vector<Human> humans;
+
+    bool boolean;
+    vector<bool> booleans;
+
+    int number;
+    vector<int> numbers;
+
     Rect rect;
     vector<Rect> rects;
-    vector<Human> humans;
     // ...
 };
 

@@ -1,5 +1,6 @@
 #include "controlint.h"
 
+
 ControlInt::ControlInt(int &data, QString name,
                        int min, int max, int step) :
     IControl(IControl::ControlInt, name), _data(data)

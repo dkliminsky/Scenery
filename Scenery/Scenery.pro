@@ -51,7 +51,6 @@ HEADERS += \
     gui/mainwindow.h \
     gui/nodeitem.h \
     nodes/node.h \
-    nodes/manager.h \
     nodes/opencv/cameranode.h \
     nodes/opencv/debugnode.h \
     debug.h \
@@ -93,13 +92,14 @@ HEADERS += \
     nodes/controls/controlgroup.h \
     gui/controls/controlgroupwidget.h \
     nodes/opencv/rectnode.h \
-    gui/controls/controlimagewidget.h
+    gui/controls/controlimagewidget.h \
+    nodes/kinect/gesturenode.h \
+    nodes/project.h
 
 SOURCES += \
     gui/mainwindow.cpp \
     gui/nodeitem.cpp \
     nodes/node.cpp \
-    nodes/manager.cpp \
     main.cpp \
     nodes/opencv/cameranode.cpp \
     nodes/opencv/debugnode.cpp \
@@ -137,9 +137,9 @@ SOURCES += \
     nodes/controls/controlgroup.cpp \
     gui/controls/controlgroupwidget.cpp \
     nodes/opencv/rectnode.cpp \
-    gui/controls/controlimagewidget.cpp
+    gui/controls/controlimagewidget.cpp \
+    nodes/kinect/gesturenode.cpp \
+    nodes/project.cpp
 
 RESOURCES += \
-icons.qrc
-
-
+    resources.qrc
