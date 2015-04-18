@@ -5,9 +5,9 @@
 #include "debug.h"
 
 
-MainWindow::MainWindow(Project *manager, QWidget *parent) :
+MainWindow::MainWindow(Project *project, QWidget *parent) :
     QMainWindow(parent),
-    manager(manager)
+    project(project)
 {
     METHOD_BEGIN
 
@@ -17,7 +17,12 @@ MainWindow::MainWindow(Project *manager, QWidget *parent) :
     createScene();
     readSettings();
 
-    manager->loadProject("config.json");
+    foreach(Node *node, project->nodes) {
+        if (node->isSource()) {
+            project->sources.append(node);
+        }
+    }
+    project->loadProject("config.json");
     createNodes();
 
     startTimer(500);
@@ -111,7 +116,7 @@ void MainWindow::createScene()
 
 void MainWindow::createNodes()
 {
-    foreach (Node *node, manager->nodes) {
+    foreach (Node *node, project->nodes) {
         NodeItem *nodeItem = getOrCreateNodeItem(node);
 
         foreach (Port *port, node->outputs) {
@@ -136,11 +141,11 @@ void MainWindow::slotAbout()
 
 void MainWindow::slotSave()
 {
-    manager->saveProject("config.json");
+    project->saveProject("config.json");
 }
 
 void MainWindow::slotLoad()
 {
-    manager->loadProject("config.json");
+    project->loadProject("config.json");
     scene->update();
 }

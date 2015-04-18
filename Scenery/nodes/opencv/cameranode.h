@@ -12,6 +12,7 @@ public:
     CameraNode(int device=0);
     virtual const QString name() { return "Camera"; }
     virtual const QString tooltip() { return "Camera capture"; }
+    virtual bool isSource() { return true; }
 
 protected:
     void run();

@@ -297,11 +297,12 @@ public:
     Image *rayImage;
     int raySize;
     int haloSize;
-
+    bool isDemo;
 
     RaysScene()
     {
         control(backColor=Color(1, 1, 1, 0.8f), "Back color");
+        control(isDemo=true, "Demo");
         control(&rayImage, "Image", "images/rays/", "ray_04.png");
         control(rayColor=Color(1, 0, 0, 1), "Ray color");
         control(raySize=200, "Ray Size", 0, 1000);
@@ -362,17 +363,22 @@ public:
         if (kinectColor.empty())
             return;
 
-        Mat kinectColor3;
-        cv::cvtColor(kinectColor, kinectColor3, COLOR_RGBA2RGB);
-        stream.set(kinectColor3);
-
-
         size(320*2, 240*2);
         background(backColor);
 
         //draw(&stream, pos.x, pos.y, pos.width, pos.height);
         color(1,1,1);
-        draw(&stream, width()/2, height()/2, width(), height());
+
+        if (isDemo) {
+            Mat kinectColor3;
+            cv::cvtColor(kinectColor, kinectColor3, COLOR_RGBA2RGB);
+            stream.set(kinectColor3);
+            draw(&stream, width()/2, height()/2, width(), height());
+        }
+        else {
+
+        }
+
         flush();
 
         color(rayColor);
@@ -446,13 +452,11 @@ public:
     {
         Node *kinectNode = new KinectNode();
         kinectNode->setPos(0, 0);
-        sources.append(kinectNode);
         nodes.append(kinectNode);
 
         Node *rectNode = new RectNode();
         rectNode->setPos(0, 200);
         nodes.append(rectNode);
-        sources.append(rectNode);
 
         Node *gestureNode = new GestureNode();
         gestureNode->setPos(0, 400);
@@ -469,7 +473,6 @@ public:
         scenesNode->addScene(new ShadowScene);
         scenesNode->addScene(new TailHandsScene);
         nodes.append(scenesNode);
-
 
         kinectNode->outputs.at(2)->links.append(new Link(gestureNode, 0));
         kinectNode->outputs.at(0)->links.append(new Link(scenesNode, 0));

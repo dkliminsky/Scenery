@@ -103,7 +103,6 @@ public:
     void init() {
         Node *cameraNode = new CameraNode();
         cameraNode->setPos(0, 0);
-        sources.append(cameraNode);
         nodes.append(cameraNode);
 
         Node *erodeNode = new ErodeNode();
@@ -117,7 +116,6 @@ public:
         Node *positionNode = new RectNode();
         positionNode->setPos(0, 200);
         nodes.append(positionNode);
-        sources.append(positionNode);
 
         ScenesNode *scenesNode = new ScenesNode();
         scenesNode->inputs.append(new Port(PortType::Mat));

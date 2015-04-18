@@ -13,15 +13,15 @@ public:
     explicit Project(QObject *parent = 0);
     ~Project();
 
-    Nodes sources;
     Nodes nodes;
+    Nodes sources;
 
     void saveProject(QString fileName);
     void loadProject(QString fileName);
+    virtual void init() {}
 
 protected:
     void timerEvent(QTimerEvent *);
-    virtual void init() = 0;
 
 private:
     void writeProject(QJsonObject &json);

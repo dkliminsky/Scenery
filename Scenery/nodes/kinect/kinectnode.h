@@ -18,6 +18,7 @@ public:
 	KinectNode(int device = 0);
 	virtual const QString name() { return "Kinect"; }
 	virtual const QString tooltip() { return "Kinect capture"; }
+    virtual bool isSource() { return true; }
 
 protected:
 	void run();

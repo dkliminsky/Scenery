@@ -23,8 +23,13 @@ Project::~Project()
     METHOD_BEGIN
 
     foreach (Node *node, nodes) {
+        qDebug() << "Wait Node:" << node->name();
         node->process_wait();
-        delete node;
+    }
+
+    foreach (Node *node, nodes) {
+        qDebug() << "Delete Node:" << node->name();
+        //delete node;
     }
 
     METHOD_END
@@ -32,21 +37,25 @@ Project::~Project()
 
 void Project::saveProject(QString fileName)
 {
-     QFile saveFile(fileName);
+    qDebug() << "Save Project:" << fileName;
 
-     if (!saveFile.open(QIODevice::WriteOnly)) {
-         qWarning("Couldn't open save file.");
-         return;
-     }
+    QFile saveFile(fileName);
 
-     QJsonObject jsonObject;
-     writeProject(jsonObject);
-     QJsonDocument saveDoc(jsonObject);
-     saveFile.write(saveDoc.toJson());
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        qWarning("Couldn't open save file.");
+        return;
+    }
+
+    QJsonObject jsonObject;
+    writeProject(jsonObject);
+    QJsonDocument saveDoc(jsonObject);
+    saveFile.write(saveDoc.toJson());
 }
 
 void Project::loadProject(QString fileName)
 {
+    qDebug() << "Load Project:" << fileName;
+
     QFile loadFile(fileName);
 
     if (!loadFile.open(QIODevice::ReadOnly)) {
@@ -97,6 +106,7 @@ void Project::readProject(QJsonObject &json)
     QJsonArray nodesArray = json["nodes"].toArray();
     for(int i=0; i<nodesArray.size(); i++) {
         QJsonObject nodeObject = nodesArray[i].toObject();
+        qDebug() << "Read Node:" << nodeObject["name"];
         nodes.at(i)->setPos(nodeObject["posX"].toInt(),
                             nodeObject["posY"].toInt());
 

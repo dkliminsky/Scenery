@@ -9,6 +9,7 @@ public:
     RectNode();
     virtual const QString name() { return "Rect"; }
     virtual const QString tooltip() { return "Rect"; }
+    virtual bool isSource() { return true; }
 
 protected:
     void run();

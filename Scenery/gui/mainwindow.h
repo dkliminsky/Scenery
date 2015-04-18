@@ -20,7 +20,7 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-    explicit MainWindow(Project *manager, QWidget *parent = 0);
+    explicit MainWindow(Project *project, QWidget *parent = 0);
     ~MainWindow();
 
 protected:
@@ -30,7 +30,7 @@ protected:
     NodeItem *getOrCreateNodeItem(Node *node);
 
 private:
-    Project *manager;
+    Project *project;
     QGraphicsScene *scene;
     QGraphicsView *graphics;
 

@@ -65,6 +65,7 @@ public:
 
     virtual const QString name() { return QString("Noname"); }
     virtual const QString tooltip() { return "Node"; }
+    virtual bool isSource() { return false; }
     virtual QWidget *widget() { return nullptr; }
 
     QString uuid() { return _uuid.toString(); }

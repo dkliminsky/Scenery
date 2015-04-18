@@ -35,6 +35,7 @@ void View::setScene(Scene *scene)
 
 void View::initializeGL()
 {
+    qDebug() << "Initialize OpenGL";
     initializeOpenGLFunctions();
 
     glShadeModel(GL_SMOOTH);
@@ -56,6 +57,8 @@ void View::initializeGL()
 
 void View::resizeGL(int width, int height)
 {
+    qDebug() << "Resize GL";
+
     if (!_scene)
         return;
 
@@ -82,6 +85,8 @@ void View::resizeGL(int width, int height)
 
 void View::paintGL()
 {
+    //qDebug() << "Paint GL";
+
     if (!_scene)
         return;
 

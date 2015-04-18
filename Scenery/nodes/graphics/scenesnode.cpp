@@ -11,10 +11,11 @@
 ScenesNode::ScenesNode() :
     curScene(nullptr)
 {
-    startTimer(17);
     createWidget();
     createActions();
     createToolBars();
+
+    startTimer(17);
 }
 
 ScenesNode::~ScenesNode()

@@ -11,6 +11,7 @@ public:
 
     virtual const QString name() { return "Kinect"; }
     virtual const QString tooltip() { return "Kinect capture fake"; }
+    virtual bool isSource() { return true; }
 
     static const int COLOR_TYPE = CV_8UC4;
     static const int DEPTH_TYPE = CV_16U;
