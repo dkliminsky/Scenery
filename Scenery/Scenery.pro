@@ -63,16 +63,15 @@ HEADERS += \
     nodes/graphics/elements/image.h \
     nodes/graphics/threads/loadimagethread.h \
     nodes/graphics/threads/saveimagethread.h \
-    nodes/controls/controlbool.h \
-    nodes/controls/controlbutton.h \
-    nodes/controls/controlcolor.h \
-    nodes/controls/controldouble.h \
-    nodes/controls/controlimage.h \
-    nodes/controls/controlint.h \
-    nodes/controls/controlstring.h \
-    nodes/controls/icontrol.h \
+    controls/controlbool.h \
+    controls/controlbutton.h \
+    controls/controlcolor.h \
+    controls/controldouble.h \
+    controls/controlimage.h \
+    controls/controlint.h \
+    controls/controlstring.h \
     nodes/nodes.h \
-    nodes/controls/controls.h \
+    controls/controls.h \
     nodes/opencv/erodenode.h \
     gui/controls/controlboolwidget.h \
     gui/controls/controlbuttonwidget.h \
@@ -94,7 +93,8 @@ HEADERS += \
     nodes/opencv/rectnode.h \
     gui/controls/controlimagewidget.h \
     nodes/kinect/gesturenode.h \
-    nodes/project.h
+    nodes/project.h \
+    controls/control.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -112,13 +112,13 @@ SOURCES += \
     nodes/graphics/elements/image.cpp \
     nodes/graphics/threads/loadimagethread.cpp \
     nodes/graphics/threads/saveimagethread.cpp \
-    nodes/controls/controlbool.cpp \
-    nodes/controls/controlbutton.cpp \
-    nodes/controls/controlcolor.cpp \
-    nodes/controls/controldouble.cpp \
-    nodes/controls/controlimage.cpp \
-    nodes/controls/controlint.cpp \
-    nodes/controls/controlstring.cpp \
+    controls/controlbool.cpp \
+    controls/controlbutton.cpp \
+    controls/controlcolor.cpp \
+    controls/controldouble.cpp \
+    controls/controlimage.cpp \
+    controls/controlint.cpp \
+    controls/controlstring.cpp \
     nodes/opencv/erodenode.cpp \
     gui/controls/controlboolwidget.cpp \
     gui/controls/controlbuttonwidget.cpp \
@@ -134,7 +134,7 @@ SOURCES += \
     scenes/example.cpp \
     nodes/kinect/OpenCVHelper.cpp \
     nodes/graphics/elements/particle.cpp \
-    nodes/controls/controlgroup.cpp \
+    controls/controlgroup.cpp \
     gui/controls/controlgroupwidget.cpp \
     nodes/opencv/rectnode.cpp \
     gui/controls/controlimagewidget.cpp \

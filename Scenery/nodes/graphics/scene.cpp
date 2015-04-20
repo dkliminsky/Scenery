@@ -1,7 +1,6 @@
 #include "scene.h"
 
 #include "tools.h"
-#include "nodes/controls/controls.h"
 
 #include <QDir>
 

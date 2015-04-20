@@ -295,18 +295,23 @@ public:
     Color backColor;
     Color rayColor;
     Image *rayImage;
+    Image *ringTestImage;
     int raySize;
     int haloSize;
     bool isDemo;
+    bool isTest;
 
     RaysScene()
     {
         control(backColor=Color(1, 1, 1, 0.8f), "Back color");
         control(isDemo=true, "Demo");
+        control(isTest=true, "Test");
         control(&rayImage, "Image", "images/rays/", "ray_04.png");
         control(rayColor=Color(1, 0, 0, 1), "Ray color");
-        control(raySize=200, "Ray Size", 0, 1000);
+        control(raySize=300, "Ray Size", 0, 1000);
         control(haloSize=100, "Halo Size", 0, 1000);
+
+        ringTestImage = new Image("images/forms/ring_01.png");
     }
 
     void drawRay(Point from, Point to)
@@ -337,11 +342,11 @@ public:
         if (d < haloSize)
             return;
 
-        if (a > pi()/4 && a < pi() - pi()/4)
-            return;
+//        if (a > pi()/4 && a < pi() - pi()/4)
+//            return;
 
-        if (a > pi() + pi()/4 && a < 2*pi() - pi()/4)
-            return;
+//        if (a > pi() + pi()/4 && a < 2*pi() - pi()/4)
+//            return;
 
         float s = raySize;
         float x = center.x;
@@ -365,8 +370,6 @@ public:
 
         size(320*2, 240*2);
         background(backColor);
-
-        //draw(&stream, pos.x, pos.y, pos.width, pos.height);
         color(1,1,1);
 
         if (isDemo) {
@@ -375,10 +378,6 @@ public:
             stream.set(kinectColor3);
             draw(&stream, width()/2, height()/2, width(), height());
         }
-        else {
-
-        }
-
         flush();
 
         color(rayColor);
@@ -389,14 +388,19 @@ public:
             center.x = (human.shoulderCenter.x + human.spine.x)/2;
             center.y = (human.shoulderCenter.y + human.spine.y)/2;
 
+            if (isTest) {
+                draw(ringTestImage, center.x, center.x, haloSize*2, haloSize*2);
+            }
+
             drawRayFromCenter(center, human.elbowLeft);
             drawRayFromCenter(center, human.elbowRight);
             drawRayFromCenter(center, human.handLeft);
             drawRayFromCenter(center, human.handRight);
-            drawRayFromCenter(center, human.kneeLeft);
-            drawRayFromCenter(center, human.kneeRight);
-            drawRayFromCenter(center, human.ankleLeft);
-            drawRayFromCenter(center, human.ankleRight);
+
+            drawRay(center, human.kneeLeft);
+            drawRay(center, human.kneeRight);
+            drawRay(center, human.ankleLeft);
+            drawRay(center, human.ankleRight);
         }
     }
 };

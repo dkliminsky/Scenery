@@ -1,9 +1,9 @@
 #ifndef CONTROLINT_H
 #define CONTROLINT_H
 
-#include "icontrol.h"
+#include "control.h"
 
-class ControlInt : public IControl
+class ControlInt : public Control
 {
 public:
     explicit ControlInt(int &data, QString name,

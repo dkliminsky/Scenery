@@ -1,7 +1,7 @@
 #include "controlbool.h"
 
 ControlBool::ControlBool(bool &data, QString name) :
-    IControl(IControl::ControlBool, name), _data(data)
+    Control(Control::ControlBool, name), _data(data)
 {
 
 }

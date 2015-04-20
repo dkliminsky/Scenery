@@ -1,6 +1,6 @@
 #include "debug.h"
 #include "project.h"
-#include "nodes/controls/icontrol.h"
+#include "controls/control.h"
 
 #include <QFile>
 #include <QJsonDocument>
@@ -87,7 +87,7 @@ void Project::writeProject(QJsonObject &json)
        nodeObject["posY"] = node->posY();
 
        QJsonArray controlsArray;
-       foreach(IControl *control, node->controls) {
+       foreach(Control *control, node->controls) {
            QJsonObject controlObject;
            controlObject["name"] = control->name();
            controlObject["type"] = control->type();

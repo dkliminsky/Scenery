@@ -2,7 +2,7 @@
 
 ControlString::ControlString(QString &data, QString name,
                              QStringList list) :
-    IControl(IControl::ControlString, name), _data(data)
+    Control(Control::ControlString, name), _data(data)
 {
     _list = list;
 }

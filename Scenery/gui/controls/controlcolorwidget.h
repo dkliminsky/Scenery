@@ -6,7 +6,7 @@
 #include <QDoubleSpinBox>
 #include <QPushButton>
 #include <QColorDialog>
-#include "nodes/controls/controlcolor.h"
+#include "controls/controlcolor.h"
 
 class ControlColorWidget : public QWidget
 {

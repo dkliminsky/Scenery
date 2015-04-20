@@ -3,7 +3,7 @@
 
 #include <QComboBox>
 #include <QStringList>
-#include "nodes/controls/controlstring.h"
+#include "controls/controlstring.h"
 
 class ControlStringWidget : public QComboBox
 {

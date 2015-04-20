@@ -7,7 +7,7 @@
 #include "nodes/node.h"
 #include "tools.h"
 #include "graphic.h"
-#include "nodes/controls/icontrol.h"
+#include "controls/control.h"
 
 
 class Scene: public Tools, public Graphic

@@ -2,7 +2,7 @@
 #define CONTROLBOOLWIDGET_H
 
 #include <QCheckBox>
-#include "nodes/controls/controlbool.h"
+#include "controls/controlbool.h"
 
 class ControlBoolWidget : public QCheckBox
 {

@@ -1,9 +1,9 @@
 #ifndef CONTROLDOUBLE_H
 #define CONTROLDOUBLE_H
 
-#include "icontrol.h"
+#include "control.h"
 
-class ControlDouble : public IControl
+class ControlDouble : public Control
 {
 public:
     ControlDouble(double &data, QString name,

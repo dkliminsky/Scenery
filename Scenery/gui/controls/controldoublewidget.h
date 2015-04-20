@@ -2,7 +2,7 @@
 #define CONTROLDOUBLEWIDGET_H
 
 #include <QDoubleSpinBox>
-#include "nodes/controls/controldouble.h"
+#include "controls/controldouble.h"
 
 class ControlDoubleWidget : public QDoubleSpinBox
 {

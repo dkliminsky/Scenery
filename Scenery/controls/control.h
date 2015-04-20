@@ -1,12 +1,12 @@
-#ifndef ICONTROL_H
-#define ICONTROL_H
+#ifndef CONTROL_H
+#define CONTROL_H
 
 #include <QString>
 
-class IControl;
-typedef QVector<IControl *> Controls;
+class Control;
+typedef QVector<Control *> Controls;
 
-class IControl
+class Control
 {
 public:
     enum Type {
@@ -20,8 +20,8 @@ public:
         ControlGroup
     };
 
-    IControl(Type type, QString name) { _type = type; _name = name; }
-    virtual ~IControl() {}
+    Control(Type type, QString name) { _type = type; _name = name; }
+    virtual ~Control() {}
 
     Type type() { return _type; }
     QString &name() { return _name; }
@@ -34,4 +34,4 @@ protected:
 
 };
 
-#endif // ICONTROL_H
+#endif // CONTROL_H

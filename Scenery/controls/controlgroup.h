@@ -1,9 +1,9 @@
 #ifndef CONTROLGROUP_H
 #define CONTROLGROUP_H
 
-#include "icontrol.h"
+#include "control.h"
 
-class ControlGroup : public IControl
+class ControlGroup : public Control
 {
 public:
     ControlGroup(QString name);

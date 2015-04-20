@@ -2,9 +2,9 @@
 #define CONTROLSTRING_H
 
 #include <QStringList>
-#include "icontrol.h"
+#include "control.h"
 
-class ControlString : public IControl
+class ControlString : public Control
 {
 public:
     ControlString(QString &data, QString name, QStringList list);

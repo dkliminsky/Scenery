@@ -1,7 +1,7 @@
 #include "controlcolor.h"
 
 ControlColor::ControlColor(Color &color, QString name) :
-    IControl(IControl::ControlColor, name), _color(color)
+    Control(Control::ControlColor, name), _color(color)
 {
 }
 

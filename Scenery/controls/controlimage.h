@@ -1,10 +1,10 @@
 #ifndef CONTROLIMAGE_H
 #define CONTROLIMAGE_H
 
-#include "icontrol.h"
+#include "control.h"
 #include "nodes/graphics/elements/image.h"
 
-class ControlImage : public IControl
+class ControlImage : public Control
 {
 public:
     ControlImage(Image **image, QString name,

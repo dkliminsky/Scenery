@@ -3,7 +3,7 @@
 
 #include <QComboBox>
 #include <QStringList>
-#include "nodes/controls/controlimage.h"
+#include "controls/controlimage.h"
 
 
 class ControlImageWidget : public QComboBox

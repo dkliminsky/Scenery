@@ -4,24 +4,24 @@
 #include <QScrollBar>
 
 
-QWidget *control_widget_factory(IControl *control)
+QWidget *control_widget_factory(Control *control)
 {
     switch(control->type()) {
-    case IControl::ControlInt:
+    case Control::ControlInt:
         return new ControlIntWidget(static_cast<ControlInt *>(control));
-    case IControl::ControlDouble:
+    case Control::ControlDouble:
         return new ControlDoubleWidget(static_cast<ControlDouble *>(control));
-    case IControl::ControlBool:
+    case Control::ControlBool:
         return new ControlBoolWidget(static_cast<ControlBool *>(control));
-    case IControl::ControlString:
+    case Control::ControlString:
         return new ControlStringWidget(static_cast<ControlString *>(control));
-    case IControl::ControlColor:
+    case Control::ControlColor:
         return new ControlColorWidget(static_cast<ControlColor *>(control));
-    case IControl::ControlImage:
+    case Control::ControlImage:
         return new ControlImageWidget(static_cast<ControlImage *>(control));
-    case IControl::ControlButton:
+    case Control::ControlButton:
         return new ControlButtonWidget(static_cast<ControlButton *>(control));
-    case IControl::ControlGroup:
+    case Control::ControlGroup:
         return new ControlGroupWidget(static_cast<ControlGroup *>(control));
     default:
         return new QWidget;
@@ -36,10 +36,10 @@ QWidget *make_controls_widget(Controls *controls)
     ControlGroupWidget *groupWidget = nullptr;
     int n = 0;
     for(int i=0; i<controls->size(); i++) {
-        IControl *control = controls->at(i);
+        Control *control = controls->at(i);
         QWidget *widget = control_widget_factory(control);
 
-        if (control->type() == IControl::ControlGroup) {
+        if (control->type() == Control::ControlGroup) {
             gridLayout = new QGridLayout();
             gridLayout->setContentsMargins(5, 8, 5, 5);
 

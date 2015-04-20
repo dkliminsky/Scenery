@@ -18,7 +18,7 @@ Node::Node() :
 
 Node::~Node()
 {
-    foreach (IControl *control, controls) {
+    foreach (Control *control, controls) {
         delete control;
     }
 }

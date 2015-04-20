@@ -1,9 +1,9 @@
 #ifndef CONTROLBOOL_H
 #define CONTROLBOOL_H
 
-#include "icontrol.h"
+#include "control.h"
 
-class ControlBool : public IControl
+class ControlBool : public Control
 {
 public:
     explicit ControlBool(bool &data, QString name);

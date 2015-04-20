@@ -5,7 +5,7 @@
 #include <QSlider>
 #include <QLabel>
 #include <QHBoxLayout>
-#include "nodes/controls/controlint.h"
+#include "controls/controlint.h"
 
 class ControlIntWidget : public QWidget
 {

@@ -3,7 +3,7 @@
 
 #include <QGroupBox>
 #include <QHBoxLayout>
-#include "nodes/controls/controlgroup.h"
+#include "controls/controlgroup.h"
 
 
 class ControlGroupWidget : public QGroupBox

@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QHBoxLayout>
-#include "nodes/controls/controlbutton.h"
+#include "controls/controlbutton.h"
 #include "nodes/graphics/scene.h"
 
 class ControlButtonWidget : public QWidget

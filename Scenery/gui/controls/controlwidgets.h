@@ -2,7 +2,7 @@
 #define CONTROLWIDGETS_H
 
 #include "nodes/node.h"
-#include "nodes/controls/icontrol.h"
+#include "controls/control.h"
 
 #include "controlintwidget.h"
 #include "controldoublewidget.h"
@@ -13,7 +13,7 @@
 #include "controlimagewidget.h"
 #include "controlgroupwidget.h"
 
-QWidget *control_widget_factory(IControl *control);
+QWidget *control_widget_factory(Control *control);
 QWidget *make_controls_widget(Controls *controls);
 
 

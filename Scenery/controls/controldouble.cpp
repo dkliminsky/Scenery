@@ -2,7 +2,7 @@
 
 ControlDouble::ControlDouble(double &data, QString name,
                              double min, double max, int precision) :
-    IControl(IControl::ControlDouble, name), _data(data)
+    Control(Control::ControlDouble, name), _data(data)
 {
     _min = min;
     _max = max;

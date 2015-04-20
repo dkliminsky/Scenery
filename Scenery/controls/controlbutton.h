@@ -1,14 +1,14 @@
 #ifndef CONTROLBUTTON_H
 #define CONTROLBUTTON_H
 
-#include "icontrol.h"
+#include "control.h"
 
 //#include "nodes/graphics/scene.h"
 
 class Scene;
 
 
-class ControlButton : public IControl
+class ControlButton : public Control
 {
 public:
     ControlButton(Scene *scene, int id, QString name);

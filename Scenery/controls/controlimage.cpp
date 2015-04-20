@@ -2,7 +2,7 @@
 
 ControlImage::ControlImage(Image **image, QString name,
                            QVector<Image *> images):
-    IControl(IControl::ControlImage, name), _image(image)
+    Control(Control::ControlImage, name), _image(image)
 {
     _images = images;
 }

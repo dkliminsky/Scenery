@@ -1,10 +1,10 @@
 #ifndef CONTROLCOLOR_H
 #define CONTROLCOLOR_H
 
-#include "icontrol.h"
+#include "control.h"
 #include "nodes/graphics/elements/color.h"
 
-class ControlColor : public IControl
+class ControlColor : public Control
 {
 public:
     ControlColor(Color &color, QString name);
