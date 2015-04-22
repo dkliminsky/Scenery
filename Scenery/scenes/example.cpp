@@ -16,10 +16,10 @@ public:
     {
         ship = new Image("images/ship_512.png");
         ship_dx = 80;
-        control(ship_size=50, "ship_size", 0, 1000);
-        button(1, "Left");
-        button(2, "Right");
-        control(back=Color(1,1,1,0), "Background");
+        addControl(ship_size=50, "ship_size", 0, 1000);
+        addButton(1, "Left");
+        addButton(2, "Right");
+        addControl(back=Color(1,1,1,0), "Background");
     }
 
     QString name() { return "Example 1"; }
@@ -77,7 +77,7 @@ public:
     Example2Scene()
     {
         ship = new Image("images/ship_512.png");
-        control(ship_size=50, "ship_size", 0, 1000);
+        addControl(ship_size=50, "ship_size", 0, 1000);
     }
 
     QString name() { return "Example 2"; }

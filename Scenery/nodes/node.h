@@ -8,7 +8,7 @@
 #include <QUuid>
 #include <opencv2/core/core.hpp>
 #include "debug.h"
-#include "controls/controls.h"
+#include "controls/controlprovider.h"
 #include "kinect/human.h"
 using namespace cv;
 
@@ -57,7 +57,7 @@ public:
     // ...
 };
 
-class Node
+class Node: public ControlProvider
 {
 public:
     Node();
@@ -84,7 +84,6 @@ public:
 
     Ports inputs;
     Ports outputs;
-    Controls controls;
 
 protected:
     virtual void run() {}
@@ -94,9 +93,6 @@ protected:
 
     void input(PortType type);
     void output(PortType type);
-    void control(int &x, QString description, int min=0, int max=999, int step=1);
-    void control(double &x, QString description, double min=0, double max=100, int precision=1);
-    void control(bool &x, QString description);
 
 private:
     QUuid _uuid;

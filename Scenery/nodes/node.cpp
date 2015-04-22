@@ -18,9 +18,7 @@ Node::Node() :
 
 Node::~Node()
 {
-    foreach (Control *control, controls) {
-        delete control;
-    }
+
 }
 
 void Node::processNext()
@@ -69,19 +67,4 @@ void Node::input(PortType type)
 void Node::output(PortType type)
 {
     outputs.append(new Port(type));
-}
-
-void Node::control(int &x, QString description, int min, int max, int step)
-{
-    controls += new ControlInt(x, description, min, max, step);
-}
-
-void Node::control(double &x, QString description, double min, double max, int precision)
-{
-    controls += new ControlDouble(x, description, min, max, precision);
-}
-
-void Node::control(bool &x, QString description)
-{
-    controls += new ControlBool(x, description);
 }

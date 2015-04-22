@@ -92,10 +92,7 @@ void NodeItem::createWidget()
         widget = new QWidget();
         QHBoxLayout *layout = new QHBoxLayout();
         widget->setLayout(layout);
-
-        if (!node->controls.empty()) {
-            layout->addWidget(make_controls_widget(&node->controls));
-        }
+        layout->addWidget(make_controls_widget(&node->controls()));
     }
 
     widget->setWindowTitle(node->name());

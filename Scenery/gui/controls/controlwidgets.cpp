@@ -28,37 +28,36 @@ QWidget *control_widget_factory(Control *control)
     }
 }
 
-QWidget *make_controls_widget(Controls *controls)
+QVBoxLayout *make_controls_layout(Controls *controls)
 {
     QVBoxLayout *layout = new QVBoxLayout();
-
-    QGridLayout *gridLayout = nullptr;
-    ControlGroupWidget *groupWidget = nullptr;
-    int n = 0;
-    for(int i=0; i<controls->size(); i++) {
-        Control *control = controls->at(i);
+    QGridLayout *gridLayout = new QGridLayout();
+    gridLayout->setContentsMargins(5, 8, 5, 5);
+    layout->addLayout(gridLayout);
+    QHashIterator<QString, Control *> i(*controls);
+    while (i.hasNext()) {
+        i.next();
+        Control *control = i.value();
         QWidget *widget = control_widget_factory(control);
 
         if (control->type() == Control::ControlGroup) {
-            gridLayout = new QGridLayout();
-            gridLayout->setContentsMargins(5, 8, 5, 5);
-
-            groupWidget = static_cast<ControlGroupWidget *>(widget);
-            groupWidget->setLayout(gridLayout);
-            layout->addWidget(groupWidget);
-            n = 0;
+            //ControlGroupWidget *groupWidget = static_cast<ControlGroupWidget *>(widget);
+            widget->setLayout(make_controls_layout(&control->controls()));
+            qDebug() << control->controls().count();
+            gridLayout->addWidget(widget, control->number(), 1);
         }
         else {
-            if (!gridLayout) {
-                gridLayout = new QGridLayout();
-                gridLayout->setContentsMargins(5, 8, 5, 5);
-                layout->addLayout(gridLayout);
-            }
-            gridLayout->addWidget(new QLabel(control->name()), n, 0);
-            gridLayout->addWidget(widget, n, 1);
-            n++;
+            gridLayout->addWidget(new QLabel(control->name()), control->number(), 0);
+            gridLayout->addWidget(widget, control->number(), 1);
         }
     }
+    return layout;
+}
+
+
+QWidget *make_controls_widget(Controls *controls)
+{
+    QVBoxLayout *layout = make_controls_layout(controls);
     layout->addStretch(1);
 
     QWidget *widget = new QWidget();

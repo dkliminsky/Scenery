@@ -3,16 +3,14 @@
 
 #include "control.h"
 
-//#include "nodes/graphics/scene.h"
-
-class Scene;
+class ControlProvider;
 
 
 class ControlButton : public Control
 {
 public:
-    ControlButton(Scene *scene, int id, QString name);
-    Scene *scene;
+    ControlButton(ControlProvider *provider, int id, QString name);
+    ControlProvider *provider;
     int id;
 };
 

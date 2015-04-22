@@ -4,7 +4,7 @@ DilateNode::DilateNode()
 {
     input(PortType::Mat);
     output(PortType::Mat);
-    control(dilation_size=2, "Erosion size", 0, 100);
+    addControl(dilation_size=2, "Erosion size", 0, 100);
 }
 
 void DilateNode::run()

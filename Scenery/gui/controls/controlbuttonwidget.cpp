@@ -16,6 +16,6 @@ ControlButtonWidget::ControlButtonWidget(ControlButton *control, QWidget *parent
 
 void ControlButtonWidget::button()
 {
-    control->scene->signal(control->id);
+    control->provider->signal(control->id);
 }
 

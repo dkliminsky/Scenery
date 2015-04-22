@@ -31,12 +31,14 @@ void ScenesNode::addScene(Scene *scene)
 
     _scenes.append(scene);
     scene->_inputs = &inputs;
+    scene->baseControl().setName(scene->name());
+    baseControl().insertControl(&scene->baseControl());
 
     QTableWidgetItem *sceneItem = new QTableWidgetItem(scene->name());
     scenesTable->setRowCount(_scenes.size());
     scenesTable->setItem(_scenes.size()-1, 0, sceneItem);
 
-    controlsStacked->addWidget(make_controls_widget(&scene->_controls));
+    controlsStacked->addWidget(make_controls_widget(&scene->controls()));
 }
 
 void ScenesNode::setCurScene(Scene *scene)

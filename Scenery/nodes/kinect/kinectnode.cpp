@@ -6,8 +6,8 @@ KinectNode::KinectNode(int device) :
 {
 	METHOD_BEGIN
 
-    control(isDrawDepthSkeleton=true, "Depth skeleton");
-    control(isDrawColorSkeleton=true, "Color skeleton");
+    addControl(isDrawDepthSkeleton=true, "Depth skeleton");
+    addControl(isDrawColorSkeleton=true, "Color skeleton");
 
 	outputs.append(new Port(PortType::Mat));
 	outputs.append(new Port(PortType::Mat));

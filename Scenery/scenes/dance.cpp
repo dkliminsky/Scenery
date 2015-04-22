@@ -52,45 +52,45 @@ public:
     ShadowScene()
     {
         addControlGroup("Main");
-        control(depth_min=50, "Depth min", 0, 255);
-        control(depth_max=110, "Depth max", 0, 255);
-        control(blur_size=7, "Blur size", 1, 50);
-        control(erosion_size=1, "Erosion size", 0, 50);
-        control(dilation_size=1, "Dilation size", 0, 50);
-        control(backColor=Color(1, 1, 1, 0.2f), "Background");
+        addControl(depth_min=50, "Depth min", 0, 255);
+        addControl(depth_max=110, "Depth max", 0, 255);
+        addControl(blur_size=7, "Blur size", 1, 50);
+        addControl(erosion_size=1, "Erosion size", 0, 50);
+        addControl(dilation_size=1, "Dilation size", 0, 50);
+        addControl(backColor=Color(1, 1, 1, 0.2f), "Background");
 
         addControlGroup("Self Shadow");
-        control(is_self_shadow=true, "On");
-        control(self_shadow_color = Color(0, 0, 0, 1), "Color");
+        addControl(is_self_shadow=true, "On Self");
+        addControl(self_shadow_color = Color(0, 0, 0, 1), "Color Self");
 
         addControlGroup("Double Shadow");
-        control(is_double_shadow=false, "On");
-        button(int(Signals::DoubleLeft), "Left");
-        button(int(Signals::DoubleRight), "Right");
-        button(int(Signals::DoubleReturn), "Return");
-        control(double_shadow_color = Color(0, 0, 0, 1), "Color");
-        control(double_shadow_max_shift=60, "Shift", 0, 100);
-        control(double_shadow_shift_time=300, "Shift Time", 0, 500);
-        control(is_reverse=false, "Reverse");
+        addControl(is_double_shadow=false, "On Double");
+        addButton(int(Signals::DoubleLeft), "Left Double");
+        addButton(int(Signals::DoubleRight), "Right Double");
+        addButton(int(Signals::DoubleReturn), "Return Double");
+        addControl(double_shadow_color = Color(0, 0, 0, 1), "Color Double");
+        addControl(double_shadow_max_shift=60, "Shift Double", 0, 100);
+        addControl(double_shadow_shift_time=300, "Shift Time Double", 0, 500);
+        addControl(is_reverse=false, "Reverse Double");
         double_shadow_command = Signals::None;
         double_shadow_shift = 0;
 
         addControlGroup("Strike Shadow");
-        control(is_strike_shadow=true, "On");
-        button(int(Signals::StrikeLeft), "Left");
-        button(int(Signals::StrikeRight), "Right");
-        control(strike_shadow_color = Color(0.8f, 0, 0, 1), "Color");
-        control(strike_shadow_disappear=0.001, "Disappear", 0, 1, 4);
-        control(strike_shadow_acceleartion=0.4, "Acceleration", 0, 10, 2);
+        addControl(is_strike_shadow=true, "On Strike");
+        addButton(int(Signals::StrikeLeft), "Left Strike");
+        addButton(int(Signals::StrikeRight), "Right Strike");
+        addControl(strike_shadow_color = Color(0.8f, 0, 0, 1), "Color Strike");
+        addControl(strike_shadow_disappear=0.001, "Disappear Strike", 0, 1, 4);
+        addControl(strike_shadow_acceleartion=0.4, "Acceleration Strike", 0, 10, 2);
         strike_shadow_command = Signals::None;
 
         addControlGroup("Dead Shadow");
-        control(is_dead_shadow=true, "On");
-        button(int(Signals::Dead), "Dead");
-        control(dead_shadow_color = Color(0, 0.2f, 0, 1), "Color");
-        control(dead_shadow_disappear=0.001, "Disappear", 0, 1, 4);
-        control(dead_shadow_acceleartion=0.2, "Acceleration", 0, 10, 2);
-        control(dead_shadow_erode=1, "Erosion", 0, 50);
+        addControl(is_dead_shadow=true, "On Dead");
+        addButton(int(Signals::Dead), "Dead Action");
+        addControl(dead_shadow_color = Color(0, 0.2f, 0, 1), "Color Dead");
+        addControl(dead_shadow_disappear=0.001, "Disappear Dead", 0, 1, 4);
+        addControl(dead_shadow_acceleartion=0.2, "Acceleration Dead", 0, 10, 2);
+        addControl(dead_shadow_erode=1, "Erosion Dead", 0, 50);
         dead_shadow_command = Signals::None;
     }
 
@@ -303,13 +303,13 @@ public:
 
     RaysScene()
     {
-        control(backColor=Color(1, 1, 1, 0.8f), "Back color");
-        control(isDemo=true, "Demo");
-        control(isTest=true, "Test");
-        control(&rayImage, "Image", "images/rays/", "ray_04.png");
-        control(rayColor=Color(1, 0, 0, 1), "Ray color");
-        control(raySize=300, "Ray Size", 0, 1000);
-        control(haloSize=100, "Halo Size", 0, 1000);
+        addControl(backColor=Color(1, 1, 1, 0.8f), "Back color");
+        addControl(isDemo=true, "Demo");
+        addControl(isTest=true, "Test");
+        addControl(&rayImage, "Image", "images/rays/", "ray_04.png");
+        addControl(rayColor=Color(1, 0, 0, 1), "Ray color");
+        addControl(raySize=300, "Ray Size", 0, 1000);
+        addControl(haloSize=100, "Halo Size", 0, 1000);
 
         ringTestImage = new Image("images/forms/ring_01.png");
     }
@@ -421,10 +421,10 @@ public:
     TailHandsScene()
     {
         stream = new Image();
-        control(backColor=Color(0, 0, 0, 0.2f), "Back color");
-        control(tailColor=Color(1, 0, 0, 1), "Tail color");
-        control(tailSize=20, "Tail Size", 0, 50);
-        control(&tailImage, "Tail hands", "images/forms/", "circle01.png");
+        addControl(backColor=Color(0, 0, 0, 0.2f), "Back color");
+        addControl(tailColor=Color(1, 0, 0, 1), "Tail color");
+        addControl(tailSize=20, "Tail Size", 0, 50);
+        addControl(&tailImage, "Tail hands", "images/forms/", "circle01.png");
 
     }
 

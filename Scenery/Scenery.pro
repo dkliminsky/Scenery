@@ -94,7 +94,8 @@ HEADERS += \
     gui/controls/controlimagewidget.h \
     nodes/kinect/gesturenode.h \
     nodes/project.h \
-    controls/control.h
+    controls/control.h \
+    controls/controlprovider.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -139,7 +140,11 @@ SOURCES += \
     nodes/opencv/rectnode.cpp \
     gui/controls/controlimagewidget.cpp \
     nodes/kinect/gesturenode.cpp \
-    nodes/project.cpp
+    nodes/project.cpp \
+    controls/controlprovider.cpp \
+    controls/control.cpp
 
 RESOURCES += \
     resources.qrc
+
+

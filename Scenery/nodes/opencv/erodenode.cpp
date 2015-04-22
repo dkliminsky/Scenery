@@ -4,7 +4,7 @@ ErodeNode::ErodeNode()
 {
     input(PortType::Mat);
     output(PortType::Mat);
-    control(erosion_size=2, "Erosion size", 0, 100);
+    addControl(erosion_size=2, "Erosion size", 0, 100);
 }
 
 void ErodeNode::run()

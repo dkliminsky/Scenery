@@ -1,8 +1,8 @@
 #include "controlbutton.h"
 
-ControlButton::ControlButton(Scene *scene, int id, QString name) :
+ControlButton::ControlButton(ControlProvider *provider, int id, QString name) :
     Control(Control::ControlButton, name)
 {
-    this->scene = scene;
+    this->provider = provider;
     this->id = id;
 }
