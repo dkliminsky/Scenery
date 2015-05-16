@@ -5,7 +5,7 @@
 #include "debug.h"
 
 ControlProvider::ControlProvider() :
-    _baseControl(Control::ControlGroup, "Node Control"),
+    _baseControl(Control::ControlGroup, "Base Control"),
     lastGroupControl(nullptr),
     curInsertControl(&_baseControl)
 {

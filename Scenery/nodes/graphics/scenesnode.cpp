@@ -6,6 +6,8 @@
 #include <QHBoxLayout>
 #include <QTableWidgetItem>
 #include <QAction>
+#include <QJsonObject>
+#include <QJsonArray>
 
 
 ScenesNode::ScenesNode() :
@@ -25,14 +27,17 @@ ScenesNode::~ScenesNode()
 
 void ScenesNode::addScene(Scene *scene)
 {
+    if (_scenes.contains(scene->name())) {
+        qDebug() << "Double scene name!!";
+        return;
+    }
+
     if (!curScene) {
         setCurScene(scene);
     }
 
-    _scenes.append(scene);
+    _scenes.insert(scene->name(), scene);
     scene->_inputs = &inputs;
-    scene->baseControl().setName(scene->name());
-    baseControl().insertControl(&scene->baseControl());
 
     QTableWidgetItem *sceneItem = new QTableWidgetItem(scene->name());
     scenesTable->setRowCount(_scenes.size());
@@ -46,6 +51,34 @@ void ScenesNode::setCurScene(Scene *scene)
     curScene = scene;
     _view.setScene(scene);
     qDebug() << "Set scene:" << scene->name();
+}
+
+QJsonObject ScenesNode::getJson()
+{
+    QJsonObject json = Node::getJson();
+    QJsonArray scenesArray;
+    foreach(Scene *scene, _scenes) {
+        QJsonObject sceneObject;
+        sceneObject["name"] = scene->name();
+        sceneObject["control"] = scene->getControlJson();
+        scenesArray.append(sceneObject);
+    }
+    json["scenes"] = scenesArray;
+    return json;
+}
+
+void ScenesNode::setJson(QJsonObject json)
+{
+    QJsonArray scenesArray = json["scenes"].toArray();
+    for(int i=0; i<scenesArray.size(); i++) {
+        QJsonObject sceneObject = scenesArray[i].toObject();
+        QJsonObject controlObject = sceneObject["control"].toObject();
+        QString name = sceneObject["name"].toString();
+        if (_scenes.contains(name)) {
+            _scenes[name]->setControlJson(controlObject);
+        }
+    }
+    Node::setJson(json);
 }
 
 void ScenesNode::timerEvent(QTimerEvent *)
@@ -96,7 +129,8 @@ void ScenesNode::slotFullScreen(bool isFull)
 void ScenesNode::slotChangeScene(int row, int column)
 {
     if ( column == 0) {
-       setCurScene(_scenes.at(row));
+        QTableWidgetItem *item = scenesTable->item(row, column);
+       setCurScene(_scenes.value(item->text()));
        controlsStacked->setCurrentIndex(row);
    }
 }

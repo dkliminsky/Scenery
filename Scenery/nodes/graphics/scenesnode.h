@@ -11,8 +11,7 @@
 #include <QToolBar>
 #include <QTime>
 
-
-typedef QList<Scene *> Scenes;
+typedef QHash<QString, Scene*> Scenes;
 
 
 class ScenesNode : public QObject, public Node
@@ -28,6 +27,9 @@ public:
 
     void addScene(Scene *scene);
     void setCurScene(Scene *scene);
+
+    virtual QJsonObject getJson();
+    virtual void setJson(QJsonObject json);
 
 protected:
     void timerEvent(QTimerEvent *);

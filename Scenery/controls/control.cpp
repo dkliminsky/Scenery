@@ -21,7 +21,7 @@ Control::~Control()
         i.next();
         Control *control = i.value();
         qDebug() << "Delete Control:" << control->name();
-        //delete control;
+        delete control;
     }
 
     METHOD_END

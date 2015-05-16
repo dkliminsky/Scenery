@@ -80,13 +80,7 @@ void Project::writeProject(QJsonObject &json)
 {
     QJsonArray nodesArray;
     foreach(Node *node, nodes) {
-       QJsonObject nodeObject;
-       nodeObject["uuid"] = node->uuid();
-       nodeObject["name"] = node->name();
-       nodeObject["posX"] = node->posX();
-       nodeObject["posY"] = node->posY();
-       nodeObject["control"] = node->getControlJson();
-       nodesArray.append(nodeObject);
+        nodesArray.append(node->getJson());
     }
     json["nodes"] = nodesArray;
 }
@@ -97,11 +91,6 @@ void Project::readProject(QJsonObject &json)
     for(int i=0; i<nodesArray.size(); i++) {
         QJsonObject nodeObject = nodesArray[i].toObject();
         qDebug() << "Read Node:" << nodeObject["name"];
-        nodes.at(i)->setPos(nodeObject["posX"].toInt(),
-                            nodeObject["posY"].toInt());
-
-        nodes.at(i)->setControlJson(nodeObject["control"].toObject());
+        nodes.at(i)->setJson(nodeObject);
     }
-
-
 }

@@ -22,7 +22,6 @@ public:
     void addButton(int id, QString name);
 
     Controls &controls() { return _baseControl.controls(); }
-    Control &baseControl() { return _baseControl; }
 
     QJsonObject getControlJson();
     void setControlJson(QJsonObject json);

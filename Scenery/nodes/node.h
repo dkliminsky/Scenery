@@ -82,6 +82,9 @@ public:
     virtual void process_wait() {}
     virtual bool isProcessing() { return false; }
 
+    virtual QJsonObject getJson();
+    virtual void setJson(QJsonObject json);
+
     Ports inputs;
     Ports outputs;
 

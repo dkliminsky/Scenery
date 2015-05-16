@@ -21,6 +21,23 @@ Node::~Node()
 
 }
 
+QJsonObject Node::getJson()
+{
+    QJsonObject json;
+    json["uuid"] = uuid();
+    json["name"] = name();
+    json["posX"] = posX();
+    json["posY"] = posY();
+    json["control"] = getControlJson();
+    return json;
+}
+
+void Node::setJson(QJsonObject json)
+{
+    setPos(json["posX"].toInt(), json["posY"].toInt());
+    setControlJson(json["control"].toObject());
+}
+
 void Node::processNext()
 {
     foreach (Port *port, outputs) {
