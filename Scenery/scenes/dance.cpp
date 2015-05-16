@@ -14,16 +14,15 @@ class ShadowScene : public Scene
 public:
     QString name() { return "Shadow"; }
     Rect pos;
-    Image stream;
+    Image imageShadow;
+    Color backColor;
 
+    QString shadow_type;
     int depth_min;
     int depth_max;
     int blur_size;
     int erosion_size;
     int dilation_size;
-
-    Image imageShadow;
-    Color backColor;
 
     bool is_self_shadow;
     Color self_shadow_color;
@@ -52,12 +51,15 @@ public:
     ShadowScene()
     {
         addControlGroup("Main");
+        addControl(backColor=Color(1, 1, 1, 0.2f), "Background");
+
+        addControlGroup("Shadow");
+        addControl(shadow_type="natural", "Shadow type", QStringList() << "smoke" << "8bit");
         addControl(depth_min=50, "Depth min", 0, 255);
         addControl(depth_max=110, "Depth max", 0, 255);
-        addControl(blur_size=7, "Blur size", 1, 50);
+        addControl(blur_size=7, "Blur size", 0, 50);
         addControl(erosion_size=1, "Erosion size", 0, 50);
         addControl(dilation_size=1, "Dilation size", 0, 50);
-        addControl(backColor=Color(1, 1, 1, 0.2f), "Background");
 
         addControlGroup("Self Shadow");
         addControl(is_self_shadow=true, "On Self");
@@ -69,7 +71,7 @@ public:
         addButton(int(Signals::DoubleRight), "Right Double");
         addButton(int(Signals::DoubleReturn), "Return Double");
         addControl(double_shadow_color = Color(0, 0, 0, 1), "Color Double");
-        addControl(double_shadow_max_shift=60, "Shift Double", 0, 100);
+        addControl(double_shadow_max_shift=60, "Shift Double", 0, 300);
         addControl(double_shadow_shift_time=300, "Shift Time Double", 0, 500);
         addControl(is_reverse=false, "Reverse Double");
         double_shadow_command = Signals::None;
@@ -94,17 +96,93 @@ public:
         dead_shadow_command = Signals::None;
     }
 
+    virtual void paint()
+    {
+        Mat &depth = input(1)->mat;
+        pos = input(3)->rect;
+
+        if (depth.empty())
+            return;
+
+        prepareShadow();
+
+        size(320, 240);
+        background(backColor);
+
+        gestures();
+        if (is_self_shadow)
+            selfShadow();
+        if (is_double_shadow) {
+            doubleShadow();
+        }
+        if (is_strike_shadow)
+            strikeShadow();
+        if (is_dead_shadow)
+            deadShadow();
+    }
+
+    void prepareShadow() {
+        Mat &depth = input(1)->mat;
+
+        int i,j;
+        int ch = depth.channels();
+        int cols = depth.cols*ch;
+        uchar* p;
+        for( i = 0; i < depth.rows; ++i)
+        {
+            p = depth.ptr<uchar>(i);
+            for ( j = 0; j < cols; j+=ch)
+            {
+                if (p[j + 0] > depth_min && p[j] < depth_max) {
+                    p[j + 0] = 255;
+                    p[j + 1] = 255;
+                    p[j + 2] = 255;
+                    p[j + 3] = 255;
+                }
+                else {
+                    p[j + 3] = 0;
+                }
+            }
+        }
+
+        Mat erode_element =
+                cv::getStructuringElement(cv::MORPH_RECT,
+                                          Size( 2*erosion_size + 1, 2*erosion_size+1 ),
+                                          Point( erosion_size, erosion_size ));
+        Mat dilate_element =
+                cv::getStructuringElement(cv::MORPH_RECT,
+                                          Size( 2*dilation_size + 1, 2*dilation_size+1 ),
+                                          Point( dilation_size, dilation_size ));
+
+        Mat depth_erode;
+        Mat depth_dilate;
+        Mat depth_big;
+        cv::erode(depth, depth_erode, erode_element);
+        cv::dilate(depth_erode, depth_dilate, dilate_element);
+        cv::resize(depth_dilate, depth_big, Size(960, 720), 0, 0, INTER_CUBIC);
+
+        if (blur_size > 0) {
+            Mat depth_blur;
+            cv::blur(depth_big, depth_blur, cv::Size(blur_size, blur_size));
+            imageShadow.set(depth_blur);
+        }
+        else {
+            imageShadow.set(depth_big);
+        }
+    }
+
+    void drawShadow(float x, float y) {
+        draw(&imageShadow, pos.x + x, pos.y + y, pos.width, pos.height);
+    }
+
     void selfShadow() {
         color(self_shadow_color);
         draw(&imageShadow, pos.x, pos.y, pos.width, pos.height);
     }
 
     void doubleShadow() {
-        if (is_reverse && double_shadow_command != Signals::None) {
-            imageShadow.setReverse(ReverseType::Horizontal);
-        }
-
-        int step = float(dtime())/float(double_shadow_shift_time)*double_shadow_max_shift;
+        int step = float(dtime())/float(double_shadow_shift_time)
+                   * double_shadow_max_shift;
         if (double_shadow_command == Signals::DoubleLeft) {
             double_shadow_shift -= step;
             if (double_shadow_shift < -double_shadow_max_shift) {
@@ -136,7 +214,6 @@ public:
 
         color(double_shadow_color);
         draw(&imageShadow, pos.x + double_shadow_shift, pos.y, pos.width, pos.height);
-        imageShadow.setReverse(ReverseType::None);
     }
 
     void strikeShadow() {
@@ -182,72 +259,9 @@ public:
         dead_shadow_command = Signals::None;
     }
 
-    virtual void paint()
-    {
-        Mat &depth = input(1)->mat;
-        pos = input(3)->rect;
-
-        if (depth.empty())
-            return;
-
-        size(320, 240);
-        background(backColor);
-
-        int i,j;
-        int ch = depth.channels();
-        int cols = depth.cols*ch;
-        uchar* p;
-        for( i = 0; i < depth.rows; ++i)
-        {
-            p = depth.ptr<uchar>(i);
-            for ( j = 0; j < cols; j+=ch)
-            {
-                if (p[j + 0] > depth_min && p[j] < depth_max) {
-                    p[j + 0] = 255;
-                    p[j + 1] = 255;
-                    p[j + 2] = 255;
-                    p[j + 3] = 255;
-                }
-                else {
-                    p[j + 3] = 0;
-                }
-            }
-        }
-
-        Mat erode_element =
-                cv::getStructuringElement(cv::MORPH_RECT,
-                                          Size( 2*erosion_size + 1, 2*erosion_size+1 ),
-                                          Point( erosion_size, erosion_size ));
-        Mat dilate_element =
-                cv::getStructuringElement(cv::MORPH_RECT,
-                                          Size( 2*dilation_size + 1, 2*dilation_size+1 ),
-                                          Point( dilation_size, dilation_size ));
-
-        Mat depth_erode;
-        Mat depth_dilate;
-        Mat depth_big;
-        Mat depth_blur;
-        cv::erode(depth, depth_erode, erode_element);
-        cv::dilate(depth_erode, depth_dilate, dilate_element);
-        cv::resize(depth_dilate, depth_big, Size(960, 720), 0, 0, INTER_CUBIC);
-        cv::blur(depth_big, depth_blur, cv::Size(blur_size, blur_size));
-
-        imageShadow.set(depth_blur);
-
-        if (is_self_shadow)
-            selfShadow();
-        if (is_double_shadow) {
-            gestures();
-            doubleShadow();
-        }
-        if (is_strike_shadow)
-            strikeShadow();
-        if (is_dead_shadow)
-            deadShadow();
-    }
-
     virtual void signal(int id)
     {
+        qDebug() << "Set command:" << id;
         switch (id) {
         case Signals::DoubleLeft:
             double_shadow_command = Signals::DoubleLeft;
@@ -275,11 +289,19 @@ public:
     void gestures()
     {
         vector<bool> &gests = input(4)->booleans;
-        if (gests.at(0)) {
-            double_shadow_command = Signals::DoubleRight;
-        }
         if (gests.at(1)) {
+            double_shadow_command = Signals::DoubleRight;
+            if (double_shadow_command != Signals::DoubleLeft
+                    && double_shadow_shift < 0) {
+                double_shadow_command = Signals::DoubleReturn;
+            }
+        }
+        if (gests.at(0)) {
             double_shadow_command = Signals::DoubleLeft;
+            if (double_shadow_command != Signals::DoubleRight
+                    && double_shadow_shift > 0) {
+                double_shadow_command = Signals::DoubleReturn;
+            }
         }
     }
 
@@ -291,15 +313,24 @@ class RaysScene : public Scene
 public:
     QString name() { return "Rays"; }
 
+    Rect pos;
+    Image imageHalo;
     Image stream;
     Color backColor;
     Color rayColor;
     Image *rayImage;
     Image *ringTestImage;
     int raySize;
-    int haloSize;
+    int circleSize;
     bool isDemo;
     bool isTest;
+
+    int depth_min;
+    int depth_max;
+    int blur_size;
+    int erosion_size;
+    int dilation_size;
+    Color halo_color;
 
     RaysScene()
     {
@@ -309,7 +340,15 @@ public:
         addControl(&rayImage, "Image", "images/rays/", "ray_04.png");
         addControl(rayColor=Color(1, 0, 0, 1), "Ray color");
         addControl(raySize=300, "Ray Size", 0, 1000);
-        addControl(haloSize=100, "Halo Size", 0, 1000);
+        addControl(circleSize=100, "Circle Size", 0, 1000);
+
+        addControl(depth_min=50, "Depth min", 0, 255);
+        addControl(depth_max=110, "Depth max", 0, 255);
+        addControl(blur_size=7, "Blur size", 1, 50);
+        addControl(erosion_size=1, "Erosion size", 0, 50);
+        addControl(dilation_size=1, "Dilation size", 0, 50);
+
+        addControl(halo_color = Color(0, 0, 0, 1), "Halo Self");
 
         ringTestImage = new Image("images/forms/ring_01.png");
     }
@@ -318,20 +357,25 @@ public:
     {
         float a = angle(from.x, from.y, to.x, to.y);
 
-        if (a > pi()/4 && a < pi() - pi()/4)
+        if (a > pi()/4.0 && a < pi() - pi()/4.0)
             return;
 
-        if (a > pi() + pi()/4 && a < 2*pi() - pi()/4)
+        if (a > pi() + pi()/4.0 && a < 2.0*pi() - pi()/4.0)
             return;
 
         float s = raySize;
         float x = from.x;
         float y = from.y;
 
-        x += s/2 * cos(a);
-        y -= s/2 * sin(a);
+        x += s/2.0 * cos(a);
+        y -= s/2.0 * sin(a);
 
-        draw(rayImage, x, y, s, s, a);
+        draw(rayImage,
+             float(x/2)*(float(pos.width)/320.0) + pos.x - pos.width/2,
+             float(y/2)*(float(pos.height)/240.0) + pos.y - pos.height/2,
+             float(s/2)*(float(pos.width)/320.0),
+             float(s/2)*(float(pos.height)/240.0),
+             a);
     }
 
     void drawRayFromCenter(Point center, Point to)
@@ -339,7 +383,7 @@ public:
         float a = angle(center.x, center.y, to.x, to.y);
         float d = distance(float(center.x), center.y, to.x, to.y);
 
-        if (d < haloSize)
+        if (d < circleSize)
             return;
 
 //        if (a > pi()/4 && a < pi() - pi()/4)
@@ -352,23 +396,28 @@ public:
         float x = center.x;
         float y = center.y;
 
-        x += s/2 * cos(a);
-        y -= s/2 * sin(a);
+        x += s/2.0 * cos(a);
+        y -= s/2.0 * sin(a);
 
-        draw(rayImage, x, y, s, s, a);
+        draw(rayImage,
+             float(x/2)*(float(pos.width)/320.0) + pos.x - pos.width/2,
+             float(y/2)*(float(pos.height)/240.0) + pos.y - pos.height/2,
+             float(s/2)*(float(pos.width)/320.0),
+             float(s/2)*(float(pos.height)/240.0),
+             a);
     }
 
     virtual void paint()
     {
         Mat &kinectColor = input(0)->mat;
         Human &human = input(2)->human;
-        //Mat &kinectDepth = input(1)->mat;
-        Rect pos = input(3)->rect;
+        Mat &kinectDepth = input(1)->mat;
+        pos = input(3)->rect;
 
         if (kinectColor.empty())
             return;
 
-        size(320*2, 240*2);
+        size(320, 240);
         background(backColor);
         color(1,1,1);
 
@@ -377,6 +426,51 @@ public:
             cv::cvtColor(kinectColor, kinectColor3, COLOR_RGBA2RGB);
             stream.set(kinectColor3);
             draw(&stream, width()/2, height()/2, width(), height());
+        }
+        else {
+            int i,j;
+            int ch = kinectDepth.channels();
+            int cols = kinectDepth.cols*ch;
+            uchar* p;
+            for( i = 0; i < kinectDepth.rows; ++i)
+            {
+                p = kinectDepth.ptr<uchar>(i);
+                for ( j = 0; j < cols; j+=ch)
+                {
+                    if (p[j + 0] > depth_min && p[j] < depth_max) {
+                        p[j + 0] = 255;
+                        p[j + 1] = 255;
+                        p[j + 2] = 255;
+                        p[j + 3] = 255;
+                    }
+                    else {
+                        p[j + 3] = 0;
+                    }
+                }
+            }
+
+            Mat erode_element =
+                    cv::getStructuringElement(cv::MORPH_RECT,
+                                              Size( 2*erosion_size + 1, 2*erosion_size+1 ),
+                                              Point( erosion_size, erosion_size ));
+            Mat dilate_element =
+                    cv::getStructuringElement(cv::MORPH_RECT,
+                                              Size( 2*dilation_size + 1, 2*dilation_size+1 ),
+                                              Point( dilation_size, dilation_size ));
+
+            Mat depth_erode;
+            Mat depth_dilate;
+            Mat depth_big;
+            Mat depth_blur;
+            cv::erode(kinectDepth, depth_erode, erode_element);
+            cv::dilate(depth_erode, depth_dilate, dilate_element);
+            cv::resize(depth_dilate, depth_big, Size(960, 720), 0, 0, INTER_CUBIC);
+            cv::blur(depth_big, depth_blur, cv::Size(blur_size, blur_size));
+
+            color(halo_color);
+            imageHalo.set(depth_blur);
+
+            draw(&imageHalo, pos.x, pos.y, pos.width, pos.height);
         }
         flush();
 
@@ -389,7 +483,11 @@ public:
             center.y = (human.shoulderCenter.y + human.spine.y)/2;
 
             if (isTest) {
-                draw(ringTestImage, center.x, center.x, haloSize*2, haloSize*2);
+                //qDebug() << pos.x + float(center.x/2)*(float(pos.width)/320.0) << float(center.x) <<  pos.y + float(center.y/2)*(float(pos.height)/240.0) << float(center.y);
+                draw(ringTestImage,
+                     pos.x + float(center.x/2)*(float(pos.width)/320.0) - pos.width/2,
+                     pos.y + float(center.y/2)*(float(pos.height)/240.0) - pos.height/2,
+                     circleSize, circleSize);
             }
 
             drawRayFromCenter(center, human.elbowLeft);
@@ -473,8 +571,8 @@ public:
         scenesNode->inputs.append(new Port(PortType::Rect));
         scenesNode->inputs.append(new Port(PortType::Booleans));
         scenesNode->setPos(200, 100);
-        scenesNode->addScene(new RaysScene);
         scenesNode->addScene(new ShadowScene);
+        scenesNode->addScene(new RaysScene);
         scenesNode->addScene(new TailHandsScene);
         nodes.append(scenesNode);
 

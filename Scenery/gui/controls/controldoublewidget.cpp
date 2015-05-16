@@ -15,6 +15,7 @@ ControlDoubleWidget::ControlDoubleWidget(ControlDouble *control, QWidget *parent
 //    connect(this, &QDoubleSpinBox::valueChanged,
 //            this, &ControlDoubleWidget::change);
     connect(this, SIGNAL(valueChanged(double)), SLOT(change()));
+    connect(control, &Control::updateData, this, &ControlDoubleWidget::update);
 }
 
 void ControlDoubleWidget::change()

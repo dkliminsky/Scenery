@@ -33,6 +33,7 @@ private:
 
     bool isDrawDepthSkeleton;
     bool isDrawColorSkeleton;
+    bool isHReverse;
 
 	void openKinect(int device);
 };

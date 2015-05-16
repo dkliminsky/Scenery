@@ -12,6 +12,8 @@ ControlDouble::ControlDouble(double &data, QString name,
 void ControlDouble::set(QString &data)
 {
     _data = data.toDouble();
+
+    emit updateData();
 }
 
 QString ControlDouble::get()

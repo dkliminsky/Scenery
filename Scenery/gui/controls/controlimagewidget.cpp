@@ -12,6 +12,7 @@ ControlImageWidget::ControlImageWidget(ControlImage *control, QWidget *parent) :
 
     update();
     connect(this, SIGNAL(currentIndexChanged(int)), SLOT(change()));
+    connect(control, &Control::updateData, this, &ControlImageWidget::update);
 }
 
 void ControlImageWidget::change()

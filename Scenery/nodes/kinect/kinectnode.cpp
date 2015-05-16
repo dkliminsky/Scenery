@@ -8,6 +8,7 @@ KinectNode::KinectNode(int device) :
 
     addControl(isDrawDepthSkeleton=true, "Depth skeleton");
     addControl(isDrawColorSkeleton=true, "Color skeleton");
+    addControl(isHReverse=false, "Horisontal reverse");
 
 	outputs.append(new Port(PortType::Mat));
 	outputs.append(new Port(PortType::Mat));

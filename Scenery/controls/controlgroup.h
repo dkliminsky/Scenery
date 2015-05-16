@@ -6,8 +6,11 @@
 class ControlGroup : public Control
 {
 public:
-    ControlGroup(QString name);
-    ~ControlGroup();
+    explicit ControlGroup(QString name);
+
+    virtual QJsonObject getJson();
+    virtual void setJson(QJsonObject json);
+
 };
 
 #endif // CONTROLGROUP_H

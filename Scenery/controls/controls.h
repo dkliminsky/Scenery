@@ -2,6 +2,7 @@
 #define CONTROLS_H
 
 #include "control.h"
+#include "controlgroup.h"
 #include "controlint.h"
 #include "controldouble.h"
 #include "controlbool.h"
@@ -9,6 +10,5 @@
 #include "controlcolor.h"
 #include "controlimage.h"
 #include "controlbutton.h"
-#include "controlgroup.h"
 
 #endif // CONTROLS_H

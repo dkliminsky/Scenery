@@ -21,15 +21,20 @@ public:
     void addControlGroup(QString name);
     void addButton(int id, QString name);
 
-    Controls &controls() { return _control.controls(); }
-    Control &baseControl() { return _control; }
+    Controls &controls() { return _baseControl.controls(); }
+    Control &baseControl() { return _baseControl; }
+
+    QJsonObject getControlJson();
+    void setControlJson(QJsonObject json);
 
 private:
-    Control _control;
+    // Контрол типа group, который содержит в себе список контролов
+    Control _baseControl;
+
     Control *curInsertControl;
     Control *lastGroupControl;
 
-    void insertControl(Control *_control);
+    void insertControl(Control *_baseControl);
 };
 
 #endif // CONTROLPROVIDER_H

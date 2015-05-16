@@ -15,7 +15,14 @@ public:
 protected:
     void run();
 
+private:
+    int inclination_deg;
+    int time_interval;
 
+    QTime time;
+    int timer;
+    int gest_time;
+    bool gest_start;
 };
 
 #endif // GESTURENODE_H

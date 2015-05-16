@@ -12,11 +12,6 @@ public:
     ControlGroupWidget(ControlGroup *control);
     ~ControlGroupWidget();
 
-    void addControlWidget(QWidget *widget);
-
-private:
-    QHBoxLayout *layout;
-
 };
 
 #endif // CONTROLGROUPWIDGET_H

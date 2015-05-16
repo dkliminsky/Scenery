@@ -12,6 +12,8 @@ void ControlBool::set(QString &data)
         _data = true;
     else
         _data = false;
+
+    emit updateData();
 }
 
 QString ControlBool::get()

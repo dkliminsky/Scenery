@@ -15,6 +15,8 @@ void ControlImage::set(QString &data)
             break;
         }
     }
+
+    emit updateData();
 }
 
 QString ControlImage::get()

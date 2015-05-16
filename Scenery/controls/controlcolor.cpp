@@ -14,6 +14,8 @@ void ControlColor::set(QString &color)
         _color.b = list.at(2).toFloat();
         _color.a = list.at(3).toFloat();
     }
+
+    emit updateData();
 }
 
 QString ControlColor::get()

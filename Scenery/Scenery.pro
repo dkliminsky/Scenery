@@ -95,7 +95,8 @@ HEADERS += \
     nodes/kinect/gesturenode.h \
     nodes/project.h \
     controls/control.h \
-    controls/controlprovider.h
+    controls/controlprovider.h \
+    controls/controlgroup.h
 
 SOURCES += \
     gui/mainwindow.cpp \
@@ -146,5 +147,4 @@ SOURCES += \
 
 RESOURCES += \
     resources.qrc
-
 

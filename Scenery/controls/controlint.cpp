@@ -13,6 +13,8 @@ ControlInt::ControlInt(int &data, QString name,
 void ControlInt::set(QString &data)
 {
     _data = data.toInt();
+
+    emit updateData();
 }
 
 QString ControlInt::get()

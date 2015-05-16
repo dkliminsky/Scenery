@@ -6,6 +6,7 @@ ControlBoolWidget::ControlBoolWidget(ControlBool *controlBool, QWidget *parent) 
     this->control = controlBool;
     update();
     connect(this, &QCheckBox::clicked, this, &ControlBoolWidget::change);
+    connect(control, &Control::updateData, this, &ControlBoolWidget::update);
 }
 
 void ControlBoolWidget::change()

@@ -41,9 +41,7 @@ QVBoxLayout *make_controls_layout(Controls *controls)
         QWidget *widget = control_widget_factory(control);
 
         if (control->type() == Control::ControlGroup) {
-            //ControlGroupWidget *groupWidget = static_cast<ControlGroupWidget *>(widget);
             widget->setLayout(make_controls_layout(&control->controls()));
-            qDebug() << control->controls().count();
             gridLayout->addWidget(widget, control->number(), 1);
         }
         else {

@@ -14,6 +14,7 @@ ControlStringWidget::ControlStringWidget(ControlString *control,
     }
 
     connect(this, SIGNAL(currentIndexChanged(int)), SLOT(change()));
+    connect(control, &Control::updateData, this, &ControlStringWidget::update);
 }
 
 void ControlStringWidget::change()

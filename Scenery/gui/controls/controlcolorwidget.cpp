@@ -48,6 +48,8 @@ ControlColorWidget::ControlColorWidget(ControlColor *control,
     connect(colorDialog, SIGNAL(currentColorChanged(QColor)),
             SLOT(changeColor(QColor)));
 
+    connect(control, &Control::updateData, this, &ControlColorWidget::update);
+
     update();
 }
 

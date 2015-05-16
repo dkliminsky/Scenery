@@ -10,6 +10,8 @@ ControlString::ControlString(QString &data, QString name,
 void ControlString::set(QString &data)
 {
     _data = data;
+
+    emit updateData();
 }
 
 QString ControlString::get()

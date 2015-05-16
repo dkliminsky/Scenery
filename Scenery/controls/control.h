@@ -1,6 +1,7 @@
 #ifndef CONTROL_H
 #define CONTROL_H
 
+#include <QObject>
 #include <QString>
 #include <QHash>
 #include <QJsonObject>
@@ -8,8 +9,9 @@
 class Control;
 typedef QHash<QString, Control *> Controls;
 
-class Control
+class Control : public QObject
 {
+    Q_OBJECT
 public:
     enum Type {
         ControlGroup,
@@ -23,7 +25,7 @@ public:
     };
 
     Control(Type type, QString name);
-    virtual ~Control() {}
+    virtual ~Control();
 
     Type type() { return _type; }
     QString &name() { return _name; }
@@ -37,7 +39,7 @@ public:
     virtual QString get() { return ""; }
 
     virtual QJsonObject getJson();
-    virtual void setJson(QJsonObject controlObject);
+    virtual void setJson(QJsonObject json);
 
 protected:
     Type _type;
@@ -46,6 +48,9 @@ protected:
     Controls _controls;
     int _number;
     int cur_inner_number;
+
+signals:
+    void updateData();
 
 };
 

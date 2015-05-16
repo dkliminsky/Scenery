@@ -29,7 +29,7 @@ Project::~Project()
 
     foreach (Node *node, nodes) {
         qDebug() << "Delete Node:" << node->name();
-        //delete node;
+        delete node;
     }
 
     METHOD_END
@@ -85,7 +85,7 @@ void Project::writeProject(QJsonObject &json)
        nodeObject["name"] = node->name();
        nodeObject["posX"] = node->posX();
        nodeObject["posY"] = node->posY();
-       nodeObject["control"] = node->baseControl().getJson();
+       nodeObject["control"] = node->getControlJson();
        nodesArray.append(nodeObject);
     }
     json["nodes"] = nodesArray;
@@ -100,7 +100,7 @@ void Project::readProject(QJsonObject &json)
         nodes.at(i)->setPos(nodeObject["posX"].toInt(),
                             nodeObject["posY"].toInt());
 
-        nodes.at(i)->baseControl().setJson(nodeObject["control"].toObject());
+        nodes.at(i)->setControlJson(nodeObject["control"].toObject());
     }
 
 

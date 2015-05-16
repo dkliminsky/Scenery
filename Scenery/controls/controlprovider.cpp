@@ -2,11 +2,12 @@
 #include <QDir>
 #include <QDebug>
 #include "nodes/graphics/elements/elements.h"
+#include "debug.h"
 
 ControlProvider::ControlProvider() :
-    _control(Control::ControlGroup, "base"),
+    _baseControl(Control::ControlGroup, "Node Control"),
     lastGroupControl(nullptr),
-    curInsertControl(&_control)
+    curInsertControl(&_baseControl)
 {
 
 }
@@ -40,7 +41,6 @@ void ControlProvider::addControl(Color &color, QString name)
 {
     insertControl(new ControlColor(color, name));
 }
-
 
 void ControlProvider::addControl(Image **image, QString name, QString path, QString file)
 {
@@ -78,7 +78,7 @@ void ControlProvider::addControl(Image **image, QString name, QString path, QStr
 void ControlProvider::addControlGroup(QString name)
 {
     lastGroupControl = new ControlGroup(name);
-    curInsertControl = &_control;
+    curInsertControl = &_baseControl;
     insertControl(lastGroupControl);
     curInsertControl = lastGroupControl;
 }
@@ -86,6 +86,16 @@ void ControlProvider::addControlGroup(QString name)
 void ControlProvider::addButton(int id, QString name)
 {
     insertControl(new ControlButton(this, id, name));
+}
+
+QJsonObject ControlProvider::getControlJson()
+{
+    return _baseControl.getJson();
+}
+
+void ControlProvider::setControlJson(QJsonObject json)
+{
+    _baseControl.setJson(json);
 }
 
 void ControlProvider::insertControl(Control *control)

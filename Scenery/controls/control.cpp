@@ -1,7 +1,7 @@
 #include "control.h"
+#include "debug.h"
 #include <QJsonObject>
 #include <QJsonArray>
-
 
 Control::Control(Control::Type type, QString name) :
     _type(type),
@@ -10,6 +10,21 @@ Control::Control(Control::Type type, QString name) :
     cur_inner_number(0)
 {
 
+}
+
+Control::~Control()
+{
+    METHOD_BEGIN
+
+    QHashIterator<QString, Control *> i(_controls);
+    while (i.hasNext()) {
+        i.next();
+        Control *control = i.value();
+        qDebug() << "Delete Control:" << control->name();
+        //delete control;
+    }
+
+    METHOD_END
 }
 
 void Control::insertControl(Control *control)
@@ -40,10 +55,10 @@ QJsonObject Control::getJson()
     return controlObject;
 }
 
-void Control::setJson(QJsonObject controlObject)
+void Control::setJson(QJsonObject json)
 {
     if (_type == Control::ControlGroup) {
-        QJsonArray controlsArray = controlObject["controls"].toArray();
+        QJsonArray controlsArray = json["controls"].toArray();
         for(int i=0; i<controlsArray.size(); i++) {
             QJsonObject controlObjectInner = controlsArray[i].toObject();
             QString name = controlObjectInner["name"].toString();
@@ -53,6 +68,6 @@ void Control::setJson(QJsonObject controlObject)
         }
     }
     else {
-        set(controlObject["data"].toString());
+        set(json["data"].toString());
     }
 }

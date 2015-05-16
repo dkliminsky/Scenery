@@ -22,6 +22,7 @@ ControlIntWidget::ControlIntWidget(ControlInt *control, QWidget *parent) :
     update();
     connect(slider, &QSlider::valueChanged,
               this, &ControlIntWidget::change);
+    connect(control, &Control::updateData, this, &ControlIntWidget::update);
 }
 
 void ControlIntWidget::change()
