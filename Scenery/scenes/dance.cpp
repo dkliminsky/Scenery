@@ -27,6 +27,14 @@ public:
     bool is_self_shadow;
     Color self_shadow_color;
 
+    bool is_move_shadow;
+    Color move_shadow_color;
+    int inclination_deg;
+    int move_speed;
+    int move_max_x;
+    double move_x_stop;
+    float move_shadow_x;
+
     bool is_double_shadow;
     Color double_shadow_color;
     int double_shadow_max_shift;
@@ -64,6 +72,15 @@ public:
         addControlGroup("Self Shadow");
         addControl(is_self_shadow=true, "On Self");
         addControl(self_shadow_color = Color(0, 0, 0, 1), "Color Self");
+
+        addControlGroup("Move Shadow");
+        addControl(is_move_shadow=true, "Move Self");
+        addControl(move_shadow_color = Color(0, 0, 0, 1), "Color Self");
+        addControl(inclination_deg=30, "Min Inclination", 0, 90);
+        addControl(move_speed=10, "Move speed", 0, 1000);
+        addControl(move_max_x=100, "Move x max", 0, 1000);
+        addControl(move_x_stop=0.15, "Move x stop", 0, 1000, 3);
+        move_shadow_x = 0;
 
         addControlGroup("Double Shadow");
         addControl(is_double_shadow=false, "On Double");
@@ -112,6 +129,8 @@ public:
         gestures();
         if (is_self_shadow)
             selfShadow();
+        if (is_move_shadow)
+            moveShadow();
         if (is_double_shadow) {
             doubleShadow();
         }
@@ -178,6 +197,38 @@ public:
     void selfShadow() {
         color(self_shadow_color);
         draw(&imageShadow, pos.x, pos.y, pos.width, pos.height);
+    }
+
+    void moveShadow() {
+        color(move_shadow_color);
+        Human &human = input(2)->human;
+
+        float a = angle(human.spine.x, human.spine.y,
+                        human.shoulderCenter.x, human.shoulderCenter.y);
+        float a_min = inclination_deg * pi() / 180;
+        float da = a - a_min;
+
+        qDebug() << a << a_min << pi()/2 - a_min;
+
+        float dx = 0;
+
+        if (a < pi()/2 - a_min) {
+            dx = da * move_speed * move_shadow_x * move_x_stop + 2;
+        }
+        else if (a > pi()/2 + a_min) {
+            dx = - da * move_speed * move_shadow_x * move_x_stop - 2;
+        }
+
+        if (move_shadow_x > move_max_x)
+            move_shadow_x = move_max_x;
+
+        if (move_shadow_x < -move_max_x)
+            move_shadow_x = -move_max_x;
+
+
+        //move_shadow_x += dx * move_shadow_x * move_x_stop;
+        move_shadow_x += dx;
+        drawShadow(move_shadow_x, 0);
     }
 
     void doubleShadow() {
