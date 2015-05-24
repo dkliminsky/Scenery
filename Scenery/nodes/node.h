@@ -17,7 +17,7 @@ class Port;
 class Link;
 
 typedef QList<Link *> Links;
-typedef QList<Port *> Ports;
+typedef QHash<QString, Port *> Ports;
 typedef QList<Node *> Nodes;
 
 enum class PortType { Mat, Human, Boolean, Booleans, Number, Numbers, Rect, Rects };
@@ -26,15 +26,17 @@ enum class PortType { Mat, Human, Boolean, Booleans, Number, Numbers, Rect, Rect
 class Link
 {
 public:
-    Link(Node *node, int port_id) : node(node), port_id(port_id)  {}
+    Link(Node *node, QString portName) : node(node), portName(portName)  {}
     Node *node;
-    int port_id;
+    QString portName;
 };
 
 class Port
 {
 public:
-    Port(PortType type) : type(type) {}
+    Port(QString name, PortType type) : _name(name), type(type) {}
+    const QString name() { return _name; }
+
     PortType type;
     Links links;
 
@@ -55,6 +57,9 @@ public:
     Rect rect;
     vector<Rect> rects;
     // ...
+
+private:
+    QString _name;
 };
 
 class Node: public ControlProvider
@@ -85,6 +90,13 @@ public:
     virtual QJsonObject getJson();
     virtual void setJson(QJsonObject json);
 
+    void addInput(QString name, PortType type);
+    void addOutput(QString name, PortType type);
+    void addLink(Node *node, QString outputName, QString inputName);
+
+    Port *input(QString name);
+    Port *output(QString name);
+
     Ports inputs;
     Ports outputs;
 
@@ -93,9 +105,6 @@ protected:
     void processNext();
     void timing_start();
     void timing_finish();
-
-    void input(PortType type);
-    void output(PortType type);
 
 private:
     QUuid _uuid;
@@ -106,7 +115,6 @@ private:
     int timeMean;
     int timeNum;
     int timeResult;
-
 };
 
 

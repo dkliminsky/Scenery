@@ -37,8 +37,8 @@ public:
         background(back);
         color(1.0f, 1.0f, 1.0f, 1.0f);
 
-        stream.set(input(0)->mat);
-        Rect pos = input(1)->rect;
+        stream.set(input("stream")->mat);
+        Rect pos = input("rect")->rect;
         draw(&stream, pos.x, pos.y, pos.width, pos.height);
         flush();
 
@@ -118,16 +118,16 @@ public:
         nodes.append(positionNode);
 
         ScenesNode *scenesNode = new ScenesNode();
-        scenesNode->inputs.append(new Port(PortType::Mat));
-        scenesNode->inputs.append(new Port(PortType::Rect));
+        scenesNode->addInput("stream", PortType::Mat);
+        scenesNode->addInput("rect", PortType::Rect);
         scenesNode->setPos(200, 100);
         scenesNode->addScene(new Example1Scene());
         scenesNode->addScene(new Example2Scene());
         nodes.append(scenesNode);
 
-        cameraNode->outputs.at(0)->links.append(new Link(erodeNode, 0));
-        erodeNode->outputs.at(0)->links.append(new Link(dilateNode, 0));
-        dilateNode->outputs.at(0)->links.append(new Link(scenesNode, 0));
-        positionNode->outputs.at(0)->links.append(new Link(scenesNode, 1));
+//        cameraNode->_outputs.at(0)->links.append(new Link(erodeNode, 0));
+//        erodeNode->_outputs.at(0)->links.append(new Link(dilateNode, 0));
+//        dilateNode->_outputs.at(0)->links.append(new Link(scenesNode, 0));
+//        positionNode->_outputs.at(0)->links.append(new Link(scenesNode, 1));
     }
 };

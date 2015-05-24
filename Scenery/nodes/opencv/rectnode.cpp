@@ -2,7 +2,7 @@
 
 RectNode::RectNode()
 {
-    output(PortType::Rect);
+    addOutput("rect", PortType::Rect);
 
     addControl(x=160, "x", -500, 500);
     addControl(y=120, "y", -500, 500);
@@ -12,7 +12,7 @@ RectNode::RectNode()
 
 void RectNode::run()
 {
-    Rect &rect = outputs.at(0)->rect;
+    Rect &rect = output("rect")->rect;
     rect.x = x;
     rect.y = y;
     rect.width = w;

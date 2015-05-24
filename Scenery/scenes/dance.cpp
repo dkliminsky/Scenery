@@ -115,8 +115,8 @@ public:
 
     virtual void paint()
     {
-        Mat &depth = input(1)->mat;
-        pos = input(3)->rect;
+        Mat &depth = input("depth")->mat;
+        pos = input("rect")->rect;
 
         if (depth.empty())
             return;
@@ -126,7 +126,6 @@ public:
         size(320, 240);
         background(backColor);
 
-        gestures();
         if (is_self_shadow)
             selfShadow();
         if (is_move_shadow)
@@ -141,7 +140,7 @@ public:
     }
 
     void prepareShadow() {
-        Mat &depth = input(1)->mat;
+        Mat &depth = input("depth")->mat;
 
         int i,j;
         int ch = depth.channels();
@@ -201,7 +200,7 @@ public:
 
     void moveShadow() {
         color(move_shadow_color);
-        Human &human = input(2)->human;
+        Human &human = input("human1")->human;
 
         float a = angle(human.spine.x, human.spine.y,
                         human.shoulderCenter.x, human.shoulderCenter.y);
@@ -336,26 +335,6 @@ public:
             break;
         }
     }
-
-    void gestures()
-    {
-        vector<bool> &gests = input(4)->booleans;
-        if (gests.at(1)) {
-            double_shadow_command = Signals::DoubleRight;
-            if (double_shadow_command != Signals::DoubleLeft
-                    && double_shadow_shift < 0) {
-                double_shadow_command = Signals::DoubleReturn;
-            }
-        }
-        if (gests.at(0)) {
-            double_shadow_command = Signals::DoubleLeft;
-            if (double_shadow_command != Signals::DoubleRight
-                    && double_shadow_shift > 0) {
-                double_shadow_command = Signals::DoubleReturn;
-            }
-        }
-    }
-
 };
 
 
@@ -460,10 +439,10 @@ public:
 
     virtual void paint()
     {
-        Mat &kinectColor = input(0)->mat;
-        Human &human = input(2)->human;
-        Mat &kinectDepth = input(1)->mat;
-        pos = input(3)->rect;
+        Mat &kinectColor = input("color")->mat;
+        Human &human = input("human1")->human;
+        Mat &kinectDepth = input("depth")->mat;
+        pos = input("rect")->rect;
 
         if (kinectColor.empty())
             return;
@@ -579,9 +558,9 @@ public:
 
     virtual void paint()
     {
-        Mat &depth = input(1)->mat;
-        Human &human = input(2)->human;
-        Rect pos = input(3)->rect;
+        Mat &depth = input("depth")->mat;
+        Human &human = input("human1")->human;
+        Rect pos = input("rect")->rect;
 
         if (depth.empty())
             return;
@@ -611,27 +590,22 @@ public:
         rectNode->setPos(0, 200);
         nodes.append(rectNode);
 
-        Node *gestureNode = new GestureNode();
-        gestureNode->setPos(0, 400);
-        nodes.append(gestureNode);
-
         ScenesNode *scenesNode = new ScenesNode();
-        scenesNode->inputs.append(new Port(PortType::Mat));
-        scenesNode->inputs.append(new Port(PortType::Mat));
-        scenesNode->inputs.append(new Port(PortType::Human));
-        scenesNode->inputs.append(new Port(PortType::Rect));
-        scenesNode->inputs.append(new Port(PortType::Booleans));
+        scenesNode->addInput("color", PortType::Mat);
+        scenesNode->addInput("depth", PortType::Mat);
+        scenesNode->addInput("human1", PortType::Human);
+        scenesNode->addInput("human2", PortType::Human);
+        scenesNode->addInput("rect", PortType::Rect);
         scenesNode->setPos(200, 100);
         scenesNode->addScene(new ShadowScene);
-        scenesNode->addScene(new RaysScene);
-        scenesNode->addScene(new TailHandsScene);
+        //scenesNode->addScene(new RaysScene);
+        //scenesNode->addScene(new TailHandsScene);
         nodes.append(scenesNode);
 
-        kinectNode->outputs.at(2)->links.append(new Link(gestureNode, 0));
-        kinectNode->outputs.at(0)->links.append(new Link(scenesNode, 0));
-        kinectNode->outputs.at(1)->links.append(new Link(scenesNode, 1));
-        kinectNode->outputs.at(2)->links.append(new Link(scenesNode, 2));
-        rectNode->outputs.at(0)->links.append(new Link(scenesNode, 3));
-        gestureNode->outputs.at(0)->links.append(new Link(scenesNode, 4));
+        kinectNode->addLink(scenesNode, "color", "color");
+        kinectNode->addLink(scenesNode, "depth", "depth");
+        kinectNode->addLink(scenesNode, "human1", "human1");
+        kinectNode->addLink(scenesNode, "human2", "human2");
+        rectNode->addLink(scenesNode, "rect", "rect");
     }
 };

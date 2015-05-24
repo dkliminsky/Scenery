@@ -10,14 +10,10 @@ KinectNode::KinectNode(int device) :
     addControl(isDrawColorSkeleton=true, "Color skeleton");
     addControl(isHReverse=false, "Horisontal reverse");
 
-	outputs.append(new Port(PortType::Mat));
-	outputs.append(new Port(PortType::Mat));
-    outputs.append(new Port(PortType::Human));
-
-    for (int i=0; i < NUI_SKELETON_COUNT; i++) {
-        Human human;
-        outputs.at(2)->humans.push_back(human);
-    }
+    addOutput("color", PortType::Mat);
+    addOutput("depth", PortType::Mat);
+    addOutput("human1", PortType::Human);
+    addOutput("human2", PortType::Human);
 
     m_colorResolution = NUI_IMAGE_RESOLUTION_640x480;
     m_depthResolution = NUI_IMAGE_RESOLUTION_320x240;
@@ -31,9 +27,9 @@ KinectNode::KinectNode(int device) :
 
 void KinectNode::run()
 {
-    Mat &colorMat = outputs.at(0)->mat;
-    Mat &depthMat = outputs.at(1)->mat;
-    Human &human = outputs.at(2)->human;
+    Mat &colorMat = output("color")->mat;
+    Mat &depthMat = output("depth")->mat;
+    Human &human = output("human1")->human;
 
     if (!m_frameHelper.IsInitialized()) {
         return;
@@ -168,15 +164,14 @@ void KinectNode::openKinect(int)
 			{
 				qDebug() << "Kinect: success connected";
 
-				Mat &colorMat = outputs.at(0)->mat;
+                Mat &colorMat = output("color")->mat;
 				DWORD width, height;
 				m_frameHelper.GetColorFrameSize(&width, &height);
 				colorMat.create(Size(width, height), m_frameHelper.COLOR_TYPE);
 
-				Mat &depthMat = outputs.at(1)->mat;
+                Mat &depthMat = output("depth")->mat;
 				m_frameHelper.GetDepthFrameSize(&width, &height);
 				depthMat.create(Size(width, height), m_frameHelper.DEPTH_RGB_TYPE);
-
 				return;
 			}
 			else

@@ -2,21 +2,21 @@
 
 DilateNode::DilateNode()
 {
-    input(PortType::Mat);
-    output(PortType::Mat);
+    addInput("mat", PortType::Mat);
+    addOutput("mat", PortType::Mat);
     addControl(dilation_size=2, "Erosion size", 0, 100);
 }
 
 void DilateNode::run()
 {
-    Mat &in_mat  =  inputs.at(0)->mat;
-    Mat &out_mat = outputs.at(0)->mat;
+    Mat &mat_in = input("mat")->mat;
+    Mat &mat_out = output("mat")->mat;
 
-    if (in_mat.empty())
+    if (mat_in.empty())
         return;
 
     Mat element = cv::getStructuringElement(cv::MORPH_RECT,
                                             Size( 2*dilation_size + 1, 2*dilation_size+1 ),
                                             Point( dilation_size, dilation_size ));
-    cv::dilate(in_mat, out_mat, element);
+    cv::dilate(mat_in, mat_out, element);
 }

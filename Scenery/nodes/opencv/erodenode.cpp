@@ -2,15 +2,15 @@
 
 ErodeNode::ErodeNode()
 {
-    input(PortType::Mat);
-    output(PortType::Mat);
+    addInput("mat", PortType::Mat);
+    addOutput("mat", PortType::Mat);
     addControl(erosion_size=2, "Erosion size", 0, 100);
 }
 
 void ErodeNode::run()
 {
-    Mat &in_mat  =  inputs.at(0)->mat;
-    Mat &out_mat = outputs.at(0)->mat;
+    Mat &in_mat  = input("mat")->mat;
+    Mat &out_mat = output("mat")->mat;
 
     if (in_mat.empty())
         return;

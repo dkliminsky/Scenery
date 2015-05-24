@@ -43,15 +43,14 @@ void Node::processNext()
     foreach (Port *port, outputs) {
         foreach (Link *link, port->links) {
             Node *next = link->node;
-
             Q_ASSERT(next);
-            Q_ASSERT(next->inputs.count() > link->port_id);
+            Q_ASSERT(next->outputs()->contains(link->portName));
 
             if (!next->isProcessing()) {
-                next->inputs.at(link->port_id)->mat = port->mat.clone();
-                next->inputs.at(link->port_id)->human = port->human;
-                next->inputs.at(link->port_id)->rect = port->rect;
-                next->inputs.at(link->port_id)->booleans = port->booleans;
+                next->input(link->portName)->mat = port->mat.clone();
+                next->input(link->portName)->human = port->human;
+                next->input(link->portName)->rect = port->rect;
+                next->input(link->portName)->booleans = port->booleans;
                 next->process();
             }
         }
@@ -76,12 +75,32 @@ void Node::timing_finish()
     }
 }
 
-void Node::input(PortType type)
+void Node::addInput(QString name, PortType type)
 {
-    inputs.append(new Port(type));
+    inputs.insert(name, new Port(name, type));
 }
 
-void Node::output(PortType type)
+void Node::addOutput(QString name, PortType type)
 {
-    outputs.append(new Port(type));
+    outputs.insert(name, new Port(name, type));
+}
+
+void Node::addLink(Node *node, QString outputName, QString inputName)
+{
+    qDebug() << "Add link, node:" << node->name() << "output:" << outputName << "input:" << inputName;
+    output(outputName)->links.append(new Link(node, inputName));
+}
+
+Port *Node::input(QString name)
+{
+    if (!inputs.contains(name))
+        qDebug() << "Not found input" << name;
+    return inputs.value(name);
+}
+
+Port *Node::output(QString name)
+{
+    if (!outputs.contains(name))
+        qDebug() << "Not found output" << name;
+    return outputs.value(name);
 }
