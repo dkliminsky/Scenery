@@ -20,8 +20,7 @@ public:
     virtual void resize(){}
     virtual void paint(){}
 
-    Port *input(QString name) { return _inputs->value(name); }
-
+    Port *input(QString name);
 private:
     friend class View;
     friend class ScenesNode;

@@ -6,12 +6,15 @@ KinectNode::KinectNode(int device) :
 {
 	METHOD_BEGIN
 
-    addControl(isDrawDepthSkeleton=true, "Depth skeleton");
-    addControl(isDrawColorSkeleton=true, "Color skeleton");
+    addControl(isDrawColorSkeleton=true, "Draw color skeleton");
+    addControl(isDrawDepthSkeleton=true, "Draw depth skeleton");
     addControl(isHReverse=false, "Horisontal reverse");
+    addControl(hitDepthMin=0, "Hit depth min", 0, 255);
+    addControl(hitDepthMax=255, "Hit depth max", 0, 255);
 
     addOutput("color", PortType::Mat);
     addOutput("depth", PortType::Mat);
+    addOutput("hit", PortType::Mat);
     addOutput("human1", PortType::Human);
     addOutput("human2", PortType::Human);
 
@@ -29,12 +32,12 @@ void KinectNode::run()
 {
     Mat &colorMat = output("color")->mat;
     Mat &depthMat = output("depth")->mat;
+    Mat &hitMat = output("hit")->mat;
     Human &human = output("human1")->human;
 
     if (!m_frameHelper.IsInitialized()) {
         return;
     }
-
 
     if (SUCCEEDED(m_frameHelper.UpdateColorFrame())) {
         HRESULT hr = m_frameHelper.GetColorImage(&colorMat);
@@ -47,6 +50,38 @@ void KinectNode::run()
         HRESULT hr = m_frameHelper.GetDepthImageAsArgb(&depthMat);
         if (FAILED(hr)) {
             return;
+        }
+    }
+
+    if (isOutputLink("hit")) {
+        hitMat.create(depthMat.rows, depthMat.cols, CV_8UC4);
+        int i, j;
+        int chHit = hitMat.channels();
+        int chDepth = depthMat.channels();
+        uchar* pHit;
+        uchar *pDepth;
+
+        for( i = 0; i < depthMat.rows; ++i)
+        {
+            pDepth = depthMat.ptr<uchar>(i);
+            pHit = hitMat.ptr<uchar>(i);
+            for ( j = 0; j < depthMat.cols; j++)
+            {
+                if (pDepth[j*chDepth] > hitDepthMin &&
+                    pDepth[j*chDepth] < hitDepthMax)
+                {
+                    pHit[j*chHit + 0] = 255;
+                    pHit[j*chHit + 1] = 255;
+                    pHit[j*chHit + 2] = 255;
+                    pHit[j*chHit + 3] = 255;
+                }
+                else {
+                    pHit[j*chHit + 0] = 0;
+                    pHit[j*chHit + 1] = 0;
+                    pHit[j*chHit + 2] = 0;
+                    pHit[j*chHit + 3] = 0;
+                }
+            }
         }
     }
 

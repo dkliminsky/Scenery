@@ -97,6 +97,8 @@ public:
     Port *input(QString name);
     Port *output(QString name);
 
+    bool isOutputLink(QString name);
+
     Ports inputs;
     Ports outputs;
 

@@ -104,3 +104,11 @@ Port *Node::output(QString name)
         qDebug() << "Not found output" << name;
     return outputs.value(name);
 }
+
+bool Node::isOutputLink(QString name)
+{
+    if (output(name)->links.size())
+        return true;
+    return false;
+}
+

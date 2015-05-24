@@ -18,8 +18,6 @@ public:
     Color backColor;
 
     QString shadow_type;
-    int depth_min;
-    int depth_max;
     int blur_size;
     int erosion_size;
     int dilation_size;
@@ -63,8 +61,6 @@ public:
 
         addControlGroup("Shadow");
         addControl(shadow_type="natural", "Shadow type", QStringList() << "smoke" << "8bit");
-        addControl(depth_min=50, "Depth min", 0, 255);
-        addControl(depth_max=110, "Depth max", 0, 255);
         addControl(blur_size=7, "Blur size", 0, 50);
         addControl(erosion_size=1, "Erosion size", 0, 50);
         addControl(dilation_size=1, "Dilation size", 0, 50);
@@ -115,10 +111,10 @@ public:
 
     virtual void paint()
     {
-        Mat &depth = input("depth")->mat;
+        Mat &hit = input("hit")->mat;
         pos = input("rect")->rect;
 
-        if (depth.empty())
+        if (hit.empty())
             return;
 
         prepareShadow();
@@ -140,29 +136,7 @@ public:
     }
 
     void prepareShadow() {
-        Mat &depth = input("depth")->mat;
-
-        int i,j;
-        int ch = depth.channels();
-        int cols = depth.cols*ch;
-        uchar* p;
-        for( i = 0; i < depth.rows; ++i)
-        {
-            p = depth.ptr<uchar>(i);
-            for ( j = 0; j < cols; j+=ch)
-            {
-                if (p[j + 0] > depth_min && p[j] < depth_max) {
-                    p[j + 0] = 255;
-                    p[j + 1] = 255;
-                    p[j + 2] = 255;
-                    p[j + 3] = 255;
-                }
-                else {
-                    p[j + 3] = 0;
-                }
-            }
-        }
-
+        Mat &hit = input("hit")->mat;
         Mat erode_element =
                 cv::getStructuringElement(cv::MORPH_RECT,
                                           Size( 2*erosion_size + 1, 2*erosion_size+1 ),
@@ -175,10 +149,9 @@ public:
         Mat depth_erode;
         Mat depth_dilate;
         Mat depth_big;
-        cv::erode(depth, depth_erode, erode_element);
+        cv::erode(hit, depth_erode, erode_element);
         cv::dilate(depth_erode, depth_dilate, dilate_element);
         cv::resize(depth_dilate, depth_big, Size(960, 720), 0, 0, INTER_CUBIC);
-
         if (blur_size > 0) {
             Mat depth_blur;
             cv::blur(depth_big, depth_blur, cv::Size(blur_size, blur_size));
@@ -207,7 +180,7 @@ public:
         float a_min = inclination_deg * pi() / 180;
         float da = a - a_min;
 
-        qDebug() << a << a_min << pi()/2 - a_min;
+        //qDebug() << a << a_min << pi()/2 - a_min;
 
         float dx = 0;
 
@@ -593,17 +566,19 @@ public:
         ScenesNode *scenesNode = new ScenesNode();
         scenesNode->addInput("color", PortType::Mat);
         scenesNode->addInput("depth", PortType::Mat);
+        scenesNode->addInput("hit", PortType::Mat);
         scenesNode->addInput("human1", PortType::Human);
         scenesNode->addInput("human2", PortType::Human);
         scenesNode->addInput("rect", PortType::Rect);
         scenesNode->setPos(200, 100);
         scenesNode->addScene(new ShadowScene);
-        //scenesNode->addScene(new RaysScene);
-        //scenesNode->addScene(new TailHandsScene);
+        scenesNode->addScene(new RaysScene);
+        scenesNode->addScene(new TailHandsScene);
         nodes.append(scenesNode);
 
         kinectNode->addLink(scenesNode, "color", "color");
         kinectNode->addLink(scenesNode, "depth", "depth");
+        kinectNode->addLink(scenesNode, "hit", "hit");
         kinectNode->addLink(scenesNode, "human1", "human1");
         kinectNode->addLink(scenesNode, "human2", "human2");
         rectNode->addLink(scenesNode, "rect", "rect");

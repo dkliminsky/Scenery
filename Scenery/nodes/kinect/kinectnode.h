@@ -34,6 +34,8 @@ private:
     bool isDrawDepthSkeleton;
     bool isDrawColorSkeleton;
     bool isHReverse;
+    int hitDepthMin;
+    int hitDepthMax;
 
 	void openKinect(int device);
 };
