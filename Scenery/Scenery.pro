@@ -143,8 +143,10 @@ SOURCES += \
     nodes/kinect/gesturenode.cpp \
     nodes/project.cpp \
     controls/controlprovider.cpp \
-    controls/control.cpp
+    controls/control.cpp \
+    scenes/shadow.cpp
 
 RESOURCES += \
     resources.qrc
+
 

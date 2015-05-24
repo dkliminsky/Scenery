@@ -18,6 +18,7 @@ public:
     float w() { return _w; }
     float h() { return _h; }
 
+    void setPos(float x, float y);
     void setPos(float x, float y, float w, float h);
     void setPos(Rect pos);
 

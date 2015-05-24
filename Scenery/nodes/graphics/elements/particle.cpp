@@ -27,6 +27,11 @@ Particle::~Particle()
         delete _image;
 }
 
+void Particle::setPos(float x, float y)
+{
+    _x = x; _y = y;
+}
+
 void Particle::setPos(float x, float y, float w, float h)
 {
     _x = x; _y = y; w = _w; _h = h;
