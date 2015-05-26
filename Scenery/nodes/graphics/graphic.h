@@ -18,6 +18,8 @@ public:
 
     int width() { return _widthScene; }
     int height() { return _heightScene; }
+    int widthWindow() { return _widthView; }
+    int heightWindow() { return _heightView; }
     void size(int width, int height);
 
     void color(GLfloat r, GLfloat g, GLfloat b, GLfloat a=1);

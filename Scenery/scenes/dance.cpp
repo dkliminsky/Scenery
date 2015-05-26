@@ -2,6 +2,7 @@
 #include "nodes/nodes.h"
 
 #include "scenes/shadow.cpp"
+#include "scenes/tailhands.cpp"
 
 
 //enum class Signals { None, DoubleLeft, DoubleRight, DoubleReturn, StrikeLeft, StrikeRight,
@@ -505,49 +506,6 @@
 //};
 
 
-//class TailHandsScene : public Scene
-//{
-//public:
-//    QString name() { return "Tail Hands"; }
-
-//    Color backColor;
-//    Color tailColor;
-//    Image *tailImage;
-//    int tailSize;
-
-//    Image *stream;
-
-//    TailHandsScene()
-//    {
-//        stream = new Image();
-//        addControl(backColor=Color(0, 0, 0, 0.2f), "Back color");
-//        addControl(tailColor=Color(1, 0, 0, 1), "Tail color");
-//        addControl(tailSize=20, "Tail Size", 0, 50);
-//        addControl(&tailImage, "Tail hands", "images/forms/", "circle01.png");
-
-//    }
-
-//    virtual void paint()
-//    {
-//        Mat &depth = input("depth")->mat;
-//        Human &human = input("human1")->human;
-//        Rect pos = input("rect")->rect;
-
-//        if (depth.empty())
-//            return;
-
-//        size(320*2, 240*2);
-//        background(backColor);
-
-//        color(tailColor);
-//        if (human.isTracking) {
-//            draw(tailImage, human.wristRight.x, human.wristRight.y, tailSize, tailSize);
-//            draw(tailImage, human.wristLeft.x, human.wristLeft.y, tailSize, tailSize);
-//        }
-//    }
-//};
-
-
 class Manager_ : public Project
 {
 public:
@@ -569,7 +527,7 @@ public:
         scenesNode->setPos(200, 100);
         scenesNode->addScene(new ShadowScene);
 //        scenesNode->addScene(new RaysScene);
-//        scenesNode->addScene(new TailHandsScene);
+        scenesNode->addScene(new TailHandsScene);
         nodes.append(scenesNode);
 
         kinectNode->addLink(scenesNode, "hit", "hit");

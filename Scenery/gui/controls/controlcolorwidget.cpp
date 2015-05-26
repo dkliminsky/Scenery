@@ -8,22 +8,22 @@ ControlColorWidget::ControlColorWidget(ControlColor *control,
 
     spinR = new QDoubleSpinBox();
     spinR->setRange(0, 1);
-    spinR->setDecimals(2);
+    spinR->setDecimals(3);
     spinR->setSingleStep(0.05);
 
     spinG = new QDoubleSpinBox();
     spinG->setRange(0, 1);
-    spinG->setDecimals(2);
+    spinG->setDecimals(3);
     spinG->setSingleStep(0.05);
 
     spinB = new QDoubleSpinBox();
     spinB->setRange(0, 1);
-    spinB->setDecimals(2);
+    spinB->setDecimals(3);
     spinB->setSingleStep(0.05);
 
     spinA = new QDoubleSpinBox();
     spinA->setRange(0, 1);
-    spinA->setDecimals(2);
+    spinA->setDecimals(3);
     spinA->setSingleStep(0.05);
 
     button = new QPushButton("Change");

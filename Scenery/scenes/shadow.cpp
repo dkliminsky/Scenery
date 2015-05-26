@@ -7,13 +7,14 @@ class ShadowScene : public Scene
 {
 public:
     QString name() { return "Shadow"; }
-    Rect pos;
     Image imageShadow;
     Color backColor;
 
     int blur_size;
     int erosion_size;
     int dilation_size;
+    bool is_rag_shadow;
+    Image *ragImage;
 
     bool is_self_shadow;
     Color self_shadow_color;
@@ -48,6 +49,8 @@ public:
         addControl(blur_size=7, "Blur size", 0, 50);
         addControl(erosion_size=1, "Erosion size", 0, 50);
         addControl(dilation_size=1, "Dilation size", 0, 50);
+        addControl(is_rag_shadow=false, "Rag shadow");
+        addControl(&ragImage, "Image", "images/forms/", "blot01.png");
 
         addControlGroup("Self Shadow");
         addControl(is_self_shadow=true, "On");
@@ -128,6 +131,10 @@ public:
         draw(&imageShadow, pos.x + x, pos.y + y, pos.width, pos.height);
     }
 
+    void drawRagShadow(float x, float y, bool reverse=false) {
+
+    }
+
     void selfShadow() {
         color(self_shadow_color);
         drawShadow(0, 0);
@@ -137,7 +144,8 @@ public:
         Human &human = input("human1")->human;
 
         float a = angle(human.spine.x, human.spine.y,
-                        human.shoulderCenter.x, human.shoulderCenter.y) * 180 / pi() - 90;
+                        human.shoulderCenter.x, human.shoulderCenter.y)
+                * 180 / pi() - 90;
         float ca = abs(a) / 90.0f;
         float dx = 0;
         float dx_abs = abs(_move_shadow_dx);
@@ -149,7 +157,6 @@ public:
         float t_merge = move_merge_threshold*x_max/100.0f;
 
         int direction = 0;
-
 
         bool isInclination = false;
         if (a > inclination_deg) {
@@ -168,7 +175,7 @@ public:
 
             if (dx_abs < t_merge) {
                 direction = -direction;
-                dx += move_speed / 2;
+                dx += move_speed / 4;
             }
         }
 
@@ -189,7 +196,7 @@ public:
                 dx += move_speed;
             }
 
-            dx += ca*move_inclination_speed;
+            dx += ca*ca*move_inclination_speed;
         }
 
         _move_shadow_dx += dx*direction;
@@ -228,10 +235,12 @@ public:
                 dt_no_rev = 1 - dt;
                 dt_rev = dt;
             }
-            color(move_shadow_color.r, move_shadow_color.g, move_shadow_color.b, dt_no_rev);
+            color(move_shadow_color.r, move_shadow_color.g, move_shadow_color.b,
+                  dt_no_rev);
             drawShadow(_move_shadow_dx, 0, !_move_is_reverse);
 
-            color(move_shadow_color.r, move_shadow_color.g, move_shadow_color.b, dt_rev);
+            color(move_shadow_color.r, move_shadow_color.g, move_shadow_color.b,
+                  dt_rev);
             drawShadow(_move_shadow_dx, 0, _move_is_reverse);
         }
         else {

@@ -61,25 +61,52 @@ void KinectNode::run()
         uchar* pHit;
         uchar *pDepth;
 
-        for( i = 0; i < depthMat.rows; ++i)
-        {
-            pDepth = depthMat.ptr<uchar>(i);
-            pHit = hitMat.ptr<uchar>(i);
-            for ( j = 0; j < depthMat.cols; j++)
+        if (isHReverse) {
+            for( i = 0; i < depthMat.rows; ++i)
             {
-                if (pDepth[j*chDepth] > hitDepthMin &&
-                    pDepth[j*chDepth] < hitDepthMax)
+                pDepth = depthMat.ptr<uchar>(i);
+                pHit = hitMat.ptr<uchar>(i);
+                for ( j = 0; j < depthMat.cols; j++)
                 {
-                    pHit[j*chHit + 0] = 255;
-                    pHit[j*chHit + 1] = 255;
-                    pHit[j*chHit + 2] = 255;
-                    pHit[j*chHit + 3] = 255;
+                    int j_inv = depthMat.cols - j;
+                    if (pDepth[j*chDepth] > hitDepthMin &&
+                        pDepth[j*chDepth] < hitDepthMax)
+                    {
+                        pHit[j_inv*chHit + 0] = 255;
+                        pHit[j_inv*chHit + 1] = 255;
+                        pHit[j_inv*chHit + 2] = 255;
+                        pHit[j_inv*chHit + 3] = 255;
+                    }
+                    else {
+                        pHit[j_inv*chHit + 0] = 0;
+                        pHit[j_inv*chHit + 1] = 0;
+                        pHit[j_inv*chHit + 2] = 0;
+                        pHit[j_inv*chHit + 3] = 0;
+                    }
                 }
-                else {
-                    pHit[j*chHit + 0] = 0;
-                    pHit[j*chHit + 1] = 0;
-                    pHit[j*chHit + 2] = 0;
-                    pHit[j*chHit + 3] = 0;
+            }
+        }
+        else {
+            for( i = 0; i < depthMat.rows; ++i)
+            {
+                pDepth = depthMat.ptr<uchar>(i);
+                pHit = hitMat.ptr<uchar>(i);
+                for ( j = 0; j < depthMat.cols; j++)
+                {
+                    if (pDepth[j*chDepth] > hitDepthMin &&
+                        pDepth[j*chDepth] < hitDepthMax)
+                    {
+                        pHit[j*chHit + 0] = 255;
+                        pHit[j*chHit + 1] = 255;
+                        pHit[j*chHit + 2] = 255;
+                        pHit[j*chHit + 3] = 255;
+                    }
+                    else {
+                        pHit[j*chHit + 0] = 0;
+                        pHit[j*chHit + 1] = 0;
+                        pHit[j*chHit + 2] = 0;
+                        pHit[j*chHit + 3] = 0;
+                    }
                 }
             }
         }
@@ -152,6 +179,29 @@ void KinectNode::run()
                 human.kneeRight = jointPositions[NUI_SKELETON_POSITION_KNEE_RIGHT];
                 human.ankleRight = jointPositions[NUI_SKELETON_POSITION_ANKLE_RIGHT];
                 human.footRight = jointPositions[NUI_SKELETON_POSITION_FOOT_RIGHT];
+
+                if (isHReverse) {
+                    human.hipCenter.x = 640 - human.hipCenter.x;
+                    human.spine.x = 640 - human.spine.x;
+                    human.shoulderCenter.x = 640 - human.shoulderCenter.x;
+                    human.head.x = 640 - human.head.x;
+                    human.shoulderLeft.x = 640 - human.shoulderLeft.x;
+                    human.elbowLeft.x = 640 - human.elbowLeft.x;
+                    human.wristLeft.x = 640 - human.wristLeft.x;
+                    human.handLeft.x = 640 - human.handLeft.x;
+                    human.shoulderRight.x = 640 - human.shoulderRight.x;
+                    human.elbowRight.x = 640 - human.elbowRight.x;
+                    human.wristRight.x = 640 - human.wristRight.x;
+                    human.handRight.x = 640 - human.handRight.x;
+                    human.hipLeft.x = 640 - human.hipLeft.x;
+                    human.kneeLeft.x = 640 - human.kneeLeft.x;
+                    human.ankleLeft.x = 640 - human.ankleLeft.x;
+                    human.footLeft.x = 640 - human.footLeft.x;
+                    human.hipRight.x = 640 - human.hipRight.x;
+                    human.kneeRight.x = 640 - human.kneeRight.x;
+                    human.ankleRight.x = 640 - human.ankleRight.x;
+                    human.footRight.x = 640 - human.footRight.x;
+                }
                 break;
             }
         }

@@ -144,9 +144,11 @@ SOURCES += \
     nodes/project.cpp \
     controls/controlprovider.cpp \
     controls/control.cpp \
-    scenes/shadow.cpp
+    scenes/shadow.cpp \
+    scenes/tailhands.cpp
 
 RESOURCES += \
     resources.qrc
+
 
 
